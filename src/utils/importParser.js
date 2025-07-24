@@ -22,7 +22,7 @@ export function parseImportContent(content, fileName) {
     }
   }
   if (isJson) {
-    // 支持 JSON 单词数组
+    // 支持 JSON 单词数组 和 { units: [...] } 格式 
     if (Array.isArray(data) && data.length > 0 && typeof data[0] === 'object' && 'word' in data[0] && 'meaning' in data[0]) {
       return { type: 'json', data };
     }
