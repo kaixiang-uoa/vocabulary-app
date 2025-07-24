@@ -64,15 +64,34 @@
   --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
   --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
-  --shadow-primary: 0 4px 14px rgba(14, 165, 233, 0.15);
-  --shadow-success: 0 4px 14px rgba(16, 185, 129, 0.15);
-  --shadow-warning: 0 4px 14px rgba(245, 158, 11, 0.15);
-  --shadow-error: 0 4px 14px rgba(239, 68, 68, 0.15);
 
-  /* gradient example*/
-  --gradient-mastered: linear-gradient(135deg, var(--success-50) 0%, #f0fdf9 100%);
-  --gradient-learning: linear-gradient(135deg, var(--primary-50) 0%, #f8faff 100%);
-  --gradient-difficult: linear-gradient(135deg, var(--error-50) 0%, #fef8f8 100%);
+  /* new variables for wordcard */
+  --wordcard-easy-bg: var(--success-50);
+  --wordcard-easy-color: var(--success-500);
+  --wordcard-easy-border: var(--success-200);
+  --wordcard-medium-bg: var(--warning-50);
+  --wordcard-medium-color: var(--warning-500);
+  --wordcard-medium-border: var(--warning-200);
+  --wordcard-hard-bg: var(--error-50);
+  --wordcard-hard-color: var(--error-500);
+  --wordcard-hard-border: var(--error-200);
+  --wordcard-mastered-bg: var(--success-50);
+  --wordcard-unmastered-bg: var(--primary-50);
+  --wordcard-mastered-border: var(--success-500);
+  --wordcard-unmastered-border: var(--primary-500);
+  --wordcard-radius: 12px;
+  --wordcard-shadow: var(--shadow-lg);
+  --wordcard-shadow-hover: 0 8px 24px rgba(0,0,0,0.12);
+  --wordcard-shadow-normal: 0 2px 8px rgba(0,0,0,0.06);
+  --wordcard-text-main: #262626;
+  --wordcard-text-secondary: #595959;
+  --wordcard-bg-secondary: #fafafa;
+  --wordcard-border-secondary: #f0f0f0;
+  --wordcard-btn-bg: var(--primary-500);
+  --wordcard-btn-bg-mastered: #f5f5f5;
+  --wordcard-btn-color: #fff;
+  --wordcard-btn-color-mastered: #262626;
+  --wordcard-btn-border-mastered: #d9d9d9;
 }
 
 /* compatible with old variables, progressive migration*/

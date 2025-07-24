@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router';
 import { Typography, Button, List, Card, Divider, Empty, message, Tabs, Statistic, Row, Col, Checkbox, Popconfirm } from 'antd';
 import { ArrowLeftOutlined, ExportOutlined, BookOutlined, CheckCircleOutlined, SyncOutlined } from '@ant-design/icons';
 import AddWordForm from '../components/AddWordForm';
-import { getUnitWords, toggleWordMastered, exportUnitWordsToCSV, getAllData, deleteItems } from '../utils/wordUtils';
+import { getUnitWords, toggleWordMastered, exportUnitWordsToCSV, getAllData, deleteItems, updateWord } from '../utils/wordUtils';
 import { useTranslation } from 'react-i18next';
 import WordCard from '../components/WordCard';
 
@@ -28,8 +28,8 @@ const UnitDetailPage = () => {
     const numericUnitId = parseInt(unitId, 10);
     const allData = getAllData();
     const currentUnit = allData.units.find(u => u.id === numericUnitId);
-    setUnit(currentUnit);
-    setWords(getUnitWords(numericUnitId));
+    setUnit(currentUnit ? JSON.parse(JSON.stringify(currentUnit)) : null);
+    setWords(getUnitWords(numericUnitId).map(w => ({ ...w })));
   }, [unitId]);
   
   useEffect(() => {
@@ -97,6 +97,13 @@ const UnitDetailPage = () => {
   const totalWords = words.length;
   const masteredWords = words.filter(word => word.mastered).length;
   const masteryRate = totalWords > 0 ? Math.round((masteredWords / totalWords) * 100) : 0;
+  
+  // 单词编辑
+  const handleEditWord = (wordId, values) => {
+    const numericUnitId = parseInt(unitId, 10);
+    updateWord(numericUnitId, wordId, values);
+    loadData();
+  };
   
   if (!unit) {
     return <div>{t('loading')}</div>;
@@ -185,7 +192,7 @@ const UnitDetailPage = () => {
       </Row>
       
       <Divider orientation="left">{t('add_word')}</Divider>
-      <AddWordForm unitId={parseInt(unitId, 10)} onWordAdded={loadData} />
+      <AddWordForm unitId={parseInt(unitId, 10)} onWordAdded={() => loadData()} />
       
       <Divider orientation="left">{t('word_list')}</Divider>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
@@ -240,16 +247,19 @@ const UnitDetailPage = () => {
       </div>
       {filteredWords.length > 0 ? (
         <List
-          grid={{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 3, xl: 4, xxl: 4 }}
+          grid={{ gutter: [16, 24], xs: 1, sm: 2, md: 3, lg: 3, xl: 4, xxl: 4 }}
           dataSource={filteredWords}
           renderItem={word => (
-            <List.Item>
-              <WordCard
-                word={word}
-                isSelected={selectedWordIds.includes(word.id)}
-                onSelect={handleSelectWord}
-                onMasteredToggle={handleMasteredToggle}
-              />
+            <List.Item style={{ marginBottom: 0, display: 'flex' }}>
+              <div style={{ width: '100%' }}>
+                <WordCard
+                  word={word}
+                  isSelected={selectedWordIds.includes(word.id)}
+                  onSelect={handleSelectWord}
+                  onMasteredToggle={handleMasteredToggle}
+                  onEdit={handleEditWord}
+                />
+              </div>
             </List.Item>
           )}
         />

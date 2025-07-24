@@ -83,6 +83,15 @@ export const updateWord = (unitId, wordId, updatedWord) => {
   return saveAllData(data);
 };
 
+// update unit
+export const updateUnit = (unitId, newValues) => {
+  const data = getAllData();
+  const unitIndex = data.units.findIndex(u => u.id === unitId);
+  if (unitIndex === -1) return false;
+  Object.assign(data.units[unitIndex], newValues);
+  return saveAllData(data);
+};
+
 // mark word as mastered/unmastered
 export const toggleWordMastered = (unitId, wordId) => {
   const data = getAllData();

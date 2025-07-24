@@ -1,20 +1,21 @@
 import React from 'react';
 import { Card, Checkbox, Tag, Tooltip } from 'antd';
-import { BookOutlined, CheckCircleOutlined, CloseCircleOutlined, RightOutlined } from '@ant-design/icons';
+import { BookOutlined, CheckCircleOutlined, CloseCircleOutlined, RightOutlined, EditOutlined } from '@ant-design/icons';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import EditModal from './EditModal';
 
-const UnitCard = ({ unit, isSelected, onSelect }) => {
+const UnitCard = ({ unit, isSelected, onSelect, onEdit }) => {
   const { t } = useTranslation();
   const wordCount = unit.words.length;
   const masteredCount = unit.words.filter(word => word.mastered).length;
   const progressPercent = wordCount > 0 ? Math.round((masteredCount / wordCount) * 100) : 0;
+  const [showEditModal, setShowEditModal] = React.useState(false);
 
   return (
     <Card
       className={`unit-card ${isSelected ? 'unit-card-selected' : ''}`}
       hoverable
-      onClick={() => onSelect(unit.id)}
       styles={{ body: { padding: 0, background: 'transparent', height: '100%' } }}
       variant="outlined"
       style={{ 
@@ -34,6 +35,7 @@ const UnitCard = ({ unit, isSelected, onSelect }) => {
         minHeight: 260,
         display: 'flex',
         flexDirection: 'column',
+        position: 'relative',
       }}
     >
       {/* Top gradient block */}
@@ -61,27 +63,64 @@ const UnitCard = ({ unit, isSelected, onSelect }) => {
         }}>
           <BookOutlined style={{ fontSize: 20, color: '#fff' }} />
         </div>
-        <Checkbox
-          checked={isSelected}
-          onClick={e => {
-            e.stopPropagation();
-            onSelect(unit.id);
-          }}
-          style={{ marginRight: 0, background: 'rgba(255,255,255,0.12)', borderRadius: 6, padding: 4 }}
-        />
+        {/* Edit button and checkbox side by side */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <button
+            onClick={e => { e.stopPropagation(); setShowEditModal(true); }}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: 'var(--neutral-50)',
+              cursor: 'pointer',
+              borderRadius: 4,
+              padding: 4,
+              transition: 'background 0.2s',
+              fontSize: 18,
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.18)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'none'}
+            aria-label="Edit"
+          >
+            <EditOutlined />
+          </button>
+          {/* Edit modal */}
+          <EditModal
+            visible={showEditModal}
+            title="edit_unit"
+            okText="save"
+            cancelText="cancel"
+            fields={[
+              { name: 'name', label: 'unit_name', value: unit.name, placeholder: 'input_unit_name_placeholder' },
+            ]}
+            onOk={values => { setShowEditModal(false); onEdit && onEdit(unit.id, values); }}
+            onCancel={() => setShowEditModal(false)}
+          />
+          <Checkbox
+            checked={isSelected}
+            onClick={e => {
+              e.stopPropagation();
+              onSelect(unit.id);
+            }}
+            style={{ marginRight: 0, background: 'rgba(255,255,255,0.12)', borderRadius: 6, padding: 4 }}
+          />
+        </div>
       </div>
       {/* Content area */}
-      <div style={{
-        background: 'var(--neutral-100)',
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20,
-        padding: '20px 24px 18px 24px',
-        minHeight: 140,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        flex: 1,
-      }}>
+      <div
+        onClick={() => onSelect(unit.id)}
+        style={{
+          background: 'var(--neutral-100)',
+          borderBottomLeftRadius: 20,
+          borderBottomRightRadius: 20,
+          padding: '20px 24px 18px 24px',
+          minHeight: 140,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          flex: 1,
+          cursor: 'pointer',
+        }}
+      >
         {/* Unit name and word count */}
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
           <h3 style={{ 

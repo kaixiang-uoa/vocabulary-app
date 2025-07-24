@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Button, Form, Input, Modal, message, Popconfirm, Checkbox, Space, Empty } from 'antd';
-import { BookOutlined, PlusOutlined, DeleteOutlined, SearchOutlined, UploadOutlined } from '@ant-design/icons';
-import { getAllData, createUnit, deleteItems, saveAllData } from '../utils/wordUtils';
+import { BookOutlined, PlusOutlined, DeleteOutlined, SearchOutlined, UploadOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { getAllData, createUnit, deleteItems, saveAllData, updateUnit } from '../utils/wordUtils';
 import UnitCard from './UnitCard';
 import ImportModal from './ImportModal';
 import { useTranslation } from 'react-i18next';
+
 
 const UnitList = () => {
   const { t } = useTranslation();
@@ -14,6 +15,7 @@ const UnitList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [form] = Form.useForm();
   const [importModalVisible, setImportModalVisible] = useState(false);
+  const [helpVisible, setHelpVisible] = useState(false);
   
   // Filter units by search term
   const filteredUnits = data.units.filter(unit => 
@@ -22,7 +24,7 @@ const UnitList = () => {
 
   // Refresh data from storage
   const refreshData = () => {
-    setData(getAllData());
+    setData(JSON.parse(JSON.stringify(getAllData())));
   };
 
   // Show create unit modal
@@ -109,16 +111,22 @@ const UnitList = () => {
     setImportModalVisible(true);
   };
 
-  // Handle import confirm
-  const handleImportConfirm = (data) => {
-    if (!data.units || !Array.isArray(data.units)) {
-      message.error(t('json_format_error'));
-      return;
+  // Handle import confirm (now supports multiple formats)
+  const handleImportConfirm = (parsed) => {
+    if (parsed.type === 'json' || parsed.type === 'csv-units') {
+      saveAllData(parsed.data);
+      setImportModalVisible(false);
+      refreshData();
+      message.success(t('import_success'));
+    } else {
+      message.error('Please use JSON or CSV with unit,word,meaning for unit import.');
     }
-    saveAllData(data);
-    setImportModalVisible(false);
+  };
+
+  // 单元编辑
+  const handleEditUnit = (unitId, values) => {
+    updateUnit(unitId, values);
     refreshData();
-    message.success(t('import_success'));
   };
 
   // Select all/indeterminate state
@@ -155,6 +163,22 @@ const UnitList = () => {
             </div>
             {/* Buttons on the right */}
             <Space>
+              {/* Help button */}
+              <Button
+                icon={<QuestionCircleOutlined />}
+                style={{
+                  background: 'linear-gradient(90deg, var(--primary-500) 0%, var(--primary-600) 100%)',
+                  color: '#fff',
+                  borderRadius: 6,
+                  border: 'none',
+                  fontWeight: 500,
+                  boxShadow: 'var(--shadow-sm)',
+                  marginLeft: 8
+                }}
+                onClick={() => setHelpVisible(true)}
+              >
+                {t('help')}
+              </Button>
               <Popconfirm
                 title={t('delete_confirm_title')}
                 description={t('delete_confirm_desc')}
@@ -214,7 +238,7 @@ const UnitList = () => {
                 }}
                 onClick={handleExportAll}
               >
-                {t('export_batch_json')}
+                {t('export_all')}
               </Button>
               <Button
                 style={{
@@ -230,7 +254,7 @@ const UnitList = () => {
                 }}
                 onClick={handleImportAll}
               >
-                {t('import_batch_json')}
+                {t('import_all')}
               </Button>
             </Space>
           </div>
@@ -312,11 +336,11 @@ const UnitList = () => {
           visible={importModalVisible}
           onOk={handleImportConfirm}
           onCancel={() => setImportModalVisible(false)}
-          title={t('import_batch_json')}
-          accept="application/json"
-          buttonText={t('upload_json_file')}
+          title={t('import_all')}
+          accept=".json,.csv"
+          buttonText={t('upload_file')}
           icon={<UploadOutlined />}
-          placeholder={t('paste_json_content')}
+          placeholder={t('import_paste_tip')}
           validate={content => {
             try {
               const data = JSON.parse(content);
@@ -379,6 +403,7 @@ const UnitList = () => {
                     unit={unit}
                     isSelected={isSelected}
                     onSelect={handleSelectUnit}
+                    onEdit={handleEditUnit}
                   />
                 );
               })}
@@ -386,6 +411,44 @@ const UnitList = () => {
           </div>
         )}
       </div>
+      {/* Help Modal */}
+      <Modal
+        open={helpVisible}
+        title={t('help_title')}
+        onCancel={() => setHelpVisible(false)}
+        footer={null}
+      >
+        <div style={{ marginBottom: 16 }}>
+          <b>{t('help_json_title')}</b>
+          <div style={{ color: '#666', fontSize: 14, margin: '8px 0' }}>{t('help_json_desc')}</div>
+          <pre style={{ background: '#f6f6f6', padding: 12, borderRadius: 6, fontSize: 13 }}>
+{`{
+  "units": [
+    {
+      "id": 1,
+      "name": "Unit 1",
+      "words": [
+        { "word": "apple", "meaning": "苹果" }
+      ]
+    }
+  ]
+}`}
+          </pre>
+        </div>
+        <div style={{ marginBottom: 16 }}>
+          <b>{t('help_csv_title')}</b>
+          <div style={{ color: '#666', fontSize: 14, margin: '8px 0' }}>{t('help_csv_desc')}</div>
+          <pre style={{ background: '#f6f6f6', padding: 12, borderRadius: 6, fontSize: 13 }}>
+{`unit,word,meaning
+Unit 1,apple,苹果
+Unit 1,banana,香蕉
+Unit 2,cat,猫`}
+          </pre>
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <Button type="primary" onClick={() => setHelpVisible(false)}>{t('help_close')}</Button>
+        </div>
+      </Modal>
     </div>
   );
 };

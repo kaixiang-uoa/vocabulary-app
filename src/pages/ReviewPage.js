@@ -22,8 +22,8 @@ const ReviewPage = () => {
     const numericUnitId = parseInt(unitId, 10);
     const allData = getAllData();
     const currentUnit = allData.units.find(u => u.id === numericUnitId);
-    setUnit(currentUnit);
-    let wordsList = getUnitWords(numericUnitId);
+    setUnit(currentUnit ? JSON.parse(JSON.stringify(currentUnit)) : null);
+    let wordsList = getUnitWords(numericUnitId).map(w => ({ ...w }));
     if (reviewMode === 'unmastered') {
       wordsList = wordsList.filter(word => !word.mastered);
     } else if (reviewMode === 'mastered') {

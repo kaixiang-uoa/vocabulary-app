@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Button, Input, message } from 'antd';
 import { useTranslation } from 'react-i18next';
+import { parseImportContent } from '../utils/importParser';
 
 const ImportModal = ({
   visible,
@@ -12,15 +13,17 @@ const ImportModal = ({
   icon,
   placeholder = '',
   validate, // (content) => string | null, return error message or null 
-  parseContent, // (content) => any, return parsed data
 }) => {
   const [content, setContent] = useState('');
   const { t } = useTranslation();
 
+  // 记录文件名
+  const fileNameRef = React.useRef('');
   // handle file upload
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    fileNameRef.current = file.name;
     const reader = new FileReader();
     reader.onload = (evt) => {
       setContent(evt.target.result);
@@ -41,17 +44,14 @@ const ImportModal = ({
         return;
       }
     }
-    let parsed = content;
-    if (parseContent) {
-      try {
-        parsed = parseContent(content);
-      } catch (e) {
-        message.error(t('import_parse_error'));
-        return;
-      }
+    try {
+      // Unified import parse and dispatch
+      const parsed = parseImportContent(content, fileNameRef.current);
+      onOk(parsed);
+      setContent('');
+    } catch (e) {
+      message.error(e.message);
     }
-    onOk(parsed);
-    setContent('');
   };
 
   return (
@@ -87,6 +87,7 @@ const ImportModal = ({
         }
       }}
     >
+      <div style={{ color: '#888', fontSize: 13, marginBottom: 8 }}>{t('import_brief_tip')}</div>
       <div style={{ marginBottom: 12, minWidth: 220 }}>
         <input id="import-file-input" type="file" accept={accept} onChange={handleFileUpload} style={{ display: 'none' }} />
         <Button
