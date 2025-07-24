@@ -5,8 +5,25 @@ import { STORAGE_KEY, initialData } from '../data/initialData';
 
 // get all word data
 export const getAllData = () => {
-  const data = getData(STORAGE_KEY);
-  return data || initialData;
+  let data = getData(STORAGE_KEY) || initialData;
+  let changed = false;
+  // Ensure every word has a unique id
+  if (data.units) {
+    data.units.forEach(unit => {
+      if (Array.isArray(unit.words)) {
+        unit.words.forEach(word => {
+          if (!word.id) {
+            word.id = uuidv4();
+            changed = true;
+          }
+        });
+      }
+    });
+  }
+  if (changed) {
+    saveData(STORAGE_KEY, data);
+  }
+  return data;
 };
 
 // save all word data

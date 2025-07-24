@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router';
 import { Button, Progress, Typography, Space, Radio, Empty, message } from 'antd';
 import { ArrowLeftOutlined, ReloadOutlined } from '@ant-design/icons';
-import WordCard from '../components/WordCard';
+import ReviewWordCard from '../components/ReviewWordCard';
 import { getUnitWords, toggleWordMastered, getAllData } from '../utils/wordUtils';
 import { useTranslation } from 'react-i18next';
 
@@ -16,13 +16,13 @@ const ReviewPage = () => {
   const [reviewMode, setReviewMode] = useState('all'); // all, unmastered, mastered
   const [reviewOrder, setReviewOrder] = useState('sequential'); // sequential, random
   const [unit, setUnit] = useState(null);
+  const [isFlipped, setIsFlipped] = useState(false);
   
   // load data and filter by mode/order
   const loadData = useCallback(() => {
     const numericUnitId = parseInt(unitId, 10);
-    const allData = getAllData();
-    const currentUnit = allData.units.find(u => u.id === numericUnitId);
-    setUnit(currentUnit ? JSON.parse(JSON.stringify(currentUnit)) : null);
+    // getAllData() is only needed for setUnit, not for assignment
+    setUnit(getAllData().units.find(u => u.id === numericUnitId) ? JSON.parse(JSON.stringify(getAllData().units.find(u => u.id === numericUnitId))) : null);
     let wordsList = getUnitWords(numericUnitId).map(w => ({ ...w }));
     if (reviewMode === 'unmastered') {
       wordsList = wordsList.filter(word => !word.mastered);
@@ -38,13 +38,31 @@ const ReviewPage = () => {
   
   useEffect(() => {
     loadData();
+    setIsFlipped(false);
   }, [loadData]);
   
   // toggle mastered state
   const handleMasteredToggle = (wordId) => {
     const numericUnitId = parseInt(unitId, 10);
     if (toggleWordMastered(numericUnitId, wordId)) {
-      loadData();
+      // record current word id
+      const prevWordId = wordId;
+      // reload data and find the index of this id
+      // getAllData() is only needed for setUnit, not for assignment
+      let wordsList = getUnitWords(numericUnitId).map(w => ({ ...w }));
+      if (reviewMode === 'unmastered') {
+        wordsList = wordsList.filter(word => !word.mastered);
+      } else if (reviewMode === 'mastered') {
+        wordsList = wordsList.filter(word => word.mastered);
+      }
+      if (reviewOrder === 'random') {
+        wordsList = [...wordsList].sort(() => Math.random() - 0.5);
+      }
+      setWords(wordsList);
+      // find the index of the current word in the new wordsList
+      const idx = wordsList.findIndex(w => w.id === prevWordId);
+      setCurrentIndex(idx >= 0 ? idx : 0);
+      setIsFlipped(false);
       message.success(t('status_updated'));
     }
   };
@@ -52,6 +70,7 @@ const ReviewPage = () => {
   const handleNext = () => {
     if (currentIndex < words.length - 1) {
       setCurrentIndex(currentIndex + 1);
+      setIsFlipped(false);
     } else {
       message.success(t('review_complete'));
     }
@@ -59,6 +78,7 @@ const ReviewPage = () => {
   const handlePrev = () => {
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
+      setIsFlipped(false);
     }
   };
   const handleRestart = () => {
@@ -141,9 +161,12 @@ const ReviewPage = () => {
             />
           </div>
           <div style={{ maxWidth: 500, margin: '0 auto' }}>
-            <WordCard 
-              word={words[currentIndex]} 
-              onMasteredToggle={() => handleMasteredToggle(words[currentIndex].id)} 
+            <ReviewWordCard
+              key={words[currentIndex]?.id || currentIndex}
+              word={words[currentIndex]}
+              isFlipped={isFlipped}
+              onFlip={() => setIsFlipped(f => !f)}
+              onMasteredToggle={() => handleMasteredToggle(words[currentIndex].id)}
             />
           </div>
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24, gap: 16 }}>
@@ -157,7 +180,7 @@ const ReviewPage = () => {
                 borderRadius: 8,
                 border: 'none',
                 fontWeight: 600,
-                boxShadow: 'var(--shadow-md)',
+                boxShadow: 'var(--wordcard-shadow-md)',
                 transition: 'all 0.2s',
                 opacity: currentIndex === 0 ? 0.5 : 1
               }}
@@ -174,7 +197,7 @@ const ReviewPage = () => {
                 borderRadius: 8,
                 border: 'none',
                 fontWeight: 600,
-                boxShadow: 'var(--shadow-md)',
+                boxShadow: 'var(--wordcard-shadow-md)',
                 transition: 'all 0.2s',
                 marginLeft: 0,
                 opacity: currentIndex === words.length - 1 ? 0.5 : 1
