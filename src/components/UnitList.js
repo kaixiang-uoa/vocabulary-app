@@ -5,7 +5,7 @@ import { getAllData, createUnit, deleteItems, saveAllData, updateUnit } from '..
 import UnitCard from './UnitCard';
 import ImportModal from './ImportModal';
 import { useTranslation } from 'react-i18next';
-
+import { v4 as uuidv4 } from 'uuid';
 
 const UnitList = () => {
   const { t } = useTranslation();
@@ -114,7 +114,22 @@ const UnitList = () => {
   // Handle import confirm (now supports multiple formats)
   const handleImportConfirm = (parsed) => {
     if (parsed.type === 'json' || parsed.type === 'csv-units') {
-      saveAllData(parsed.data);
+      // 补全每个 word 的 id 和必需字段
+      const fixedData = {
+        ...parsed.data,
+        units: parsed.data.units.map(unit => ({
+          ...unit,
+          words: (unit.words || []).map(word => ({
+            ...word,
+            id: uuidv4(),
+            mastered: false,
+            createTime: Date.now(),
+            reviewTimes: 0,
+            lastReviewTime: null
+          }))
+        }))
+      };
+      saveAllData(fixedData);
       setImportModalVisible(false);
       refreshData();
       message.success(t('import_success'));
@@ -341,18 +356,6 @@ const UnitList = () => {
           buttonText={t('upload_file')}
           icon={<UploadOutlined />}
           placeholder={t('import_paste_tip')}
-          validate={content => {
-            try {
-              const data = JSON.parse(content);
-              if (!data.units || !Array.isArray(data.units)) {
-                return t('json_format_error');
-              }
-              return null;
-            } catch {
-              return t('json_parse_fail');
-            }
-          }}
-          parseContent={content => JSON.parse(content)}
         />
 
         {/* Unit list content */}

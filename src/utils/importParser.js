@@ -22,6 +22,10 @@ export function parseImportContent(content, fileName) {
     }
   }
   if (isJson) {
+    // 支持 JSON 单词数组
+    if (Array.isArray(data) && data.length > 0 && typeof data[0] === 'object' && 'word' in data[0] && 'meaning' in data[0]) {
+      return { type: 'json', data };
+    }
     if (!data.units || !Array.isArray(data.units)) {
       throw new Error('Invalid JSON format: missing units array');
     }

@@ -196,15 +196,15 @@ const UnitDetailPage = () => {
       
       <Divider orientation="left">{t('word_list')}</Divider>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-        <Tabs
-          activeKey={activeTab}
+      <Tabs
+        activeKey={activeTab}
           onChange={key => { setActiveTab(key); setSelectedWordIds([]); }}
-          items={[
+        items={[
             { key: 'all', label: `${t('all')} (${words.length})` },
             { key: 'mastered', label: `${t('mastered')} (${words.filter(word => word.mastered).length})` },
             { key: 'unmastered', label: `${t('unmastered')} (${words.filter(word => !word.mastered).length})` },
-          ]}
-        />
+        ]}
+      />
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           {filteredWords.length > 0 && (
             <Checkbox
@@ -250,7 +250,7 @@ const UnitDetailPage = () => {
           grid={{ gutter: [16, 24], xs: 1, sm: 2, md: 3, lg: 3, xl: 4, xxl: 4 }}
           dataSource={filteredWords}
           renderItem={word => (
-            <List.Item style={{ marginBottom: 0, display: 'flex' }}>
+            <List.Item key={word.id} style={{ marginBottom: 0, display: 'flex' }}>
               <div style={{ width: '100%' }}>
                 <WordCard
                   word={word}
@@ -259,7 +259,7 @@ const UnitDetailPage = () => {
                   onMasteredToggle={handleMasteredToggle}
                   onEdit={handleEditWord}
                 />
-              </div>
+                </div>
             </List.Item>
           )}
         />

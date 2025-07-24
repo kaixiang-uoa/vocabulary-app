@@ -15,7 +15,7 @@ const HomePage = () => {
   const totalWords = masteredWords.length + unmasteredWords.length;
   // calculate mastery rate
   const masteryRate = totalWords > 0 ? Math.round((masteredWords.length / totalWords) * 100) : 0;
-
+  
   return (
     <div className="home-page">
       {/* language switch buttons */}

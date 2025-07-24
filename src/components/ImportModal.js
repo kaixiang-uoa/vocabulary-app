@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Button, Input, message } from 'antd';
+import { Modal, Button, Input } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { parseImportContent } from '../utils/importParser';
 
@@ -15,6 +15,7 @@ const ImportModal = ({
   validate, // (content) => string | null, return error message or null 
 }) => {
   const [content, setContent] = useState('');
+  const [error, setError] = useState('');
   const { t } = useTranslation();
 
   // 记录文件名
@@ -27,6 +28,7 @@ const ImportModal = ({
     const reader = new FileReader();
     reader.onload = (evt) => {
       setContent(evt.target.result);
+      setError('');
     };
     reader.readAsText(file);
   };
@@ -34,13 +36,13 @@ const ImportModal = ({
   // handle import confirm
   const handleOk = () => {
     if (!content.trim()) {
-      message.error(t('import_empty_error'));
+      setError(t('import_empty_error'));
       return;
     }
     if (validate) {
       const err = validate(content);
       if (err) {
-        message.error(err);
+        setError(err);
         return;
       }
     }
@@ -49,9 +51,16 @@ const ImportModal = ({
       const parsed = parseImportContent(content, fileNameRef.current);
       onOk(parsed);
       setContent('');
+      setError('');
     } catch (e) {
-      message.error(e.message);
+      setError(e.message);
     }
+  };
+
+  const handleCancel = () => {
+    setContent('');
+    setError('');
+    onCancel();
   };
 
   return (
@@ -59,33 +68,8 @@ const ImportModal = ({
       title={<span style={{fontSize: 20, fontWeight: 700, color: '#222'}}>{title}</span>}
       open={visible}
       onOk={handleOk}
-      onCancel={() => { setContent(''); onCancel(); }}
-      okText={<span style={{fontWeight: 600}}>{t('ok')}</span>}
-      cancelText={<span style={{fontWeight: 500}}>{t('cancel')}</span>}
-      okButtonProps={{
-        style: {
-          background: 'linear-gradient(90deg, var(--primary-500) 0%, var(--primary-600) 100%)',
-          color: '#fff',
-          borderRadius: 8,
-          fontWeight: 600,
-          fontSize: 15,
-          border: 'none',
-          boxShadow: 'var(--shadow-md)',
-          transition: 'all 0.2s',
-        }
-      }}
-      cancelButtonProps={{
-        style: {
-          background: 'var(--neutral-100)',
-          color: 'var(--neutral-700)',
-          borderRadius: 8,
-          fontWeight: 500,
-          fontSize: 15,
-          border: 'none',
-          boxShadow: 'var(--shadow-sm)',
-          transition: 'all 0.2s',
-        }
-      }}
+      onCancel={handleCancel}
+      footer={null}
     >
       <div style={{ color: '#888', fontSize: 13, marginBottom: 8 }}>{t('import_brief_tip')}</div>
       <div style={{ marginBottom: 12, minWidth: 220 }}>
@@ -113,10 +97,17 @@ const ImportModal = ({
       <Input.TextArea
         placeholder={placeholder}
         value={content}
-        onChange={e => setContent(e.target.value)}
+        onChange={e => { setContent(e.target.value); setError(''); }}
         rows={8}
         style={{ fontSize: 14, borderRadius: 8, fontWeight: 500, marginTop: 8 }}
       />
+      {error && (
+        <div style={{ color: '#ff4d4f', marginTop: 8, marginBottom: 0, fontSize: 14, fontWeight: 500 }}>{error}</div>
+      )}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, marginTop: 18 }}>
+        <Button onClick={handleCancel} style={{ minWidth: 80 }}>{t('cancel')}</Button>
+        <Button type="primary" onClick={handleOk} style={{ minWidth: 80 }}>{t('ok')}</Button>
+      </div>
     </Modal>
   );
 };

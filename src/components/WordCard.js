@@ -81,7 +81,7 @@ const WordCard = ({ word, isSelected, onSelect, onMasteredToggle, onEdit }) => {
         onMouseEnter={e => e.currentTarget.style.background = 'var(--neutral-100)'}
         onMouseLeave={e => e.currentTarget.style.background = 'none'}
         aria-label="Edit"
-      >
+    >
         <EditOutlined style={{ fontSize: 18 }} />
       </button>
       {/* Edit modal */}
@@ -99,8 +99,7 @@ const WordCard = ({ word, isSelected, onSelect, onMasteredToggle, onEdit }) => {
       />
       {/* Header area */}
       <div
-        onClick={() => onSelect && onSelect(word.id)}
-        style={{ cursor: 'pointer' }}
+        // No onClick here, only checkbox controls selection
       >
         <div
           style={{
@@ -153,7 +152,7 @@ const WordCard = ({ word, isSelected, onSelect, onMasteredToggle, onEdit }) => {
             </span>
           )}
         </div>
-
+        
         {/* Word and pronunciation */}
         <div
           style={{

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, message, Modal } from 'antd';
 import { PlusOutlined, UploadOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { addWord, importWordsFromCSV } from '../utils/wordUtils';
+import { addWord, addWordsInBatch } from '../utils/wordUtils';
 import ImportModal from './ImportModal';
 import { useTranslation } from 'react-i18next';
 
@@ -32,15 +32,43 @@ const AddWordForm = ({ unitId, onWordAdded }) => {
   const handleImportConfirm = (parsed) => {
     // parsed: { type, data }
     if (parsed.type === 'csv-words') {
-      if (importWordsFromCSV(unitId, parsed.data.words)) {
+      if (addWordsInBatch(unitId, parsed.data.words)) {
         message.success(t('import_csv_success'));
         setIsModalVisible(false);
         if (onWordAdded) onWordAdded();
       } else {
         message.error(t('import_csv_fail'));
       }
+    } else if (parsed.type === 'json') {
+      // 支持两种 json 格式：1. 单词数组 2. { units: [...] }
+      if (Array.isArray(parsed.data)) {
+        // 直接是单词数组
+        if (addWordsInBatch(unitId, parsed.data)) {
+          message.success(t('import_success'));
+          setIsModalVisible(false);
+          if (onWordAdded) onWordAdded();
+        } else {
+          message.error(t('import_csv_fail'));
+        }
+      } else if (parsed.data.units && Array.isArray(parsed.data.units)) {
+        // 多单元 json，找到当前单元
+        const unit = parsed.data.units.find(u => String(u.id) === String(unitId) || u.name === unitId);
+        if (unit && Array.isArray(unit.words)) {
+          if (addWordsInBatch(unitId, unit.words)) {
+            message.success(t('import_success'));
+            setIsModalVisible(false);
+            if (onWordAdded) onWordAdded();
+          } else {
+            message.error(t('import_csv_fail'));
+          }
+        } else {
+          message.error(t('json_format_error'));
+        }
+      } else {
+        message.error(t('json_format_error'));
+      }
     } else {
-      message.error('Only single-unit CSV import is supported here.');
+      message.error('Only single-unit CSV or JSON import is supported here.');
     }
   };
 
@@ -149,8 +177,6 @@ const AddWordForm = ({ unitId, onWordAdded }) => {
         buttonText={t('upload_file')}
         icon={<UploadOutlined />}
         placeholder={t('import_paste_tip')}
-        validate={content => !content.trim() ? t('input_csv_content') : null}
-        parseContent={content => content}
       />
     </div>
   );

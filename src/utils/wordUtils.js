@@ -47,11 +47,9 @@ export const addWordsInBatch = (unitId, wordsArray) => {
   // wordsArray format: [{word: 'word1', meaning: 'meaning1'}, ...]
   const data = getAllData();
   const unitIndex = data.units.findIndex(u => u.id === unitId);
-  
   if (unitIndex === -1) return false;
-  
   const newWords = wordsArray.map(item => ({
-    id: uuidv4(),
+    id: uuidv4(), // always generate new id, ignore any incoming id
     word: item.word.trim(),
     meaning: item.meaning.trim(),
     mastered: false,
@@ -59,7 +57,6 @@ export const addWordsInBatch = (unitId, wordsArray) => {
     reviewTimes: 0,
     lastReviewTime: null
   }));
-  
   data.units[unitIndex].words = [...data.units[unitIndex].words, ...newWords];
   return saveAllData(data);
 };
@@ -178,9 +175,9 @@ export const deleteItems = ({ type, ids, unitId }) => {
   let deletedCount = 0;
   if (type === 'unit') {
     ids.forEach(unitId => {
-      const unitIndex = data.units.findIndex(u => u.id === unitId);
+  const unitIndex = data.units.findIndex(u => u.id === unitId);
       if (unitIndex !== -1) {
-        data.units.splice(unitIndex, 1);
+  data.units.splice(unitIndex, 1);
         deletedCount++;
       }
     });
@@ -200,7 +197,7 @@ export const exportUnitWordsToCSV = (unitId) => {
   const words = getUnitWords(unitId);
   if (words.length === 0) return '';
   
-  const header = '单词,释义,是否掌握,创建时间,复习次数,最后复习时间\n'; 
+  const header = '单词,释义,是否掌握,创建时间,复习次数,最后复习时间\n';
   const rows = words.map(word => {
     const mastered = word.mastered ? '是' : '否';
     const createTime = new Date(word.createTime).toLocaleString();
