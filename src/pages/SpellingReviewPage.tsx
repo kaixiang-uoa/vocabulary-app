@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useParams, Link } from 'react-router';
 import { Button, Text, Title, RadioGroup, RadioButton, Empty, message, Modal, Switch, InputNumber, Space } from '../components/ui';
 import { ArrowLeftIcon, ArrowPathIcon, BookOpenIcon, SpeakerWaveIcon } from '@heroicons/react/24/outline';
 import SpellingReviewCard from '../components/SpellingReviewCard';
 import LanguageSwitcher from '../components/LanguageSwitcher';
-import { setWordMasteredStatus } from '../utils/wordUtils';
+import { setWordMasteredStatus, getAllData } from '../utils/wordUtils';
 import { useTranslation } from 'react-i18next';
 import { getTailwindClass } from '../utils/styleMapping';
 import { useReviewData, useReviewNavigation } from '../hooks';
@@ -21,6 +21,7 @@ const SpellingReviewPage: React.FC = () => {
   const [reviewMode, setReviewMode] = useState<ReviewMode>('all');
   const [reviewOrder, setReviewOrder] = useState<ReviewOrder>('sequential');
   const [showCompletionModal, setShowCompletionModal] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   
   // Auto play state - default enabled
   const [autoPlay, setAutoPlay] = useState(true);
@@ -30,8 +31,43 @@ const SpellingReviewPage: React.FC = () => {
   const { data, loading, error } = useReviewData({ 
     unitId: unitId!,
     reviewMode,
-    reviewOrder
+    reviewOrder,
+    refreshTrigger
   });
+
+  // Calculate word counts for each mode - use real-time data
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const wordCounts = useMemo(() => {
+    if (!data.unit) return { all: 0, mastered: 0, unmastered: 0 };
+    
+    // Get fresh data from localStorage to ensure real-time counts
+    const allData = getAllData();
+    const currentUnit = allData.units.find(u => u.id === unitId);
+    const allWords = currentUnit?.words || data.unit.words;
+    
+    return {
+      all: allWords.length,
+      mastered: allWords.filter(word => word.mastered).length,
+      unmastered: allWords.filter(word => !word.mastered).length
+    };
+  }, [data.unit, unitId, refreshTrigger]);
+
+  // Auto-switch mode if current mode has no words
+  useEffect(() => {
+    if (data.unit && wordCounts[reviewMode] === 0) {
+      // Find a mode with words
+      if (wordCounts.all > 0) {
+        setReviewMode('all');
+        message.info(t('switched_to_all_mode'));
+      } else if (wordCounts.unmastered > 0) {
+        setReviewMode('unmastered');
+        message.info(t('switched_to_unmastered_mode'));
+      } else if (wordCounts.mastered > 0) {
+        setReviewMode('mastered');
+        message.info(t('switched_to_mastered_mode'));
+      }
+    }
+  }, [data.unit, reviewMode, wordCounts, t]);
   
   // Navigation layer
   const {
@@ -61,6 +97,8 @@ const SpellingReviewPage: React.FC = () => {
     
     if (setWordMasteredStatus(unitId, wordId, mastered)) {
       message.success(t('status_updated'));
+      // Trigger refresh to update word counts
+      setRefreshTrigger(prev => prev + 1);
     }
   };
 
@@ -159,9 +197,24 @@ const SpellingReviewPage: React.FC = () => {
             <div className="flex flex-col gap-3 flex-shrink-0 min-w-[140px]">
               <label className="text-sm font-bold text-gray-700">{t('review_mode')}</label>
               <RadioGroup value={reviewMode} onChange={handleModeChange} className="flex gap-2">
-                <RadioButton value="all">{t('all')}</RadioButton>
-                <RadioButton value="unmastered">{t('unmastered')}</RadioButton>
-                <RadioButton value="mastered">{t('mastered')}</RadioButton>
+                <RadioButton 
+                  value="all" 
+                  disabled={wordCounts.all === 0}
+                >
+                  {t('all')} ({wordCounts.all})
+                </RadioButton>
+                <RadioButton 
+                  value="unmastered" 
+                  disabled={wordCounts.unmastered === 0}
+                >
+                  {t('unmastered')} ({wordCounts.unmastered})
+                </RadioButton>
+                <RadioButton 
+                  value="mastered" 
+                  disabled={wordCounts.mastered === 0}
+                >
+                  {t('mastered')} ({wordCounts.mastered})
+                </RadioButton>
               </RadioGroup>
             </div>
             
@@ -251,21 +304,27 @@ const SpellingReviewPage: React.FC = () => {
           
           <div className="flex justify-center mb-8">
             <div className="w-full max-w-2xl">
-              <SpellingReviewCard
-                key={currentWord?.id || currentIndex}
-                word={currentWord}
-                onMasteredToggle={(mastered) => handleSetMasteredStatus(currentWord.id, mastered)}
-                onNext={handleNext}
-                onPrev={handlePrev}
-                isFirst={isFirst}
-                isLast={isLast}
-                currentIndex={currentIndex}
-                failedWords={failedWords}
-                setFailedWords={markFailed}
-                onCompleted={markCompleted}
-                autoPlay={autoPlay}
-                pronunciationDelay={pronunciationDelay}
-              />
+              {currentWord ? (
+                <SpellingReviewCard
+                  key={currentWord.id || currentIndex}
+                  word={currentWord}
+                  onMasteredToggle={(mastered) => handleSetMasteredStatus(currentWord.id, mastered)}
+                  onNext={handleNext}
+                  onPrev={handlePrev}
+                  isFirst={isFirst}
+                  isLast={isLast}
+                  currentIndex={currentIndex}
+                  failedWords={failedWords}
+                  setFailedWords={markFailed}
+                  onCompleted={markCompleted}
+                  autoPlay={autoPlay}
+                  pronunciationDelay={pronunciationDelay}
+                />
+              ) : (
+                <div className="text-center text-gray-500">
+                  {t('loading_word')}
+                </div>
+              )}
             </div>
           </div>
 

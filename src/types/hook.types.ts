@@ -4,6 +4,7 @@ export interface UseReviewDataOptions {
   unitId: string | undefined;
   reviewMode: 'all' | 'unmastered' | 'mastered';
   reviewOrder: 'sequential' | 'random';
+  refreshTrigger?: number;
 }
 
 export interface UseReviewDataReturn {

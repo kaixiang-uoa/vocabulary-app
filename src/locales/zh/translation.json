@@ -132,5 +132,9 @@
   "auto_play_enabled": "自动播放已开启",
   "auto_play_disabled": "自动播放已关闭",
   "pronunciation_delay": "发音延迟",
+  "switched_to_all_mode": "已切换到全部模式（所选模式无单词）",
+  "switched_to_unmastered_mode": "已切换到未掌握模式（所选模式无单词）",
+  "switched_to_mastered_mode": "已切换到已掌握模式（所选模式无单词）",
+  "loading_word": "正在加载单词...",
   "pronunciation_delay_tip": "设置自动播放发音的延迟时间（整数秒）"
 } 

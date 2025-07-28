@@ -5,7 +5,8 @@ import { Unit, UseReviewDataProps, UseReviewDataReturn } from '../types';
 export const useReviewData = ({ 
   unitId, 
   reviewMode = 'all', 
-  reviewOrder = 'sequential' 
+  reviewOrder = 'sequential',
+  refreshTrigger = 0
 }: UseReviewDataProps): UseReviewDataReturn => {
   const [unit, setUnit] = useState<Unit | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -89,13 +90,16 @@ export const useReviewData = ({
     loadData(unitId).catch(console.error);
   }, [unitId, loadData]);
 
-  // Memoized filtered words for current mode and order
+  // Memoized filtered words for current mode and order - use real-time data
   const filteredWords = useMemo(() => {
     if (!unit) return [];
 
     console.log('useReviewData: Filtering words for mode:', reviewMode, 'order:', reviewOrder);
     
-    let words = unit.words;
+    // Get fresh data from localStorage to ensure real-time filtering
+    const allData = getAllData();
+    const currentUnit = allData.units.find(u => u.id === unitId);
+    let words = currentUnit?.words || unit.words;
 
     // Filter by review mode
     if (reviewMode === 'unmastered') {
@@ -112,7 +116,7 @@ export const useReviewData = ({
     console.log('useReviewData: Filtered words count:', words.length);
     return words;
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [unit?.id, reviewMode, reviewOrder]); // Remove unit?.words.length dependency
+  }, [unit?.id, reviewMode, reviewOrder, unitId, refreshTrigger]); // Add refreshTrigger to ensure real-time updates
 
   return {
     data: {

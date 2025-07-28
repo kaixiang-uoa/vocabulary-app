@@ -132,5 +132,8 @@
   "auto_play_enabled": "Auto play enabled",
   "auto_play_disabled": "Auto play disabled",
   "pronunciation_delay": "Pronunciation Delay",
+  "switched_to_all_mode": "Switched to All mode (no words in selected mode)",
+  "switched_to_unmastered_mode": "Switched to Unmastered mode (no words in selected mode)",
+  "switched_to_mastered_mode": "Switched to Mastered mode (no words in selected mode)",
   "pronunciation_delay_tip": "Set delay time for auto playing pronunciation (whole seconds)"
 } 

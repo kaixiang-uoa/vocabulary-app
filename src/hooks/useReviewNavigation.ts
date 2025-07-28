@@ -12,6 +12,11 @@ export const useReviewNavigation = ({ words }: UseReviewNavigationOptions) => {
 
   // Current word
   const currentWord = useMemo(() => {
+    // Reset currentIndex if it's out of bounds
+    if (currentIndex >= words.length && words.length > 0) {
+      setCurrentIndex(0);
+      return words[0] || null;
+    }
     return words[currentIndex] || null;
   }, [words, currentIndex]);
 

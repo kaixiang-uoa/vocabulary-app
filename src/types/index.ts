@@ -206,6 +206,7 @@ export interface UseReviewDataProps {
   unitId: string;
   reviewMode?: 'all' | 'unmastered' | 'mastered';
   reviewOrder?: 'sequential' | 'random';
+  refreshTrigger?: number;
 }
 
 export interface UseReviewDataReturn {
