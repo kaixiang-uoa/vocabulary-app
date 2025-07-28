@@ -117,3 +117,26 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Review card mastered styles */
+.review-card.mastered {
+  background: var(--wordcard-mastered-bg) !important;
+  border-color: var(--wordcard-mastered-border) !important;
+}
+
+.review-card.mastered .absolute {
+  background: var(--wordcard-mastered-bg) !important;
+  border-color: var(--wordcard-mastered-border) !important;
+}
+
+/* Button mastered styles */
+.btn-secondary.mastered {
+  background: var(--wordcard-btn-bg-mastered) !important;
+  color: var(--wordcard-btn-color-mastered) !important;
+  border-color: var(--wordcard-btn-border-mastered) !important;
+}
+
+.btn-secondary.mastered:hover {
+  background: #e5e5e5 !important;
+  border-color: #bfbfbf !important;
+}

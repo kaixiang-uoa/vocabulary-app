@@ -1,0 +1,332 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Button, Input, Text, Progress } from '../components/ui';
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import { useTranslation } from 'react-i18next';
+import { SpellingReviewCardProps, InputHistoryItem } from '../types';
+import { useNavigate, useParams } from 'react-router';
+import { validateSpellingInput, isValidLetter } from '../utils/spellingUtils';
+import { getTailwindClass } from '../utils/styleMapping';
+import { playPronunciation } from '../services/pronunciationService';
+
+
+
+const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({ 
+  word, 
+  onMasteredToggle, 
+  onNext, 
+  onPrev, 
+  isFirst, 
+  isLast, 
+  currentIndex,
+  failedWords, 
+  setFailedWords, 
+  onCompleted,
+  autoPlay = true,
+  pronunciationDelay = 1
+}) => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { unitId } = useParams<{ unitId: string }>();
+  const [currentInput, setCurrentInput] = useState('');
+  const [errorCount, setErrorCount] = useState(0);
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [showResult, setShowResult] = useState(false);
+  const [inputHistory, setInputHistory] = useState<InputHistoryItem[]>([]);
+  const inputRef = useRef<any>(null);
+  const lastWordId = useRef<string>('');
+
+  const maxErrors = 3;
+  const targetWord = word.word.toLowerCase();
+
+  // Simple audio play functions
+  const playErrorPronunciation = () => {
+    setTimeout(() => {
+      playPronunciation(word.word);
+    }, 300);
+  };
+
+  const playManualPronunciation = () => {
+    playPronunciation(word.word);
+  };
+
+  // Reset state when word changes
+  useEffect(() => {
+    setCurrentInput('');
+    setErrorCount(0);
+    setIsCompleted(false);
+    setShowResult(false);
+    setInputHistory([]);
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [word.id]);
+
+  // Qwerty Learner style - simple auto play
+  useEffect(() => {
+    if (autoPlay && word.id !== lastWordId.current) {
+      lastWordId.current = word.id;
+      console.log('Qwerty Learner style: Auto playing', word.word);
+      setTimeout(() => {
+        const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word.word)}&type=2`;
+        const audio = new Audio(url);
+        audio.play();
+      }, pronunciationDelay * 1000);
+    }
+  }, [word.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Handle key press
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && showResult) {
+      handleNext();
+    }
+  };
+
+  // Handle next word
+  const handleNext = () => {
+    if (!isLast) {
+      onNext();
+    } else {
+      // If last word and showResult, jump to UnitDetailPage
+      navigate(`/unit/${unitId}`);
+    }
+  };
+
+  // Handle previous word
+  const handlePrev = () => {
+    if (!isFirst) {
+      onPrev();
+    }
+  };
+
+  // Handle show answer
+  const handleShowAnswer = () => {
+    setShowResult(true);
+    if (!failedWords.has(word.id)) {
+      setFailedWords(word.id);
+    }
+  };
+
+  // Generate input display
+  const renderInputDisplay = () => {
+    return targetWord.split('').map((letter, index) => {
+      const inputLetter = currentInput[index] || '';
+      const isCorrect = inputLetter === letter;
+      const hasInput = inputLetter !== '';
+      
+      return (
+        <span
+          key={index}
+          className={`inline-block w-8 h-8 mx-1 text-center leading-8 border-2 rounded font-mono text-lg font-bold ${
+            hasInput 
+              ? isCorrect 
+                ? 'border-green-500 bg-green-100 text-green-700' 
+                : 'border-red-500 bg-red-100 text-red-700'
+              : 'border-gray-300 bg-gray-50 text-gray-400'
+          }`}
+        >
+          {inputLetter}
+        </span>
+      );
+    });
+  };
+
+  // Handle input validation and processing
+  const handleInputChange = (nextInput: string) => {
+    const validation = validateSpellingInput(nextInput, targetWord);
+    
+    if (!validation.isValid) {
+      // Input is wrong - handle error
+      handleInputError(nextInput);
+      return;
+    }
+    
+    // Input is valid - update current input
+    setCurrentInput(nextInput);
+    
+    // Check if input is complete and correct
+    if (validation.isComplete && validation.isCorrect) {
+      handleInputSuccess(nextInput);
+    }
+  };
+
+  // Handle input error
+  const handleInputError = (input: string) => {
+    setCurrentInput('');
+    const newErrorCount = errorCount + 1;
+    setErrorCount(newErrorCount);
+    setInputHistory([...inputHistory, { input, correct: false }]);
+    
+    // Play error pronunciation only if autoPlay is enabled AND not the last error
+    if (autoPlay && newErrorCount < maxErrors) {
+      playErrorPronunciation();
+    }
+    
+    if (newErrorCount >= maxErrors) {
+      onMasteredToggle();
+      setShowResult(true);
+      // Auto jump to next
+      setTimeout(() => handleNext(), 800);
+    }
+  };
+
+  // Handle input success
+  const handleInputSuccess = (input: string) => {
+    setIsCompleted(true);
+    setShowResult(true);
+    setInputHistory([...inputHistory, { input, correct: true }]);
+    if (onCompleted) onCompleted(word.id);
+    
+    // Auto jump to next (new word will auto play via useEffect)
+    setTimeout(() => handleNext(), 800);
+  };
+
+  return (
+    <div className="max-w-2xl mx-auto p-8 bg-white rounded-xl shadow-lg">
+      {/* Word meaning */}
+      <div className="mb-6">
+        <div className="text-center mb-4">
+          <span className="text-lg font-medium text-gray-600">
+            {t('meaning')}
+          </span>
+        </div>
+        <div className="text-center">
+          <span className="text-xl font-medium">
+            {word.meaning}
+          </span>
+          <button
+            type="button"
+            onClick={playManualPronunciation}
+            className="text-gray-500 hover:text-gray-700 ml-3 inline-flex items-center"
+            title={t('play_pronunciation')}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Progress indicator */}
+      <div className={`${getTailwindClass('mb-24')}`}>
+        <Progress
+          percent={Math.round((errorCount / maxErrors) * 100)}
+          status={errorCount >= maxErrors ? 'exception' : 'active'}
+          format={() => `${errorCount}/${maxErrors}`}
+          strokeColor={errorCount >= maxErrors ? '#ff4d4f' : '#1890ff'}
+                      className="text-base font-medium"
+        />
+      </div>
+
+      {/* Spelling area */}
+      <div className="mb-8">
+        {!showResult ? (
+          <div>
+            <Input
+              ref={inputRef}
+              value={currentInput}
+              onChange={e => {
+                const value = e.target.value.toLowerCase();
+                // Only allow input next letter
+                if (value.length === currentInput.length + 1) {
+                  const nextChar = value[value.length - 1];
+                  if (!isValidLetter(nextChar)) return;
+                  handleInputChange(currentInput + nextChar);
+                } else if (value.length < currentInput.length) {
+                  // Allow backspace
+                  setCurrentInput(value);
+                }
+                // Other cases (like multiple letters input), ignore
+              }}
+              onKeyPress={handleKeyPress}
+              onPaste={e => e.preventDefault()}
+              placeholder={t('enter_word')}
+              className="text-lg h-12 text-center font-mono"
+              maxLength={targetWord.length}
+              autoFocus
+            />
+            <div className="mt-4 text-center">
+              {renderInputDisplay()}
+            </div>
+          </div>
+        ) : (
+          <div>
+            <div className="mb-4 text-center">
+              {targetWord.split('').map((letter, index) => (
+                <span
+                  key={index}
+                  className="inline-block w-8 h-8 mx-1 text-center leading-8 border-2 border-green-500 bg-green-100 text-green-700 rounded font-mono text-lg font-bold"
+                >
+                  {letter}
+                </span>
+              ))}
+            </div>
+            <div className="mt-4 text-center">
+              {isCompleted ? (
+                <Text className="text-green-600 text-base flex items-center justify-center gap-2">
+                  <CheckCircleIcon /> {t('spelling_correct')}
+                </Text>
+              ) : (
+                <Text className="text-red-600 text-base flex items-center justify-center gap-2">
+                  <XCircleIcon /> {t('correct_answer')}{targetWord}
+                </Text>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Action buttons */}
+      <div className="flex justify-center items-center gap-4 mt-6">
+        <Button
+          onClick={handlePrev}
+          disabled={isFirst}
+          className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')} px-6 py-2 text-base font-medium`}
+        >
+          {t('previous')}
+        </Button>
+        
+        {!showResult && (
+          <Button
+            onClick={handleShowAnswer}
+            className="px-6 py-2 text-base font-medium rounded-lg transition-colors duration-200 bg-yellow-500 text-white border border-yellow-500 hover:bg-yellow-600"
+          >
+            {t('view_answer')}
+          </Button>
+        )}
+        
+        <Button
+          onClick={handleNext}
+          disabled={isLast && !showResult}
+          className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')} px-6 py-2 text-base font-medium`}
+        >
+          {isLast ? t('complete') : t('next_word')}
+        </Button>
+      </div>
+
+      {/* Error history */}
+      {inputHistory.length > 0 && (
+        <div className="mt-8 text-center">
+          <Text className={`${getTailwindClass('text-secondary')} ${getTailwindClass('text-small')}`}>
+            {t('attempt_history')}
+          </Text>
+          <div className="mt-2 text-center">
+            {inputHistory.map((attempt, index) => (
+              <div
+                key={index}
+                className={`inline-block mx-1 px-3 py-1 rounded text-sm font-mono ${
+                  attempt.correct 
+                    ? 'bg-green-100 text-green-700 border border-green-300' 
+                    : 'bg-red-100 text-red-700 border border-red-300'
+                }`}
+              >
+                {attempt.input}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default SpellingReviewCard; 
