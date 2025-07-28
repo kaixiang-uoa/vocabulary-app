@@ -301,8 +301,8 @@ const UnitDetailPage: React.FC = () => {
       
       <Divider orientation="left">{t('word_list')}</Divider>
       
-      {/* First row: Tabs */}
-      <div className="mb-4">
+            {/* First row: Tabs */}
+      <div className="mb-6">
         <Tabs
           activeKey={activeTab}
           onChange={(key) => { setActiveTab(key as 'all' | 'mastered' | 'unmastered'); setSelectedWordIds([]); }}
@@ -323,7 +323,7 @@ const UnitDetailPage: React.FC = () => {
               checked={isAllSelected}
               indeterminate={isIndeterminate}
               onChange={handleSelectAll}
-              className="text-base font-medium"
+              className="text-sm font-medium"
             >
               {t('select_all')}
             </Checkbox>
@@ -340,7 +340,7 @@ const UnitDetailPage: React.FC = () => {
               type="primary"
               danger
               disabled={selectedWordIds.length === 0}
-              className={`${getTailwindClass('btn-danger')} ${getTailwindClass('btn-standard')} ${selectedWordIds.length === 0 ? 'opacity-50' : ''}`}
+              className={`${getTailwindClass('btn-danger')} ${getTailwindClass('btn-standard')} text-sm px-3 py-1 h-8 ${selectedWordIds.length === 0 ? 'opacity-50' : ''}`}
             >
               {t('delete_selected')}{selectedWordIds.length > 0 ? ` (${selectedWordIds.length})` : ''}
             </Button>
@@ -349,13 +349,13 @@ const UnitDetailPage: React.FC = () => {
         
         {/* Right side: Pagination controls */}
         <div className="flex items-center gap-3">
-          <span className="text-base text-gray-600">
+          <span className="text-sm text-gray-600">
             {t('page_size')}:
           </span>
           <select 
             value={pageSize} 
             onChange={(e) => setPageSize(Number(e.target.value))}
-            className="text-base border border-gray-300 rounded px-2 py-1"
+            className="text-sm border border-gray-300 rounded px-2 py-1 h-8"
           >
             <option value={10}>10</option>
             <option value={20}>20</option>
@@ -363,7 +363,7 @@ const UnitDetailPage: React.FC = () => {
             <option value={100}>100</option>
           </select>
           
-          <span className="text-base text-gray-600">
+          <span className="text-sm text-gray-600">
             {t('page')} {currentPage} / {Math.ceil(filteredWords.length / pageSize)}
           </span>
           
@@ -371,7 +371,18 @@ const UnitDetailPage: React.FC = () => {
             size="small"
             disabled={currentPage === 1}
             onClick={() => setCurrentPage(currentPage - 1)}
-            className="text-base font-medium"
+            className="text-sm font-medium px-3 py-1 h-8"
+            style={{
+              background: currentPage === 1 
+                ? '#f5f5f5' 
+                : 'linear-gradient(90deg, var(--primary-500) 0%, var(--primary-600) 100%)',
+              color: currentPage === 1 ? '#999' : '#fff',
+              borderRadius: 6,
+              border: 'none',
+              fontWeight: 500,
+              boxShadow: currentPage === 1 ? 'none' : 'var(--shadow-sm)',
+              transition: 'all 0.2s'
+            }}
           >
             {t('prev')}
           </Button>
@@ -379,7 +390,18 @@ const UnitDetailPage: React.FC = () => {
             size="small"
             disabled={currentPage >= Math.ceil(filteredWords.length / pageSize)}
             onClick={() => setCurrentPage(currentPage + 1)}
-            className="text-base font-medium"
+            className="text-sm font-medium px-3 py-1 h-8"
+            style={{
+              background: currentPage >= Math.ceil(filteredWords.length / pageSize)
+                ? '#f5f5f5' 
+                : 'linear-gradient(90deg, var(--primary-500) 0%, var(--primary-600) 100%)',
+              color: currentPage >= Math.ceil(filteredWords.length / pageSize) ? '#999' : '#fff',
+              borderRadius: 6,
+              border: 'none',
+              fontWeight: 500,
+              boxShadow: currentPage >= Math.ceil(filteredWords.length / pageSize) ? 'none' : 'var(--shadow-sm)',
+              transition: 'all 0.2s'
+            }}
           >
             {t('next')}
           </Button>

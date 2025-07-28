@@ -215,6 +215,9 @@ const UnitList: React.FC = () => {
           alignItems: 'center', 
           justifyContent: 'space-between', 
           marginBottom: 16,
+          marginTop: 16,
+          marginLeft: 16,
+          marginRight: 16,
           flexWrap: 'wrap',
           gap: 12
         }}>
@@ -308,6 +311,8 @@ const UnitList: React.FC = () => {
             alignItems: 'center', 
             justifyContent: 'space-between', 
             marginBottom: 16,
+            marginLeft: 16,
+            marginRight: 16,
             padding: '12px 16px',
             background: '#fafafa',
             borderRadius: 8,
@@ -486,6 +491,8 @@ const UnitList: React.FC = () => {
                 gap: '40px',
                 marginTop: 16,
                 marginBottom: 16,
+                marginLeft: 16,
+                marginRight: 16,
                 alignItems: 'stretch',
                 maxWidth: filteredUnits.length === 1 ? 480 : '100%',
                 width: filteredUnits.length === 1 ? '100%' : '100%',
