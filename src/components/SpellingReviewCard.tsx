@@ -177,7 +177,8 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
     }
     
     if (newErrorCount >= maxErrors) {
-      onMasteredToggle();
+      // Mark as unmastered after 3 failed attempts
+      onMasteredToggle(false);
       setShowResult(true);
       // Auto jump to next
       setTimeout(() => handleNext(), 800);
@@ -189,6 +190,9 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
     setIsCompleted(true);
     setShowResult(true);
     setInputHistory([...inputHistory, { input, correct: true }]);
+    
+    // Mark as mastered when spelling is correct
+    onMasteredToggle(true);
     if (onCompleted) onCompleted(word.id);
     
     // Auto jump to next (new word will auto play via useEffect)

@@ -4,7 +4,7 @@ import { Button, Text, Title, RadioGroup, RadioButton, Empty, message, Modal, Sw
 import { ArrowLeftIcon, ArrowPathIcon, BookOpenIcon, SpeakerWaveIcon } from '@heroicons/react/24/outline';
 import SpellingReviewCard from '../components/SpellingReviewCard';
 import LanguageSwitcher from '../components/LanguageSwitcher';
-import { toggleWordMastered } from '../utils/wordUtils';
+import { setWordMasteredStatus } from '../utils/wordUtils';
 import { useTranslation } from 'react-i18next';
 import { getTailwindClass } from '../utils/styleMapping';
 import { useReviewData, useReviewNavigation } from '../hooks';
@@ -28,7 +28,9 @@ const SpellingReviewPage: React.FC = () => {
   
   // Data layer
   const { data, loading, error } = useReviewData({ 
-    unitId: unitId! 
+    unitId: unitId!,
+    reviewMode,
+    reviewOrder
   });
   
   // Navigation layer
@@ -53,15 +55,16 @@ const SpellingReviewPage: React.FC = () => {
     playPronunciation(word);
   };
   
-  // Toggle mastered state
-  const handleMasteredToggle = (wordId: string) => {
+  // Set mastered state for spelling review
+  const handleSetMasteredStatus = (wordId: string, mastered: boolean) => {
     if (!unitId) return;
     
-    if (toggleWordMastered(unitId, wordId)) {
-      markFailed(wordId);
+    if (setWordMasteredStatus(unitId, wordId, mastered)) {
       message.success(t('status_updated'));
     }
   };
+
+
 
   // Next/prev handlers
   const handleNext = () => {
@@ -251,7 +254,7 @@ const SpellingReviewPage: React.FC = () => {
               <SpellingReviewCard
                 key={currentWord?.id || currentIndex}
                 word={currentWord}
-                onMasteredToggle={() => handleMasteredToggle(currentWord.id)}
+                onMasteredToggle={(mastered) => handleSetMasteredStatus(currentWord.id, mastered)}
                 onNext={handleNext}
                 onPrev={handlePrev}
                 isFirst={isFirst}

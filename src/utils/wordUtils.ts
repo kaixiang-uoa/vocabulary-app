@@ -106,6 +106,24 @@ export const toggleWordMastered = (unitId: string, wordId: string): boolean => {
   return saveAllData(data);
 };
 
+// set word mastered status for spelling review
+export const setWordMasteredStatus = (unitId: string, wordId: string, mastered: boolean): boolean => {
+  const data = getAllData();
+  const unitIndex = data.units.findIndex(u => u.id === unitId);
+  
+  if (unitIndex === -1) return false;
+  
+  const wordIndex = data.units[unitIndex].words.findIndex(w => w.id === wordId);
+  
+  if (wordIndex === -1) return false;
+  
+  data.units[unitIndex].words[wordIndex].mastered = mastered;
+  data.units[unitIndex].words[wordIndex].reviewTimes += 1;
+  data.units[unitIndex].words[wordIndex].lastReviewTime = Date.now();
+  
+  return saveAllData(data);
+};
+
 // create new unit
 export const createUnit = (unitName: string): string => {
   const data = getAllData();

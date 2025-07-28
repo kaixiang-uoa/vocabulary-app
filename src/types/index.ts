@@ -39,7 +39,7 @@ export interface WordCardProps {
 
 export interface SpellingReviewCardProps {
   word: Word;
-  onMasteredToggle: () => void;
+  onMasteredToggle: (mastered: boolean) => void;
   onNext: () => void;
   onPrev: () => void;
   isFirst: boolean;
