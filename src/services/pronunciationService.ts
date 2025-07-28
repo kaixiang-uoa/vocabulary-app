@@ -30,9 +30,20 @@ export class PronunciationService {
       const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=${type}`;
       console.log('PronunciationService: Playing audio for:', word, 'URL:', url);
       const audio = new Audio(url);
-      audio.play().catch(console.error);
+      
+      // Handle audio loading errors gracefully
+      audio.addEventListener('error', (e) => {
+        console.warn('Audio failed to load for word:', word, e);
+        // Don't throw error, just log it
+      });
+      
+      audio.play().catch((error) => {
+        console.warn('Audio playback failed for word:', word, error);
+        // Don't throw error, just log it
+      });
     } catch (error) {
-      console.error('Pronunciation playback error:', error);
+      console.warn('Pronunciation service error for word:', word, error);
+      // Don't throw error, just log it
     }
   }
 
@@ -56,8 +67,23 @@ export const pronunciationService = PronunciationService.getInstance();
 export const playPronunciation = (word: string, type: number = 2): void => {
   if (!word) return;
   
-  const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=${type}`;
-  console.log('playPronunciation: Playing audio for:', word, 'URL:', url);
-  const audio = new Audio(url);
-  audio.play().catch(console.error);
+  try {
+    const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=${type}`;
+    console.log('playPronunciation: Playing audio for:', word, 'URL:', url);
+    const audio = new Audio(url);
+    
+    // Handle audio loading errors gracefully
+    audio.addEventListener('error', (e) => {
+      console.warn('Audio failed to load for word:', word, e);
+      // Don't throw error, just log it
+    });
+    
+    audio.play().catch((error) => {
+      console.warn('Audio playback failed for word:', word, error);
+      // Don't throw error, just log it
+    });
+  } catch (error) {
+    console.warn('playPronunciation error for word:', word, error);
+    // Don't throw error, just log it
+  }
 }; 

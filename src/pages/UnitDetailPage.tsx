@@ -129,9 +129,24 @@ const UnitDetailPage: React.FC = () => {
 
   // Play pronunciation
   const playPronunciation = (word: string) => {
-    const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=2`;
-    const audio = new window.Audio(url);
-    audio.play();
+    try {
+      const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=2`;
+      const audio = new window.Audio(url);
+      
+      // Handle audio loading errors gracefully
+      audio.addEventListener('error', (e) => {
+        console.warn('Audio failed to load for word:', word, e);
+        // Don't throw error, just log it
+      });
+      
+      audio.play().catch((error) => {
+        console.warn('Audio playback failed for word:', word, error);
+        // Don't throw error, just log it
+      });
+    } catch (error) {
+      console.warn('playPronunciation error for word:', word, error);
+      // Don't throw error, just log it
+    }
   };
 
   // Table columns

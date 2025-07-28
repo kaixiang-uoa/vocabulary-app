@@ -33,9 +33,24 @@ const difficultyColors: DifficultyColors = {
 }
 
 const playYoudaoVoice = (word: string, type: number = 2): void => {
-  const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=${type}`;
-  const audio = new window.Audio(url);
-  audio.play();
+  try {
+    const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=${type}`;
+    const audio = new window.Audio(url);
+    
+    // Handle audio loading errors gracefully
+    audio.addEventListener('error', (e) => {
+      console.warn('Audio failed to load for word:', word, e);
+      // Don't throw error, just log it
+    });
+    
+    audio.play().catch((error) => {
+      console.warn('Audio playback failed for word:', word, error);
+      // Don't throw error, just log it
+    });
+  } catch (error) {
+    console.warn('playYoudaoVoice error for word:', word, error);
+    // Don't throw error, just log it
+  }
 };
 
 const WordCard: React.FC<WordCardProps> = ({ word, isSelected = false, onSelect, onMasteredToggle, onEdit }) => {

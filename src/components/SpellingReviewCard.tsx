@@ -67,9 +67,24 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
       lastWordId.current = word.id;
       console.log('Qwerty Learner style: Auto playing', word.word);
       setTimeout(() => {
-        const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word.word)}&type=2`;
-        const audio = new Audio(url);
-        audio.play();
+        try {
+          const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word.word)}&type=2`;
+          const audio = new Audio(url);
+          
+          // Handle audio loading errors gracefully
+          audio.addEventListener('error', (e) => {
+            console.warn('Auto-play audio failed to load for word:', word.word, e);
+            // Don't throw error, just log it
+          });
+          
+          audio.play().catch((error) => {
+            console.warn('Auto-play audio failed for word:', word.word, error);
+            // Don't throw error, just log it
+          });
+        } catch (error) {
+          console.warn('Auto-play audio error for word:', word.word, error);
+          // Don't throw error, just log it
+        }
       }, pronunciationDelay * 1000);
     }
   }, [word.id]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -263,11 +278,11 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
             <div className="mt-4 text-center">
               {isCompleted ? (
                 <Text className="text-green-600 text-base flex items-center justify-center gap-2">
-                  <CheckCircleIcon /> {t('spelling_correct')}
+                  <CheckCircleIcon className="w-5 h-5" /> {t('spelling_correct')}
                 </Text>
               ) : (
                 <Text className="text-red-600 text-base flex items-center justify-center gap-2">
-                  <XCircleIcon /> {t('correct_answer')}{targetWord}
+                  <XCircleIcon className="w-5 h-5" /> {t('correct_answer')}{targetWord}
                 </Text>
               )}
             </div>

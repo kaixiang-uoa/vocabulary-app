@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams, Link } from 'react-router';
-import { Button, Progress, Text, Title, RadioGroup, RadioButton, Empty, message, Modal, Switch, InputNumber, Space } from '../components/ui';
+import { Button, Text, Title, RadioGroup, RadioButton, Empty, message, Modal, Switch, InputNumber, Space } from '../components/ui';
 import { ArrowLeftIcon, ArrowPathIcon, BookOpenIcon, SpeakerWaveIcon } from '@heroicons/react/24/outline';
 import SpellingReviewCard from '../components/SpellingReviewCard';
 import LanguageSwitcher from '../components/LanguageSwitcher';
@@ -234,12 +234,16 @@ const SpellingReviewPage: React.FC = () => {
       {data.words.length > 0 ? (
         <div>
           <div className="mb-6">
-                      <Progress 
-            percent={progress} 
-            status="active" 
-            format={() => `${currentIndex + 1}/${data.words.length}`} 
-            className={getTailwindClass('progress-text')}
-          />
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-base font-semibold text-gray-700">{t('learning_progress')}</span>
+              <span className="text-lg font-bold text-blue-600">{currentIndex + 1}/{data.words.length}</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-3">
+              <div 
+                className="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
           </div>
           
           <div className="flex justify-center mb-8">
