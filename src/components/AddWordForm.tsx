@@ -43,7 +43,7 @@ const AddWordForm: React.FC<AddWordFormProps & { onExport?: () => void }> = ({ u
     if (Array.isArray(parsed) && parsed.length > 0 && !('unit' in parsed[0])) {
       // Handle direct word array import
       if (addWordsInBatch(unitId, parsed as ImportWordData[])) {
-        message.success(t('import_success'));
+        message.success(t('import_words_success', { count: parsed.length }));
         setIsModalVisible(false);
         if (onWordAdded) onWordAdded();
       } else {
@@ -119,17 +119,17 @@ const AddWordForm: React.FC<AddWordFormProps & { onExport?: () => void }> = ({ u
         onCancel={() => setHelpVisible(false)}
         footer={null}
       >
-        <div style={{ marginBottom: 16 }}>
+        <div className="mb-4">
           <b>{t('help_csv_title_word')}</b>
-          <div style={{ color: '#666', fontSize: 14, margin: '8px 0' }}>{t('help_csv_desc_word')}</div>
-          <pre style={{ background: '#f6f6f6', padding: 12, borderRadius: 6, fontSize: 13 }}>{t('help_csv_example_word')}</pre>
+          <div className="text-gray-600 text-sm my-2">{t('help_csv_desc_word')}</div>
+          <pre className="bg-gray-100 p-3 rounded text-xs">{t('help_csv_example_word')}</pre>
         </div>
-        <div style={{ marginBottom: 16 }}>
+        <div className="mb-4">
           <b>{t('help_json_title_word')}</b>
-          <div style={{ color: '#666', fontSize: 14, margin: '8px 0' }}>{t('help_json_desc_word')}</div>
-          <pre style={{ background: '#f6f6f6', padding: 12, borderRadius: 6, fontSize: 13 }}>{t('help_json_example_word')}</pre>
+          <div className="text-gray-600 text-sm my-2">{t('help_json_desc_word')}</div>
+          <pre className="bg-gray-100 p-3 rounded text-xs">{t('help_json_example_word')}</pre>
         </div>
-        <div style={{ textAlign: 'right' }}>
+        <div className="text-right">
           <Button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-lg px-4 py-2 text-base shadow-md hover:shadow-lg justify-center" onClick={() => setHelpVisible(false)}>{t('help_close')}</Button>
         </div>
       </Modal>

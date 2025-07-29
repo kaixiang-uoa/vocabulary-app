@@ -23,6 +23,7 @@ const UnitList: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isImportModalVisible, setIsImportModalVisible] = useState(false);
   const [helpVisible, setHelpVisible] = useState(false);
+  const [newUnitName, setNewUnitName] = useState('');
 
   // Load data on component mount
   useEffect(() => {
@@ -44,16 +45,38 @@ const UnitList: React.FC = () => {
   };
 
   const showCreateModal = () => {
+    setNewUnitName('');
     setIsModalVisible(true);
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    setNewUnitName('');
   };
 
   const handleCreate = () => {
-    setIsModalVisible(false);
-    refreshData();
+    const trimmedName = newUnitName.trim();
+    if (!trimmedName) {
+      message.error(t('unit_name_required'));
+      return;
+    }
+
+    // Check for duplicate unit names
+    const existingUnit = units.find(unit => unit.name.toLowerCase() === trimmedName.toLowerCase());
+    if (existingUnit) {
+      message.error(t('unit_name_exists'));
+      return;
+    }
+
+    try {
+      createUnit(trimmedName);
+      setIsModalVisible(false);
+      setNewUnitName('');
+      refreshData();
+      message.success(t('unit_created_success'));
+    } catch (error) {
+      message.error(t('unit_created_error'));
+    }
   };
 
   const handleSelectUnit = (unitId: string) => {
@@ -78,7 +101,7 @@ const UnitList: React.FC = () => {
     deleteItems({ type: 'unit', ids: selectedUnits });
     setSelectedUnits([]);
     refreshData();
-    message.success(t('delete_success'));
+    message.success(t('delete_success', { count: selectedUnits.length }));
   };
 
   const handleExportAll = () => {
@@ -148,7 +171,7 @@ const UnitList: React.FC = () => {
 
       setIsImportModalVisible(false);
       refreshData();
-      message.success(t('import_success', { count: importedCount }));
+      message.success(t('import_batch_success', { count: importedCount }));
     } catch (error) {
       console.error('Import failed:', error);
       message.error(t('import_fail'));
@@ -583,6 +606,8 @@ const UnitList: React.FC = () => {
             </label>
             <Input
               placeholder={t('input_unit_name_placeholder')}
+              value={newUnitName}
+              onChange={(e) => setNewUnitName(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleCreate()}
             />
           </div>
@@ -644,7 +669,7 @@ const UnitList: React.FC = () => {
               {searchTerm ? t('no_search_results') : t('no_units')}
             </div>
             <div className="text-sm text-gray-500 leading-relaxed">
-              {searchTerm ? t('no_search_results_tip').replace('{{term}}', searchTerm) : t('no_units_tip')}
+              {searchTerm ? t('no_search_results_tip', { term: searchTerm }) : t('no_units_tip')}
             </div>
           </div>
         )}

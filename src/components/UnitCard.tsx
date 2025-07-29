@@ -38,7 +38,7 @@ const UnitCard: React.FC<UnitCardProps> = ({ unit, isSelected = false, onSelect,
               className="p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors duration-200"
               aria-label={t('edit_unit')}
             >
-              <PencilIcon style={{ fontSize: 16 }} />
+              <PencilIcon className="w-4 h-4" />
             </button>
             {/* Edit modal */}
             <EditModal

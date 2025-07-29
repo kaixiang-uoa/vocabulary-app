@@ -270,7 +270,7 @@ const ReviewPage: React.FC = () => {
         <Empty 
           description={
             <span>
-              {t('no_words', { mode: reviewMode === 'unmastered' ? t('unmastered') : reviewMode === 'mastered' ? t('mastered') : '' })}
+              {t('no_words', { mode: reviewMode === 'unmastered' ? t('unmastered') : reviewMode === 'mastered' ? t('mastered') : t('all') })}
             </span>
           }
         />

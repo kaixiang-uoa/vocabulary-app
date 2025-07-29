@@ -712,15 +712,11 @@ const UnitDetailPage: React.FC = () => {
           }}
         />
       ) : (
-        <div style={{ 
-          textAlign: 'center', 
-          padding: '60px 20px',
-          color: '#666'
-        }}>
-          <div style={{ fontSize: 18, fontWeight: 500, marginBottom: 12 }}>
+        <div className="text-center py-15 px-5 text-gray-600">
+          <div className="text-lg font-medium mb-3">
             {t('no_words_in_unit')}
           </div>
-          <div style={{ fontSize: 14, color: '#999', lineHeight: 1.5 }}>
+          <div className="text-sm text-gray-500 leading-relaxed">
             {t('no_words_in_unit_tip')}
           </div>
         </div>
