@@ -61,6 +61,8 @@
   "status_updated": "状态已更新",
   "review_complete": "复习完成！",
   "review_restart": "已重新开始复习",
+  "restart_tip": "从第一个单词重新开始复习",
+  "restart_disabled_tip": "重新开始功能仅在第一个单词之后可用",
   "loading": "加载中...",
   "back_to_unit": "返回单元",
   "restart": "重新开始",

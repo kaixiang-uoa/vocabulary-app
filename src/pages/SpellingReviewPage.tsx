@@ -185,7 +185,9 @@ const SpellingReviewPage: React.FC = () => {
             <Button 
               icon={<ArrowPathIcon className="w-4 h-4" />} 
               onClick={handleRestart}
+              disabled={isFirst}
               className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')} flex items-center gap-2`}
+              title={isFirst ? t('restart_disabled_tip') : t('restart_tip')}
             >
               {t('restart')}
             </Button>
@@ -230,54 +232,132 @@ const SpellingReviewPage: React.FC = () => {
         </div>
       </div>
       
-      {/* Auto play controls */}
-      <div className="flex items-center gap-3 mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-        <div className="flex items-center gap-2">
-          <SpeakerWaveIcon className="w-5 h-5 text-gray-600" />
-          <Text className="text-base font-medium text-gray-700">
-            {t('auto_play_pronunciation')}:
-          </Text>
-          <Switch
-            checked={autoPlay}
-            onChange={setAutoPlay}
-            size="small"
-          />
-          <Text className={`text-sm ${autoPlay ? 'text-green-600 font-medium' : 'text-gray-500'}`}>
-            {autoPlay ? t('auto_play_enabled') : t('auto_play_disabled')}
-          </Text>
+      {/* Auto play controls - Responsive Layout */}
+      <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+        {/* Large screen: horizontal layout */}
+        <div className="hidden lg:flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <SpeakerWaveIcon className="w-5 h-5 text-gray-600" />
+            <Text className="text-base font-medium text-gray-700">
+              {t('auto_play_pronunciation')}:
+            </Text>
+            <Switch
+              checked={autoPlay}
+              onChange={setAutoPlay}
+              size="small"
+            />
+            <Text className={`text-sm ${autoPlay ? 'text-green-600 font-medium' : 'text-gray-500'}`}>
+              {autoPlay ? t('auto_play_enabled') : t('auto_play_disabled')}
+            </Text>
+          </div>
+          
+          {autoPlay && (
+            <div className="flex items-center gap-1">
+              <Text className="text-sm text-gray-600">
+                {t('pronunciation_delay')}:
+              </Text>
+              <InputNumber
+                min={0}
+                max={10}
+                step={1}
+                precision={0}
+                value={pronunciationDelay}
+                onChange={(value) => setPronunciationDelay(value ?? 1)}
+                size="small"
+                className="w-12"
+                title={t('pronunciation_delay_tip')}
+              />
+              <Text className="text-sm text-gray-600">s</Text>
+            </div>
+          )}
+          
+          {currentWord && (
+            <Button
+              type="default"
+              icon={<SpeakerWaveIcon />}
+              onClick={() => handlePlayPronunciation(currentWord.word)}
+              size="small"
+              className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')}`}
+            >
+              {t('play_pronunciation')}
+            </Button>
+          )}
         </div>
         
-        {autoPlay && (
-          <div className="flex items-center gap-1">
-            <Text className="text-sm text-gray-600">
-              {t('pronunciation_delay')}:
+        {/* Small and medium screens: vertical layout */}
+        <div className="lg:hidden space-y-4">
+          {/* First row: Auto play toggle */}
+          <div className="flex items-center gap-2">
+            <SpeakerWaveIcon className="w-5 h-5 text-gray-600" />
+            <Text className="text-base font-medium text-gray-700">
+              {t('auto_play_pronunciation')}:
             </Text>
-            <InputNumber
-              min={0}
-              max={10}
-              step={1}
-              precision={0}
-              value={pronunciationDelay}
-              onChange={(value) => setPronunciationDelay(value ?? 1)}
+            <Switch
+              checked={autoPlay}
+              onChange={setAutoPlay}
               size="small"
-              className="w-12"
-              title={t('pronunciation_delay_tip')}
             />
-            <Text className="text-sm text-gray-600">s</Text>
+            <Text className={`text-sm ${autoPlay ? 'text-green-600 font-medium' : 'text-gray-500'}`}>
+              {autoPlay ? t('auto_play_enabled') : t('auto_play_disabled')}
+            </Text>
           </div>
-        )}
-        
-        {currentWord && (
-          <Button
-            type="default"
-            icon={<SpeakerWaveIcon />}
-            onClick={() => handlePlayPronunciation(currentWord.word)}
-            size="small"
-            className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')}`}
-          >
-            {t('play_pronunciation')}
-          </Button>
-        )}
+          
+          {/* Second row: Delay, Repeat Count (future), and Play button */}
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3">
+              {autoPlay && (
+                <div className="flex items-center gap-2">
+                  <Text className="text-sm text-gray-600">
+                    {t('pronunciation_delay')}:
+                  </Text>
+                  <InputNumber
+                    min={0}
+                    max={10}
+                    step={1}
+                    precision={0}
+                    value={pronunciationDelay}
+                    onChange={(value) => setPronunciationDelay(value ?? 1)}
+                    size="small"
+                    className="w-16"
+                    title={t('pronunciation_delay_tip')}
+                  />
+                  <Text className="text-sm text-gray-600">s</Text>
+                </div>
+              )}
+              
+              {/* Future: Repeat Count Control */}
+              {/* <div className="flex items-center gap-2">
+                <Text className="text-sm text-gray-600">
+                  {t('repeat_count')}:
+                </Text>
+                <InputNumber
+                  min={1}
+                  max={5}
+                  step={1}
+                  precision={0}
+                  value={repeatCount}
+                  onChange={(value) => setRepeatCount(value ?? 1)}
+                  size="small"
+                  className="w-16"
+                  title={t('repeat_count_tip')}
+                />
+                <Text className="text-sm text-gray-600">{t('times')}</Text>
+              </div> */}
+            </div>
+            
+            {currentWord && (
+              <Button
+                type="default"
+                icon={<SpeakerWaveIcon />}
+                onClick={() => handlePlayPronunciation(currentWord.word)}
+                size="small"
+                className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')} flex-1 max-w-[200px]`}
+              >
+                {t('play_pronunciation')}
+              </Button>
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Game rules explanation */}

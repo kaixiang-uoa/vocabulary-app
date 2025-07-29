@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Input, Button, message, Modal } from '../components/ui';
-import { PlusIcon, ArrowUpTrayIcon, QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, ArrowUpTrayIcon, QuestionMarkCircleIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 import { addWord } from '../utils/wordUtils';
 import { addWordsInBatch } from '../utils/wordImportExport';
 import ImportModal from './ImportModal';
@@ -9,7 +9,7 @@ import { ImportWordData, ImportData, AddWordFormProps, FormValues } from '../typ
 
 
 
-const AddWordForm: React.FC<AddWordFormProps> = ({ unitId, onWordAdded }) => {
+const AddWordForm: React.FC<AddWordFormProps & { onExport?: () => void }> = ({ unitId, onWordAdded, onExport }) => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState<FormValues>({ word: '', meaning: '' });
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -80,7 +80,7 @@ const AddWordForm: React.FC<AddWordFormProps> = ({ unitId, onWordAdded }) => {
           />
         </div>
 
-        <div>
+        <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
           <Button 
             type="primary" 
             htmlType="submit" 
@@ -90,10 +90,11 @@ const AddWordForm: React.FC<AddWordFormProps> = ({ unitId, onWordAdded }) => {
               color: '#fff',
               borderRadius: 8,
               fontWeight: 600,
-              fontSize: 17,
+              fontSize: 16,
               border: 'none',
               boxShadow: 'var(--shadow-md)',
               transition: 'all 0.2s',
+              padding: '8px 16px',
             }}
             onMouseEnter={e => e.currentTarget.style.filter = 'brightness(0.95)'}
             onMouseLeave={e => e.currentTarget.style.filter = 'none'}
@@ -102,15 +103,15 @@ const AddWordForm: React.FC<AddWordFormProps> = ({ unitId, onWordAdded }) => {
           </Button>
           <Button 
             style={{ 
-              marginLeft: 8, 
               background: 'linear-gradient(90deg, var(--primary-500) 0%, var(--primary-600) 100%)',
               color: '#fff',
               borderRadius: 8,
               fontWeight: 600,
-              fontSize: 17,
+              fontSize: 16,
               border: 'none',
               boxShadow: 'var(--shadow-md)',
               transition: 'all 0.2s',
+              padding: '8px 16px',
             }}
             onClick={showImportModal}
             icon={<ArrowUpTrayIcon />}
@@ -119,17 +120,37 @@ const AddWordForm: React.FC<AddWordFormProps> = ({ unitId, onWordAdded }) => {
           >
             {t('import_all')}
           </Button>
+          {onExport && (
+            <Button
+              icon={<ArrowDownTrayIcon />}
+              style={{
+                background: 'linear-gradient(90deg, var(--primary-500) 0%, var(--primary-600) 100%)',
+                color: '#fff',
+                borderRadius: 8,
+                border: 'none',
+                fontWeight: 600,
+                fontSize: 16,
+                boxShadow: 'var(--shadow-md)',
+                transition: 'all 0.2s',
+                padding: '8px 16px',
+              }}
+              onClick={onExport}
+            >
+              {t('export_words')}
+            </Button>
+          )}
           <Button
             icon={<QuestionMarkCircleIcon />}
             style={{
               background: 'linear-gradient(90deg, var(--primary-500) 0%, var(--primary-600) 100%)',
               color: '#fff',
-              borderRadius: 6,
+              borderRadius: 8,
               border: 'none',
-              fontWeight: 500,
+              fontWeight: 600,
               fontSize: 16,
-              boxShadow: 'var(--shadow-sm)',
-              marginLeft: 8
+              boxShadow: 'var(--shadow-md)',
+              transition: 'all 0.2s',
+              padding: '8px 16px',
             }}
             onClick={() => setHelpVisible(true)}
           >

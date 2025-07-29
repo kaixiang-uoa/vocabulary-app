@@ -3,6 +3,7 @@ import { SpellingValidationResult } from '../types';
 
 /**
  * Validate spelling input against target word
+ * New logic: If first character is wrong, it's immediately invalid
  */
 export const validateSpellingInput = (
   input: string,
@@ -26,8 +27,23 @@ export const validateSpellingInput = (
     }
   }
   
-  // Input is valid if it's a prefix of the target word or matches completely
-  const isValid = isCorrect || normalizedTarget.startsWith(normalizedInput);
+  // New validation logic: 
+  // 1. If first character is wrong, it's immediately invalid
+  // 2. Otherwise, input is valid if it's a prefix of the target word or matches completely
+  let isValid: boolean;
+  
+  if (normalizedInput.length > 0) {
+    // Check if first character is correct
+    if (normalizedInput[0] !== normalizedTarget[0]) {
+      isValid = false;
+    } else {
+      // First character is correct, check if it's a valid prefix
+      isValid = isCorrect || normalizedTarget.startsWith(normalizedInput);
+    }
+  } else {
+    // Empty input is always valid
+    isValid = true;
+  }
   
   return {
     isValid,

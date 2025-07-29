@@ -37,6 +37,16 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
 
   const maxErrors = 3;
   const targetWord = word.word.toLowerCase();
+  
+  // Qwerty Learner style: Force input focus and clear on error
+  const forceInputFocus = () => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+      // Force cursor to end
+      const length = inputRef.current.value.length;
+      inputRef.current.setSelectionRange(length, length);
+    }
+  };
 
   // Simple audio play functions
   const playErrorPronunciation = () => {
@@ -49,16 +59,18 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
     playPronunciation(word.word);
   };
 
-  // Reset state when word changes
+  // Reset state when word changes - Qwerty Learner style
   useEffect(() => {
     setCurrentInput('');
     setErrorCount(0);
     setIsCompleted(false);
     setShowResult(false);
     setInputHistory([]);
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
+    
+    // Force focus after state reset
+    setTimeout(() => {
+      forceInputFocus();
+    }, 0);
   }, [word.id]);
 
   // Qwerty Learner style - simple auto play
@@ -146,27 +158,18 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
   };
 
   // Handle input validation and processing
-  const handleInputChange = (nextInput: string) => {
-    const validation = validateSpellingInput(nextInput, targetWord);
-    
-    if (!validation.isValid) {
-      // Input is wrong - handle error
-      handleInputError(nextInput);
-      return;
-    }
-    
-    // Input is valid - update current input
-    setCurrentInput(nextInput);
-    
-    // Check if input is complete and correct
-    if (validation.isComplete && validation.isCorrect) {
-      handleInputSuccess(nextInput);
-    }
-  };
 
-  // Handle input error
+
+  // Handle input error - Qwerty Learner style
   const handleInputError = (input: string) => {
+    // Immediately clear input and force focus
     setCurrentInput('');
+    
+    // Force input focus after state update
+    setTimeout(() => {
+      forceInputFocus();
+    }, 0);
+    
     const newErrorCount = errorCount + 1;
     setErrorCount(newErrorCount);
     setInputHistory([...inputHistory, { input, correct: false }]);
@@ -177,10 +180,12 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
     }
     
     if (newErrorCount >= maxErrors) {
+      // Add to failed words
+      setFailedWords(word.id);
       // Mark as unmastered after 3 failed attempts
       onMasteredToggle(false);
       setShowResult(true);
-      // Auto jump to next
+      // Auto jump to next after showing result
       setTimeout(() => handleNext(), 800);
     }
   };
@@ -188,15 +193,14 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
   // Handle input success
   const handleInputSuccess = (input: string) => {
     setIsCompleted(true);
-    setShowResult(true);
     setInputHistory([...inputHistory, { input, correct: true }]);
     
     // Mark as mastered when spelling is correct
     onMasteredToggle(true);
     if (onCompleted) onCompleted(word.id);
     
-    // Auto jump to next (new word will auto play via useEffect)
-    setTimeout(() => handleNext(), 800);
+    // Directly jump to next word without showing result
+    handleNext();
   };
 
   return (
@@ -240,26 +244,47 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
       <div className="mb-8">
         {!showResult ? (
           <div>
-            <Input
+            <input
               ref={inputRef}
+              type="text"
               value={currentInput}
               onChange={e => {
                 const value = e.target.value.toLowerCase();
-                // Only allow input next letter
+                
+                // Handle backspace
+                if (value.length < currentInput.length) {
+                  setCurrentInput(value);
+                  return;
+                }
+                
+                // Handle new input - Qwerty Learner style
                 if (value.length === currentInput.length + 1) {
                   const nextChar = value[value.length - 1];
                   if (!isValidLetter(nextChar)) return;
-                  handleInputChange(currentInput + nextChar);
-                } else if (value.length < currentInput.length) {
-                  // Allow backspace
+                  
+                  // Qwerty Learner style: Check if this character is correct
+                  const expectedChar = targetWord[value.length - 1];
+                  
+                  if (nextChar !== expectedChar) {
+                    // Wrong character - immediately handle error
+                    handleInputError(value);
+                    return;
+                  }
+                  
+                  // Correct character - update input
                   setCurrentInput(value);
+                  
+                  // Check if word is complete
+                  if (value === targetWord) {
+                    handleInputSuccess(value);
+                  }
                 }
                 // Other cases (like multiple letters input), ignore
               }}
               onKeyPress={handleKeyPress}
               onPaste={e => e.preventDefault()}
               placeholder={t('enter_word')}
-              className="text-lg h-12 text-center font-mono"
+              className="w-full text-center font-mono text-xl h-14 px-4 py-3 border border-gray-300 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               maxLength={targetWord.length}
               autoFocus
             />

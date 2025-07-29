@@ -1,31 +1,39 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useParams, Link } from 'react-router';
 import { Title, Button, Card, Divider, Empty, message, Statistic, Row, Col, Checkbox, Space, Tag, Tabs, Popconfirm, Table } from '../components/ui';
-import { ArrowLeftIcon, ArrowDownTrayIcon, BookOpenIcon, CheckCircleIcon, ArrowPathIcon, PencilIcon, SpeakerWaveIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, BookOpenIcon, CheckCircleIcon, ArrowPathIcon, PencilIcon, SpeakerWaveIcon } from '@heroicons/react/24/outline';
 import AddWordForm from '../components/AddWordForm';
 import LanguageSwitcher from '../components/LanguageSwitcher';
-import { toggleWordMastered, getAllData, deleteItems, updateWord } from '../utils/wordUtils';
-import { exportUnitWordsToCSV } from '../utils/wordImportExport';
-import { getUnitWords } from '../utils/wordFiltering';
 import { useTranslation } from 'react-i18next';
 import EditModal from '../components/EditModal';
 import { Word, Unit } from '../types';
-import { getTailwindClass } from '../utils/styleMapping';
 
+// Mock data for testing
+const mockUnit: Unit = {
+  id: 'test-unit-1',
+  name: 'Test Unit 1',
+  createTime: Date.now(),
+  words: Array.from({ length: 25 }, (_, i) => ({
+    id: `word-${i}`,
+    word: `test-word-${i + 1}`,
+    meaning: `测试单词含义 ${i + 1}`,
+    unitId: 'test-unit-1',
+    mastered: i < 8,
+    createTime: Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000, // Random time within 30 days
+    reviewTimes: Math.floor(Math.random() * 10) + 1,
+    lastReviewTime: Math.random() > 0.5 ? Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000 : null
+  }))
+};
 
-
-const UnitDetailPage: React.FC = () => {
+const UIResponsiveTestPage: React.FC = () => {
   const { t } = useTranslation();
-  const { unitId } = useParams<{ unitId: string }>();
-  const [words, setWords] = useState<Word[]>([]);
-  const [unit, setUnit] = useState<Unit | null>(null);
+  const [words, setWords] = useState<Word[]>(mockUnit.words);
+  const [unit, setUnit] = useState<Unit>(mockUnit);
   const [activeTab, setActiveTab] = useState<'all' | 'mastered' | 'unmastered'>('all');
   const [selectedWordIds, setSelectedWordIds] = useState<string[]>([]);
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingWord, setEditingWord] = useState<Word | null>(null);
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-
 
   // Filter word list
   const filteredWords = activeTab === 'all' 
@@ -35,61 +43,34 @@ const UnitDetailPage: React.FC = () => {
       : words.filter(word => !word.mastered);
   
   const loadData = useCallback(() => {
-    if (!unitId) return;
-    
-    const allData = getAllData();
-    const currentUnit = allData.units.find(u => u.id === unitId);
-    setUnit(currentUnit ? JSON.parse(JSON.stringify(currentUnit)) : null);
-    setWords(getUnitWords(unitId).map(w => ({ ...w })));
-  }, [unitId]);
+    // For testing, we use mock data
+    setUnit(mockUnit);
+    setWords(mockUnit.words);
+  }, []);
   
   useEffect(() => {
     loadData();
   }, [loadData]);
   
   const handleMasteredToggle = (wordId: string) => {
-    if (!unitId) return;
-    
-    if (toggleWordMastered(unitId, wordId)) {
-      loadData();
-    }
+    setWords(prevWords => 
+      prevWords.map(word => 
+        word.id === wordId 
+          ? { ...word, mastered: !word.mastered }
+          : word
+      )
+    );
   };
   
   const handleExport = () => {
-    if (!unitId) return;
-    
-    const csvContent = exportUnitWordsToCSV(unitId);
-    
-    if (!csvContent) {
-      message.error(t('no_words_to_export'));
-      return;
-    }
-    
-    // Create download link
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', t('unit_word_csv_filename', { unitId }));
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    message.success(t('export_success'));
+    message.success('Export functionality would be implemented here');
   };
   
   // Delete words (batch)
   const handleDeleteWords = () => {
-    if (!unitId) return;
-    
-    const success = deleteItems({ type: 'word', ids: selectedWordIds, unitId });
-    if (success) {
-      message.success(t('delete_success', { count: selectedWordIds.length }));
-      setSelectedWordIds([]);
-      loadData();
-    } else {
-      message.error(t('delete_fail'));
-    }
+    setWords(prevWords => prevWords.filter(word => !selectedWordIds.includes(word.id)));
+    setSelectedWordIds([]);
+    message.success(`Deleted ${selectedWordIds.length} words`);
   };
   
   // Select all/cancel all
@@ -121,10 +102,13 @@ const UnitDetailPage: React.FC = () => {
 
   // Word editing
   const handleEditWord = (wordId: string, values: { word: string; meaning: string }) => {
-    if (!unitId) return;
-    
-    updateWord(unitId, wordId, values);
-    loadData();
+    setWords(prevWords => 
+      prevWords.map(word => 
+        word.id === wordId 
+          ? { ...word, word: values.word, meaning: values.meaning }
+          : word
+      )
+    );
   };
 
   // Play pronunciation
@@ -238,15 +222,11 @@ const UnitDetailPage: React.FC = () => {
     },
   ];
   
-  if (!unit) {
-    return <div className="flex items-center justify-center h-64 text-lg text-gray-600">{t('loading')}</div>;
-  }
-  
   return (
-    <div className={getTailwindClass('unit-detail-page')}>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20">
       {/* Header with title and language switcher */}
-      <div className={getTailwindClass('page-header')}>
-        <Title level={2} className={getTailwindClass('page-title')}>{unit.name}</Title>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 lg:mb-12 gap-4">
+        <Title level={2} className="text-3xl lg:text-4xl font-bold text-gray-900">{unit.name}</Title>
         <LanguageSwitcher className="flex items-center gap-2" />
       </div>
       
@@ -254,58 +234,58 @@ const UnitDetailPage: React.FC = () => {
       <div className="mb-6">
         {/* Large screen: horizontal layout */}
         <div className="hidden lg:flex flex-wrap gap-3">
-          <Link to="/">
-            <Button 
-              className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200"
-              icon={<ArrowLeftIcon className="w-5 h-5" />}
-            >{t('back_to_home')}</Button>
-          </Link>
-          <Link to={`/review/${unitId}`}>
-            <Button 
-              type="primary" 
-              icon={<ArrowPathIcon />} 
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200"
-            >{t('start_review')}</Button>
-          </Link>
-          <Link to={`/spelling-review/${unitId}`}>
-            <Button 
-              type="primary" 
-              icon={<BookOpenIcon />} 
-              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200"
-            >{t('spelling_review')}</Button>
-          </Link>
+          <Button 
+            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200"
+            icon={<ArrowLeftIcon className="w-5 h-5" />}
+          >
+            {t('back_to_home')}
+          </Button>
+          <Button 
+            type="primary" 
+            icon={<ArrowPathIcon />} 
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200"
+          >
+            {t('start_review')}
+          </Button>
+          <Button 
+            type="primary" 
+            icon={<BookOpenIcon />} 
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200"
+          >
+            {t('spelling_review')}
+          </Button>
         </div>
         
         {/* Medium and small screen: vertical layout */}
         <div className="lg:hidden space-y-3">
-          <Link to="/">
-            <Button 
-              className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200 w-full justify-center"
-              icon={<ArrowLeftIcon className="w-5 h-5" />}
-            >{t('back_to_home')}</Button>
-          </Link>
+          <Button 
+            className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200 w-full justify-center"
+            icon={<ArrowLeftIcon className="w-5 h-5" />}
+          >
+            {t('back_to_home')}
+          </Button>
           <div className="flex gap-2">
-            <Link to={`/review/${unitId}`}>
-              <Button 
-                type="primary" 
-                icon={<ArrowPathIcon />} 
-                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200 flex-1 justify-center"
-              >{t('start_review')}</Button>
-            </Link>
-            <Link to={`/spelling-review/${unitId}`}>
-              <Button 
-                type="primary" 
-                icon={<BookOpenIcon />} 
-                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200 flex-1 justify-center"
-              >{t('spelling_review')}</Button>
-            </Link>
+            <Button 
+              type="primary" 
+              icon={<ArrowPathIcon />} 
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200 flex-1 justify-center"
+            >
+              {t('start_review')}
+            </Button>
+            <Button 
+              type="primary" 
+              icon={<BookOpenIcon />} 
+              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200 flex-1 justify-center"
+            >
+              {t('spelling_review')}
+            </Button>
           </div>
         </div>
       </div>
       
       <Row gutter={16} className="mb-6">
         <Col span={8}>
-          <Card className={getTailwindClass('stats-card')}>
+          <Card className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100">
             <Statistic
               title={t('total_words')}
               value={totalWords}
@@ -314,7 +294,7 @@ const UnitDetailPage: React.FC = () => {
           </Card>
         </Col>
         <Col span={8}>
-          <Card className={`${getTailwindClass('stats-card')} ${getTailwindClass('stats-card.mastered')}`}>
+          <Card className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100">
             <Statistic
               title={t('mastered')}
               value={masteredWords}
@@ -324,7 +304,7 @@ const UnitDetailPage: React.FC = () => {
           </Card>
         </Col>
         <Col span={8}>
-          <Card className={`${getTailwindClass('stats-card')} ${masteryRate > 80 ? 'border-green-500 bg-gradient-to-br from-green-50 to-blue-50' : masteryRate > 50 ? 'border-yellow-500 bg-gradient-to-br from-yellow-50 to-orange-50' : 'border-red-500 bg-gradient-to-br from-red-50 to-orange-50'}`}>
+          <Card className={`bg-white/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border ${masteryRate > 80 ? 'border-green-500 bg-gradient-to-br from-green-50 to-blue-50' : masteryRate > 50 ? 'border-yellow-500 bg-gradient-to-br from-yellow-50 to-orange-50' : 'border-red-500 bg-gradient-to-br from-red-50 to-orange-50'}`}>
             <Statistic
               title={t('mastery_rate')}
               value={masteryRate}
@@ -341,7 +321,7 @@ const UnitDetailPage: React.FC = () => {
           <span className="text-xl font-semibold text-gray-800">{t('add_word')}</span>
         </Divider>
       </div>
-      <AddWordForm unitId={unitId} onWordAdded={() => loadData()} onExport={handleExport} />
+      <AddWordForm unitId={unit.id} onWordAdded={() => loadData()} onExport={handleExport} />
       
       <div className="mt-8 mb-4">
         <Divider orientation="left">
@@ -349,7 +329,7 @@ const UnitDetailPage: React.FC = () => {
         </Divider>
       </div>
       
-            {/* First row: Tabs */}
+      {/* First row: Tabs */}
       <div className="mb-6">
         <Tabs
           activeKey={activeTab}
@@ -687,6 +667,7 @@ const UnitDetailPage: React.FC = () => {
           </div>
         </>
       )}
+      
       {paginatedWords.length > 0 ? (
         <Table
           dataSource={paginatedWords}
@@ -744,4 +725,4 @@ const UnitDetailPage: React.FC = () => {
   );
 };
 
-export default UnitDetailPage; 
+export default UIResponsiveTestPage; 

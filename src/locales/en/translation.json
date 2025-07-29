@@ -61,6 +61,8 @@
   "status_updated": "Status updated",
   "review_complete": "Review complete!",
   "review_restart": "Review restarted",
+  "restart_tip": "Restart the review from the beginning",
+  "restart_disabled_tip": "Restart is only available after the first word",
   "loading": "Loading...",
   "back_to_unit": "Back to Unit",
   "restart": "Restart",

@@ -1,15 +1,15 @@
 import React from 'react';
-import { Title } from '../components/ui';
-import { BookOpenIcon, CheckCircleIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import { Title, Button } from '../components/ui';
+import { BookOpenIcon, CheckCircleIcon, ArrowPathIcon, BeakerIcon } from '@heroicons/react/24/outline';
 import UnitList from '../components/UnitList';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import { getMasteredWords, getUnmasteredWords } from '../utils/wordFiltering';
 import { useTranslation } from 'react-i18next';
-
-
+import { useNavigate } from 'react-router';
 
 const HomePage: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const masteredWords = getMasteredWords();
   const unmasteredWords = getUnmasteredWords();
   
@@ -20,7 +20,9 @@ const HomePage: React.FC = () => {
   const masteryRate = totalWords > 0 ? Math.round((masteredWords.length / totalWords) * 100) : 0;
   
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8 bg-white/60 backdrop-blur-sm rounded-2xl shadow-lg border border-white/20">
+
+
       {/* Header with title and language switcher */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 lg:mb-12 gap-4">
         <Title level={1} className="text-3xl lg:text-4xl font-bold text-gray-900">
@@ -29,13 +31,21 @@ const HomePage: React.FC = () => {
         
         <div className="flex items-center gap-2">
           <LanguageSwitcher className="flex items-center gap-2" />
+          {/* Temporary UI Test Button */}
+          <Button
+            onClick={() => navigate('/ui-test')}
+            className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+          >
+            <BeakerIcon className="w-4 h-4 mr-1" />
+            UI Test
+          </Button>
         </div>
       </div>
 
       {/* Section 1: Statistics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mb-8 lg:mb-12">
         {/* Total Words Card */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100 p-6">
+        <div className="bg-white/80 sm:bg-blue-100/80 md:bg-green-100/80 lg:bg-purple-100/80 xl:bg-orange-100/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">{t('total_words')}</p>
@@ -48,7 +58,7 @@ const HomePage: React.FC = () => {
         </div>
 
         {/* Mastered Words Card */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100 p-6">
+        <div className="bg-white/80 sm:bg-green-100/80 md:bg-blue-100/80 lg:bg-orange-100/80 xl:bg-purple-100/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">{t('mastered')}</p>
@@ -61,7 +71,7 @@ const HomePage: React.FC = () => {
         </div>
 
         {/* Mastery Rate Card */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200 border border-gray-100 p-6">
+        <div className="bg-white/80 sm:bg-purple-100/80 md:bg-orange-100/80 lg:bg-green-100/80 xl:bg-blue-100/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">{t('mastery_rate')}</p>
@@ -91,7 +101,7 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Section 3: Unit List Content */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200">
+      <div className="bg-white/90 sm:bg-blue-50/90 md:bg-green-50/90 lg:bg-purple-50/90 xl:bg-orange-50/90 backdrop-blur-sm rounded-xl shadow-sm border border-gray-200">
         <UnitList />
       </div>
     </div>
