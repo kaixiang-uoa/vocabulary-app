@@ -174,8 +174,8 @@ const UnitList: React.FC = () => {
       {/* Search and action buttons - responsive layout */}
       <div className="mb-6">
         {/* Large screens: horizontal layout */}
-        <div className="hidden lg:flex items-center justify-between mb-4">
-          <div className="flex-1 max-w-md">
+        <div className="hidden lg:flex items-center gap-6 mb-4">
+          <div className="w-80">
             <div className="relative">
               <MagnifyingGlassIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 z-10" />
               <Input
@@ -188,7 +188,7 @@ const UnitList: React.FC = () => {
             </div>
           </div>
           
-          <div className="flex gap-3 ml-6">
+          <div className="flex gap-3">
             <Button
               icon={<QuestionMarkCircleIcon />}
               onClick={() => setHelpVisible(true)}
