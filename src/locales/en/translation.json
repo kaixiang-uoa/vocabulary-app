@@ -84,6 +84,7 @@
   "mark_mastered": "Mark as Mastered",
   "mark_unmastered": "Mark as Unmastered",
   "no_words_in_unit": "No words in this unit",
+  "no_words_in_unit_tip": "This unit doesn't have any words yet. Click the 'Add Word' button above to add your first word!",
   "import_paste_tip": "Or paste content into the text box below",
   "import_empty_error": "Please paste or upload content",
   "import_parse_error": "Content parsing failed, please check the format",
@@ -144,5 +145,10 @@
   "switched_to_all_mode": "Switched to All mode (no words in selected mode)",
   "switched_to_unmastered_mode": "Switched to Unmastered mode (no words in selected mode)",
   "switched_to_mastered_mode": "Switched to Mastered mode (no words in selected mode)",
-  "pronunciation_delay_tip": "Set delay time for auto playing pronunciation (whole seconds)"
+  "pronunciation_delay_tip": "Set delay time for auto playing pronunciation (whole seconds)",
+  "no_units": "No learning units yet",
+  "no_search_results": "No matching units found",
+  "no_units_tip": "Start your vocabulary learning journey! Click the 'Create Unit' button above to create your first learning unit.",
+  "no_search_results_tip": "No units found containing '{{term}}'. Please try different keywords or create a new unit.",
+  "import_placeholder_default": "Please paste or upload JSON/CSV content...\n\nExample JSON format:\n{\n  \"units\": [\n    {\n      \"id\": \"unit1\",\n      \"name\": \"Unit 1\",\n      \"words\": [\n        {\"id\": \"word1\", \"word\": \"apple\", \"meaning\": \"苹果\", \"mastered\": false}\n      ]\n    }\n  ]\n}\n\nExample CSV format:\napple,苹果\nbanana,香蕉\nhello,你好"
 } 

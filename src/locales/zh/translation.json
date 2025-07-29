@@ -84,6 +84,7 @@
   "mark_mastered": "标记为已掌握",
   "mark_unmastered": "标记为未掌握",
   "no_words_in_unit": "暂无单词",
+  "no_words_in_unit_tip": "这个单元还没有添加任何单词。点击上方的\"添加单词\"按钮开始添加你的第一个单词吧！",
   "import_all": "批量导入",
   "export_all": "批量导出",
   "upload_file": "上传文件",
@@ -145,5 +146,10 @@
   "switched_to_unmastered_mode": "已切换到未掌握模式（所选模式无单词）",
   "switched_to_mastered_mode": "已切换到已掌握模式（所选模式无单词）",
   "loading_word": "正在加载单词...",
-  "pronunciation_delay_tip": "设置自动播放发音的延迟时间（整数秒）"
+  "pronunciation_delay_tip": "设置自动播放发音的延迟时间（整数秒）",
+  "no_units": "暂无学习单元",
+  "no_search_results": "未找到匹配的单元",
+  "no_units_tip": "开始你的词汇学习之旅吧！点击上方\"创建单元\"按钮创建你的第一个学习单元。",
+  "no_search_results_tip": "没有找到包含\"{{term}}\"的单元，请尝试其他关键词或创建新单元。",
+  "import_placeholder_default": "请粘贴或上传 JSON/CSV 内容...\n\n示例 JSON 格式：\n{\n  \"units\": [\n    {\n      \"id\": \"unit1\",\n      \"name\": \"单元1\",\n      \"words\": [\n        {\"id\": \"word1\", \"word\": \"apple\", \"meaning\": \"苹果\", \"mastered\": false}\n      ]\n    }\n  ]\n}\n\n示例 CSV 格式：\napple,苹果\nbanana,香蕉\nhello,你好"
 } 

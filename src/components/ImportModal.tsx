@@ -82,11 +82,13 @@ const ImportModal: React.FC<ImportModalProps> = ({
       onOk={handleOk}
       onCancel={handleCancel}
       footer={null}
+      width={800}
+      centered
     >
-      <div className={`${getTailwindClass('text-secondary')} ${getTailwindClass('text-small')} mb-2`}>
+      <div className={`${getTailwindClass('text-secondary')} ${getTailwindClass('text-small')} mb-4`}>
         {t('import_brief_tip')}
       </div>
-      <div className="mb-3 min-w-[220px]">
+      <div className="mb-6 min-w-[220px]">
                     <input id="import-file-input" type="file" accept={accept} onChange={handleFileUpload} className="sr-only" />
         <Button
           onClick={() => document.getElementById('import-file-input')?.click()}
@@ -100,11 +102,17 @@ const ImportModal: React.FC<ImportModalProps> = ({
         </div>
       </div>
       <Input.TextArea
-        placeholder={placeholder}
+        placeholder={placeholder || t('import_placeholder_default')}
         value={content}
         onChange={e => { setContent(e.target.value); setError(''); }}
         rows={8}
         className={`${getTailwindClass('text-small')} rounded mb-2`}
+        style={{ 
+          minHeight: '300px',
+          fontFamily: 'monospace',
+          fontSize: '13px',
+          lineHeight: '1.5'
+        }}
       />
       {error && (
         <div className={`${getTailwindClass('text-error')} ${getTailwindClass('text-small')} font-medium mb-0`}>

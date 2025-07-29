@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router';
-import { Title, Button, Card, Divider, Empty, message, Statistic, Row, Col, Checkbox, Space, Tag, Tabs, Popconfirm, Table } from '../components/ui';
+import { Title, Button, Card, Divider, message, Statistic, Row, Col, Checkbox, Space, Tag, Tabs, Popconfirm, Table } from '../components/ui';
 import { ArrowLeftIcon, BookOpenIcon, CheckCircleIcon, ArrowPathIcon, PencilIcon, SpeakerWaveIcon } from '@heroicons/react/24/outline';
 import AddWordForm from '../components/AddWordForm';
 import LanguageSwitcher from '../components/LanguageSwitcher';
@@ -712,7 +712,18 @@ const UnitDetailPage: React.FC = () => {
           }}
         />
       ) : (
-        <Empty description={t('no_words_in_unit')} />
+        <div style={{ 
+          textAlign: 'center', 
+          padding: '60px 20px',
+          color: '#666'
+        }}>
+          <div style={{ fontSize: 18, fontWeight: 500, marginBottom: 12 }}>
+            {t('no_words_in_unit')}
+          </div>
+          <div style={{ fontSize: 14, color: '#999', lineHeight: 1.5 }}>
+            {t('no_words_in_unit_tip')}
+          </div>
+        </div>
       )}
       
       {/* Edit Modal */}

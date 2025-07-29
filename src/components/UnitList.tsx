@@ -211,28 +211,28 @@ const UnitList: React.FC = () => {
                 <Button
                   icon={<QuestionMarkCircleIcon />}
                   onClick={() => setHelpVisible(true)}
-                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-3 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
                 >
                   {t('help')}
                 </Button>
                 <Button
                   icon={<PlusIcon />}
                   onClick={showCreateModal}
-                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-3 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
                 >
                   {t('create_unit')}
                 </Button>
                 <Button
                   icon={<ArrowUpTrayIcon />}
                   onClick={handleExportAll}
-                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-3 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
                 >
                   {t('export_all')}
                 </Button>
                 <Button
                   icon={<ArrowUpTrayIcon />}
                   onClick={handleImportAll}
-                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-3 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
                 >
                   {t('import_all')}
                 </Button>
@@ -267,28 +267,28 @@ const UnitList: React.FC = () => {
               {/* Action buttons - 2x2 grid layout */}
               <div className="grid grid-cols-2 gap-3">
                 <Button 
-                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-3 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
                   icon={<QuestionMarkCircleIcon />}
                   onClick={() => setHelpVisible(true)}
                 >
                   {t('help')}
                 </Button>
                 <Button 
-                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-3 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
                   icon={<PlusIcon />}
                   onClick={showCreateModal}
                 >
                   {t('create_unit')}
                 </Button>
                 <Button 
-                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-3 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
                   icon={<ArrowUpTrayIcon />}
                   onClick={handleExportAll}
                 >
                   {t('export_all')}
                 </Button>
                 <Button 
-                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-3 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
                   icon={<ArrowUpTrayIcon />}
                   onClick={handleImportAll}
                 >
@@ -708,11 +708,15 @@ const UnitList: React.FC = () => {
           ) : (
             <div style={{ 
               textAlign: 'center', 
-              padding: '60px 20px',
-              color: '#666',
-              fontSize: 16
+              padding: '200px 20px',
+              color: '#666'
             }}>
-              {searchTerm ? t('no_search_results') : t('no_units')}
+              <div style={{ fontSize: 18, fontWeight: 500, marginBottom: 12 }}>
+                {searchTerm ? t('no_search_results') : t('no_units')}
+              </div>
+              <div style={{ fontSize: 14, color: '#999', lineHeight: 1.5 }}>
+                {searchTerm ? t('no_search_results_tip').replace('{{term}}', searchTerm) : t('no_units_tip')}
+              </div>
             </div>
           )}
         </div>
