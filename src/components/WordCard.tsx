@@ -27,9 +27,9 @@ const SoundIcon: React.FC = () => (
 )
 
 const difficultyColors: DifficultyColors = {
-  easy: { bg: 'var(--wordcard-easy-bg)', color: 'var(--wordcard-easy-color)', border: 'var(--wordcard-easy-border)' },
-  medium: { bg: 'var(--wordcard-medium-bg)', color: 'var(--wordcard-medium-color)', border: 'var(--wordcard-medium-border)' },
-  hard: { bg: 'var(--wordcard-hard-bg)', color: 'var(--wordcard-hard-color)', border: 'var(--wordcard-hard-border)' },
+  easy: { bg: '#ecfdf5', color: '#10b981', border: '#a7f3d0' }, // green-50, green-500, green-200
+  medium: { bg: '#fffbeb', color: '#f59e0b', border: '#fde68a' }, // yellow-50, yellow-500, yellow-200
+  hard: { bg: '#fef2f2', color: '#ef4444', border: '#fecaca' }, // red-50, red-500, red-200
 }
 
 const playYoudaoVoice = (word: string, type: number = 2): void => {
@@ -161,16 +161,11 @@ const WordCard: React.FC<WordCardProps> = ({ word, isSelected = false, onSelect,
               e.stopPropagation()
               onMasteredToggle && onMasteredToggle(word.id)
             }}
-            className={`${getTailwindClass('btn-secondary')} ${word.mastered ? 'mastered' : ''}`}
-            style={{
-              background: word.mastered ? 'var(--wordcard-btn-bg-mastered)' : 'var(--wordcard-btn-bg)',
-              color: word.mastered ? 'var(--wordcard-btn-color-mastered)' : 'var(--wordcard-btn-color)',
-              border: word.mastered ? '1px solid var(--wordcard-btn-border-mastered)' : 'none',
-              fontSize: 14,
-              padding: '8px 16px',
-              borderRadius: '6px',
-              fontWeight: 500,
-            }}
+            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
+              word.mastered 
+                ? 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200' 
+                : 'bg-blue-500 text-white hover:bg-blue-600'
+            }`}
           >
             {word.mastered ? t('mark_unmastered') : t('mark_mastered')}
           </button>

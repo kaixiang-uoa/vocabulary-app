@@ -50,7 +50,7 @@ const SpellingReviewPage: React.FC = () => {
       mastered: allWords.filter(word => word.mastered).length,
       unmastered: allWords.filter(word => !word.mastered).length
     };
-  }, [data.unit, unitId, refreshTrigger]);
+  }, [data.unit, unitId]);
 
   // Auto-switch mode if current mode has no words
   useEffect(() => {

@@ -117,6 +117,7 @@
   "failed": "失败",
   "remaining": "剩余",
   "help_title": "导入格式帮助",
+  "help_content": "本应用支持两种导入格式：\n\n1. CSV格式：每行包含一个单词和释义，用逗号分隔\n   示例：apple,苹果\n\n2. JSON格式：包含完整的单元和单词数据结构\n   示例：{\"units\": [{\"id\": \"unit1\", \"name\": \"单元1\", \"words\": [{\"id\": \"word1\", \"word\": \"apple\", \"meaning\": \"苹果\", \"mastered\": false}]}]}\n\n导入时请确保格式正确，否则可能导致导入失败。",
   "help_csv_title_word": "CSV格式",
   "help_csv_desc_word": "每行包含一个单词和释义，用逗号分隔：",
   "help_csv_example_word": "apple,苹果\nbanana,香蕉\nhello,你好",

@@ -9,7 +9,7 @@ import HomePage from './pages/HomePage';
 import UnitDetailPage from './pages/UnitDetailPage';
 import ReviewPage from './pages/ReviewPage';
 import SpellingReviewPage from './pages/SpellingReviewPage';
-import UIResponsiveTestPage from './pages/UIResponsiveTestPage';
+
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
             <Route path="/unit/:unitId" element={<UnitDetailPage />} />
             <Route path="/review/:unitId" element={<ReviewPage />} />
             <Route path="/spelling-review/:unitId" element={<SpellingReviewPage />} />
-            <Route path="/ui-test" element={<UIResponsiveTestPage />} />
+    
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>

@@ -1,15 +1,14 @@
 import React from 'react';
-import { Title, Button } from '../components/ui';
-import { BookOpenIcon, CheckCircleIcon, ArrowPathIcon, BeakerIcon } from '@heroicons/react/24/outline';
+import { Title } from '../components/ui';
+import { BookOpenIcon, CheckCircleIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
 import UnitList from '../components/UnitList';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import { getMasteredWords, getUnmasteredWords } from '../utils/wordFiltering';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
+
 
 const HomePage: React.FC = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const masteredWords = getMasteredWords();
   const unmasteredWords = getUnmasteredWords();
   
@@ -31,14 +30,6 @@ const HomePage: React.FC = () => {
         
         <div className="flex items-center gap-2">
           <LanguageSwitcher className="flex items-center gap-2" />
-          {/* Temporary UI Test Button */}
-          <Button
-            onClick={() => navigate('/ui-test')}
-            className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
-          >
-            <BeakerIcon className="w-4 h-4 mr-1" />
-            UI Test
-          </Button>
         </div>
       </div>
 

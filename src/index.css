@@ -1,108 +1,14 @@
-:root {
-  /* brand-primary color*/ 
-  --primary-50: #eff6ff;
-  --primary-100: #dbeafe;
-  --primary-200: #bae6fd;
-  --primary-300: #7dd3fc;
-  --primary-400: #38bdf8;
-  --primary-500: #0ea5e9;
-  --primary-600: #2563eb;
-  --primary-700: #1d4ed8;
-  --primary-800: #075985;
-  --primary-900: #0c4a6e;
-
-  /* success color*/
-  --success-50: #ecfdf5;
-  --success-100: #d1fae5;
-  --success-200: #a7f3d0;
-  --success-300: #6ee7b7;
-  --success-400: #34d399;
-  --success-500: #10b981;
-  --success-600: #059669;
-  --success-700: #047857;
-  --success-800: #065f46;
-  --success-900: #064e3b;
-
-  /* warning color*/
-  --warning-50: #fffbeb;
-  --warning-100: #fef3c7;
-  --warning-200: #fde68a;
-  --warning-300: #fcd34d;
-  --warning-400: #fbbf24;
-  --warning-500: #f59e0b;
-  --warning-600: #d97706;
-  --warning-700: #b45309;
-  --warning-800: #92400e;
-  --warning-900: #78350f;
-
-  /* error color*/
-  --error-50: #fef2f2;
-  --error-100: #fee2e2;
-  --error-200: #fecaca;
-  --error-300: #fca5a5;
-  --error-400: #f87171;
-  --error-500: #ef4444;
-  --error-600: #dc2626;
-  --error-700: #b91c1c;
-  --error-800: #991b1b;
-  --error-900: #7f1d1d;
-
-  /* neutral color*/
-  --neutral-50: #fafafa;
-  --neutral-100: #f4f4f5;
-  --neutral-200: #e4e4e7;
-  --neutral-300: #d4d4d8;
-  --neutral-400: #a1a1aa;
-  --neutral-500: #71717a;
-  --neutral-600: #52525b;
-  --neutral-700: #3f3f46;
-  --neutral-800: #27272a;
-  --neutral-900: #18181b;
-
-  /* shadow system*/
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
-
-  /* new variables for wordcard */
-  --wordcard-easy-bg: var(--success-50);
-  --wordcard-easy-color: var(--success-500);
-  --wordcard-easy-border: var(--success-200);
-  --wordcard-medium-bg: var(--warning-50);
-  --wordcard-medium-color: var(--warning-500);
-  --wordcard-medium-border: var(--warning-200);
-  --wordcard-hard-bg: var(--error-50);
-  --wordcard-hard-color: var(--error-500);
-  --wordcard-hard-border: var(--error-200);
-  --wordcard-mastered-bg: var(--success-50);
-  --wordcard-unmastered-bg: var(--primary-50);
-  --wordcard-mastered-border: var(--success-500);
-  --wordcard-unmastered-border: var(--primary-500);
-  --wordcard-radius: 12px;
-  --wordcard-shadow: var(--shadow-lg);
-  --wordcard-shadow-hover: 0 8px 24px rgba(0,0,0,0.12);
-  --wordcard-shadow-normal: 0 2px 8px rgba(0,0,0,0.06);
-  --wordcard-text-main: #262626;
-  --wordcard-text-secondary: #595959;
-  --wordcard-bg-secondary: #fafafa;
-  --wordcard-border-secondary: #f0f0f0;
-  --wordcard-btn-bg: var(--primary-500);
-  --wordcard-btn-bg-mastered: #f5f5f5;
-  --wordcard-btn-color: #fff;
-  --wordcard-btn-color-mastered: #262626;
-  --wordcard-btn-border-mastered: #d9d9d9;
-}
-
-/* compatible with old variables, progressive migration*/
-:root {
-  --color-primary: var(--primary-500);
-  --color-success: var(--success-500);
-  --color-warning: var(--warning-500);
-  --color-error: var(--error-500);
-  --color-bg: var(--neutral-50);
-  --color-text: var(--neutral-900);
-}
+/* 
+ * 已移除所有 CSS 变量定义
+ * 现在统一使用 Tailwind CSS 系统
+ * 
+ * 颜色映射参考：
+ * - primary-500 -> blue-500 (#3b82f6)
+ * - primary-600 -> blue-600 (#2563eb)
+ * - success-500 -> green-500 (#10b981)
+ * - warning-500 -> yellow-500 (#f59e0b)
+ * - error-500 -> red-500 (#ef4444)
+ */
 
 body {
   margin: 0;
@@ -118,25 +24,7 @@ code {
     monospace;
 }
 
-/* Review card mastered styles */
-.review-card.mastered {
-  background: var(--wordcard-mastered-bg) !important;
-  border-color: var(--wordcard-mastered-border) !important;
-}
-
-.review-card.mastered .absolute {
-  background: var(--wordcard-mastered-bg) !important;
-  border-color: var(--wordcard-mastered-border) !important;
-}
-
-/* Button mastered styles */
-.btn-secondary.mastered {
-  background: var(--wordcard-btn-bg-mastered) !important;
-  color: var(--wordcard-btn-color-mastered) !important;
-  border-color: var(--wordcard-btn-border-mastered) !important;
-}
-
-.btn-secondary.mastered:hover {
-  background: #e5e5e5 !important;
-  border-color: #bfbfbf !important;
-}
+/* 
+ * 已移除所有 CSS 变量相关的样式
+ * 现在使用 Tailwind CSS 类名替代
+ */

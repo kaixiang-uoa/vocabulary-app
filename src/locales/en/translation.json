@@ -116,6 +116,7 @@
   "failed": "Failed",
   "remaining": "Remaining",
   "help_title": "Import Format Help",
+  "help_content": "This application supports two import formats:\n\n1. CSV Format: Each line contains one word and its meaning, separated by comma\n   Example: apple,苹果\n\n2. JSON Format: Contains complete unit and word data structure\n   Example: {\"units\": [{\"id\": \"unit1\", \"name\": \"Unit 1\", \"words\": [{\"id\": \"word1\", \"word\": \"apple\", \"meaning\": \"苹果\", \"mastered\": false}]}]}\n\nPlease ensure the format is correct when importing, otherwise it may cause import failure.",
   "help_csv_title_word": "CSV Format",
   "help_csv_desc_word": "Each line contains one word and its meaning, separated by comma:",
   "help_csv_example_word": "apple,苹果\nbanana,香蕉\nhello,你好",

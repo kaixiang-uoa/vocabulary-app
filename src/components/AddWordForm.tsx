@@ -82,58 +82,23 @@ const AddWordForm: React.FC<AddWordFormProps & { onExport?: () => void }> = ({ u
 
         <div className="flex flex-wrap gap-3 justify-center lg:justify-start">
           <Button 
-            type="primary" 
             htmlType="submit" 
             icon={<PlusIcon />} 
-            style={{
-              background: 'linear-gradient(90deg, var(--primary-500) 0%, var(--primary-600) 100%)',
-              color: '#fff',
-              borderRadius: 8,
-              fontWeight: 600,
-              fontSize: 16,
-              border: 'none',
-              boxShadow: 'var(--shadow-md)',
-              transition: 'all 0.2s',
-              padding: '8px 16px',
-            }}
-            onMouseEnter={e => e.currentTarget.style.filter = 'brightness(0.95)'}
-            onMouseLeave={e => e.currentTarget.style.filter = 'none'}
+            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
           >
             {t('add_word')}
           </Button>
           <Button 
-            style={{ 
-              background: 'linear-gradient(90deg, var(--primary-500) 0%, var(--primary-600) 100%)',
-              color: '#fff',
-              borderRadius: 8,
-              fontWeight: 600,
-              fontSize: 16,
-              border: 'none',
-              boxShadow: 'var(--shadow-md)',
-              transition: 'all 0.2s',
-              padding: '8px 16px',
-            }}
             onClick={showImportModal}
             icon={<ArrowUpTrayIcon />}
-            onMouseEnter={e => e.currentTarget.style.filter = 'brightness(0.95)'}
-            onMouseLeave={e => e.currentTarget.style.filter = 'none'}
+            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
           >
             {t('import_all')}
           </Button>
           {onExport && (
             <Button
               icon={<ArrowDownTrayIcon />}
-              style={{
-                background: 'linear-gradient(90deg, var(--primary-500) 0%, var(--primary-600) 100%)',
-                color: '#fff',
-                borderRadius: 8,
-                border: 'none',
-                fontWeight: 600,
-                fontSize: 16,
-                boxShadow: 'var(--shadow-md)',
-                transition: 'all 0.2s',
-                padding: '8px 16px',
-              }}
+              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
               onClick={onExport}
             >
               {t('export_words')}
@@ -141,17 +106,7 @@ const AddWordForm: React.FC<AddWordFormProps & { onExport?: () => void }> = ({ u
           )}
           <Button
             icon={<QuestionMarkCircleIcon />}
-            style={{
-              background: 'linear-gradient(90deg, var(--primary-500) 0%, var(--primary-600) 100%)',
-              color: '#fff',
-              borderRadius: 8,
-              border: 'none',
-              fontWeight: 600,
-              fontSize: 16,
-              boxShadow: 'var(--shadow-md)',
-              transition: 'all 0.2s',
-              padding: '8px 16px',
-            }}
+            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
             onClick={() => setHelpVisible(true)}
           >
             {t('help')}
@@ -175,7 +130,7 @@ const AddWordForm: React.FC<AddWordFormProps & { onExport?: () => void }> = ({ u
           <pre style={{ background: '#f6f6f6', padding: 12, borderRadius: 6, fontSize: 13 }}>{t('help_json_example_word')}</pre>
         </div>
         <div style={{ textAlign: 'right' }}>
-          <Button type="primary" onClick={() => setHelpVisible(false)}>{t('help_close')}</Button>
+          <Button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg justify-center" onClick={() => setHelpVisible(false)}>{t('help_close')}</Button>
         </div>
       </Modal>
 

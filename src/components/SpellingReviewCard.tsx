@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Input, Text, Progress } from '../components/ui';
+import { Button, Text, Progress } from '../components/ui';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
 import { useTranslation } from 'react-i18next';
 import { SpellingReviewCardProps, InputHistoryItem } from '../types';
 import { useNavigate, useParams } from 'react-router';
-import { validateSpellingInput, isValidLetter } from '../utils/spellingUtils';
+import { isValidLetter } from '../utils/spellingUtils';
 import { getTailwindClass } from '../utils/styleMapping';
 import { playPronunciation } from '../services/pronunciationService';
 

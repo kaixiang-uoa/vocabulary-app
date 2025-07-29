@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router';
 import { Title, Button, Card, Divider, Empty, message, Statistic, Row, Col, Checkbox, Space, Tag, Tabs, Popconfirm, Table } from '../components/ui';
-import { ArrowLeftIcon, ArrowDownTrayIcon, BookOpenIcon, CheckCircleIcon, ArrowPathIcon, PencilIcon, SpeakerWaveIcon } from '@heroicons/react/24/outline';
+import { ArrowLeftIcon, BookOpenIcon, CheckCircleIcon, ArrowPathIcon, PencilIcon, SpeakerWaveIcon } from '@heroicons/react/24/outline';
 import AddWordForm from '../components/AddWordForm';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import { toggleWordMastered, getAllData, deleteItems, updateWord } from '../utils/wordUtils';
@@ -262,16 +262,14 @@ const UnitDetailPage: React.FC = () => {
           </Link>
           <Link to={`/review/${unitId}`}>
             <Button 
-              type="primary" 
               icon={<ArrowPathIcon />} 
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200"
+              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 flex items-center gap-2"
             >{t('start_review')}</Button>
           </Link>
           <Link to={`/spelling-review/${unitId}`}>
             <Button 
-              type="primary" 
               icon={<BookOpenIcon />} 
-              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200"
+              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
             >{t('spelling_review')}</Button>
           </Link>
         </div>
@@ -287,16 +285,14 @@ const UnitDetailPage: React.FC = () => {
           <div className="flex gap-2">
             <Link to={`/review/${unitId}`}>
               <Button 
-                type="primary" 
                 icon={<ArrowPathIcon />} 
-                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200 flex-1 justify-center"
+                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
               >{t('start_review')}</Button>
             </Link>
             <Link to={`/spelling-review/${unitId}`}>
               <Button 
-                type="primary" 
                 icon={<BookOpenIcon />} 
-                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200 flex-1 justify-center"
+                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
               >{t('spelling_review')}</Button>
             </Link>
           </div>

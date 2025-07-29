@@ -25,5 +25,7 @@ yarn-error.log*
 # macOS
 .DS_Store
 
+# ignore docs and learning-practice
 .cursor
 /docs
+/learning-practice/

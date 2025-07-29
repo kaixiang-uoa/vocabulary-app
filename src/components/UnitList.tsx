@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Input, Checkbox, Popconfirm, Modal, Space, message } from '../components/ui';
+import { Button, Input, Checkbox, Popconfirm, Modal, message } from '../components/ui';
 import { useTranslation } from 'react-i18next';
 import { 
   MagnifyingGlassIcon, 
   PlusIcon, 
   ArrowUpTrayIcon, 
-  QuestionMarkCircleIcon,
-  TrashIcon
+  QuestionMarkCircleIcon
 } from '@heroicons/react/24/outline';
 import UnitCard from './UnitCard';
-import AddWordForm from './AddWordForm';
 import ImportModal from './ImportModal';
-import { getAllData, updateUnit, deleteItems, createUnit } from '../utils/wordUtils';
+import { getAllData, updateUnit, deleteItems } from '../utils/wordUtils';
 import { ImportData } from '../types/index';
 
 const UnitList: React.FC = () => {
@@ -158,72 +156,28 @@ const UnitList: React.FC = () => {
               <Button
                 icon={<QuestionMarkCircleIcon />}
                 onClick={() => setHelpVisible(true)}
-                style={{
-                  background: '#fff',
-                  color: '#374151',
-                  borderRadius: 8,
-                  fontWeight: 500,
-                  fontSize: 14,
-                  border: '2px solid #d1d5db',
-                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-                  transition: 'all 0.2s',
-                  padding: '8px 16px',
-                  minWidth: 'auto'
-                }}
+                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
               >
                 {t('help')}
               </Button>
               <Button
                 icon={<PlusIcon />}
                 onClick={showCreateModal}
-                style={{
-                  background: '#fff',
-                  color: '#374151',
-                  borderRadius: 8,
-                  fontWeight: 500,
-                  fontSize: 14,
-                  border: '2px solid #d1d5db',
-                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-                  transition: 'all 0.2s',
-                  padding: '8px 16px',
-                  minWidth: 'auto'
-                }}
+                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
               >
                 {t('create_unit')}
               </Button>
               <Button
                 icon={<ArrowUpTrayIcon />}
                 onClick={handleExportAll}
-                style={{
-                  background: '#fff',
-                  color: '#374151',
-                  borderRadius: 8,
-                  fontWeight: 500,
-                  fontSize: 14,
-                  border: '2px solid #d1d5db',
-                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-                  transition: 'all 0.2s',
-                  padding: '8px 16px',
-                  minWidth: 'auto'
-                }}
+                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
               >
                 {t('export_all')}
               </Button>
               <Button
                 icon={<ArrowUpTrayIcon />}
                 onClick={handleImportAll}
-                style={{
-                  background: '#fff',
-                  color: '#374151',
-                  borderRadius: 8,
-                  fontWeight: 500,
-                  fontSize: 14,
-                  border: '2px solid #d1d5db',
-                  boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-                  transition: 'all 0.2s',
-                  padding: '8px 16px',
-                  minWidth: 'auto'
-                }}
+                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
               >
                 {t('import_all')}
               </Button>
@@ -257,72 +211,28 @@ const UnitList: React.FC = () => {
                 <Button
                   icon={<QuestionMarkCircleIcon />}
                   onClick={() => setHelpVisible(true)}
-                  style={{
-                    background: '#fff',
-                    color: '#374151',
-                    borderRadius: 8,
-                    fontWeight: 500,
-                    fontSize: 14,
-                    border: '2px solid #d1d5db',
-                    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-                    transition: 'all 0.2s',
-                    padding: '8px 16px',
-                    minWidth: 'auto'
-                  }}
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
                 >
                   {t('help')}
                 </Button>
                 <Button
                   icon={<PlusIcon />}
                   onClick={showCreateModal}
-                  style={{
-                    background: '#fff',
-                    color: '#374151',
-                    borderRadius: 8,
-                    fontWeight: 500,
-                    fontSize: 14,
-                    border: '2px solid #d1d5db',
-                    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-                    transition: 'all 0.2s',
-                    padding: '8px 16px',
-                    minWidth: 'auto'
-                  }}
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
                 >
                   {t('create_unit')}
                 </Button>
                 <Button
                   icon={<ArrowUpTrayIcon />}
                   onClick={handleExportAll}
-                  style={{
-                    background: '#fff',
-                    color: '#374151',
-                    borderRadius: 8,
-                    fontWeight: 500,
-                    fontSize: 14,
-                    border: '2px solid #d1d5db',
-                    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-                    transition: 'all 0.2s',
-                    padding: '8px 16px',
-                    minWidth: 'auto'
-                  }}
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
                 >
                   {t('export_all')}
                 </Button>
                 <Button
                   icon={<ArrowUpTrayIcon />}
                   onClick={handleImportAll}
-                  style={{
-                    background: '#fff',
-                    color: '#374151',
-                    borderRadius: 8,
-                    fontWeight: 500,
-                    fontSize: 14,
-                    border: '2px solid #d1d5db',
-                    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-                    transition: 'all 0.2s',
-                    padding: '8px 16px',
-                    minWidth: 'auto'
-                  }}
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
                 >
                   {t('import_all')}
                 </Button>
@@ -357,58 +267,30 @@ const UnitList: React.FC = () => {
               {/* Action buttons - 2x2 grid layout */}
               <div className="grid grid-cols-2 gap-3">
                 <Button 
-                  className="flex-shrink-0 justify-center shadow-sm hover:shadow-md transition-shadow duration-200"
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
                   icon={<QuestionMarkCircleIcon />}
                   onClick={() => setHelpVisible(true)}
-                  style={{
-                    background: '#fff',
-                    color: '#374151',
-                    fontWeight: '500',
-                    border: '2px solid #d1d5db',
-                    borderRadius: '8px'
-                  }}
                 >
                   {t('help')}
                 </Button>
                 <Button 
-                  className="flex-shrink-0 justify-center shadow-sm hover:shadow-md transition-shadow duration-200"
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
                   icon={<PlusIcon />}
                   onClick={showCreateModal}
-                  style={{
-                    background: '#fff',
-                    color: '#374151',
-                    fontWeight: '500',
-                    border: '2px solid #d1d5db',
-                    borderRadius: '8px'
-                  }}
                 >
                   {t('create_unit')}
                 </Button>
                 <Button 
-                  className="flex-shrink-0 justify-center shadow-sm hover:shadow-md transition-shadow duration-200"
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
                   icon={<ArrowUpTrayIcon />}
                   onClick={handleExportAll}
-                  style={{
-                    background: '#fff',
-                    color: '#374151',
-                    fontWeight: '500',
-                    border: '2px solid #d1d5db',
-                    borderRadius: '8px'
-                  }}
                 >
                   {t('export_all')}
                 </Button>
                 <Button 
-                  className="flex-shrink-0 justify-center shadow-sm hover:shadow-md transition-shadow duration-200"
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
                   icon={<ArrowUpTrayIcon />}
                   onClick={handleImportAll}
-                  style={{
-                    background: '#fff',
-                    color: '#374151',
-                    fontWeight: '500',
-                    border: '2px solid #d1d5db',
-                    borderRadius: '8px'
-                  }}
                 >
                   {t('import_all')}
                 </Button>
@@ -800,9 +682,11 @@ const UnitList: React.FC = () => {
           width={600}
           centered
         >
-          <div style={{ fontSize: 16, lineHeight: 1.6, color: '#333' }}>
+          <div style={{ fontSize: 16, lineHeight: 1.6, color: '#333', paddingBottom: 20, minHeight: 200 }}>
             <p><strong>{t('help_title')}</strong></p>
-            <p>{t('help_content')}</p>
+            <div style={{ whiteSpace: 'pre-line', marginTop: 16 }}>
+              {t('help_content')}
+            </div>
           </div>
         </Modal>
 
