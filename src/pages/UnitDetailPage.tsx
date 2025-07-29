@@ -263,13 +263,13 @@ const UnitDetailPage: React.FC = () => {
           <Link to={`/review/${unitId}`}>
             <Button 
               icon={<ArrowPathIcon />} 
-              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 flex items-center gap-2"
+              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-lg px-4 py-2 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 flex items-center gap-2"
             >{t('start_review')}</Button>
           </Link>
           <Link to={`/spelling-review/${unitId}`}>
             <Button 
               icon={<BookOpenIcon />} 
-              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
+              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-lg px-4 py-2 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
             >{t('spelling_review')}</Button>
           </Link>
         </div>
@@ -283,16 +283,16 @@ const UnitDetailPage: React.FC = () => {
             >{t('back_to_home')}</Button>
           </Link>
           <div className="flex gap-2">
-            <Link to={`/review/${unitId}`}>
+            <Link to={`/review/${unitId}`} className="flex-1">
               <Button 
                 icon={<ArrowPathIcon />} 
-                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
+                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-lg px-4 py-2 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center w-full"
               >{t('start_review')}</Button>
             </Link>
-            <Link to={`/spelling-review/${unitId}`}>
+            <Link to={`/spelling-review/${unitId}`} className="flex-1">
               <Button 
                 icon={<BookOpenIcon />} 
-                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
+                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-lg px-4 py-2 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center w-full"
               >{t('spelling_review')}</Button>
             </Link>
           </div>
@@ -337,16 +337,17 @@ const UnitDetailPage: React.FC = () => {
           <span className="text-xl font-semibold text-gray-800">{t('add_word')}</span>
         </Divider>
       </div>
+
       <AddWordForm unitId={unitId} onWordAdded={() => loadData()} onExport={handleExport} />
       
-      <div className="mt-8 mb-4">
+      <div className="mt-8 mb-2">
         <Divider orientation="left">
           <span className="text-xl font-semibold text-gray-800">{t('word_list')}</span>
         </Divider>
       </div>
       
-            {/* First row: Tabs */}
-      <div className="mb-6">
+      {/* First row: Tabs */}
+      <div className="mb-4 py-2">
         <Tabs
           activeKey={activeTab}
           onChange={(key) => { setActiveTab(key as 'all' | 'mastered' | 'unmastered'); setSelectedWordIds([]); }}

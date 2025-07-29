@@ -671,22 +671,23 @@ const UnitList: React.FC = () => {
 
         {/* Help modal */}
         <Modal
-          title={<span style={{ fontSize: 22, fontWeight: 700, color: '#222' }}>{t('help')}</span>}
           open={helpVisible}
+          title={t('help_title')}
           onCancel={() => setHelpVisible(false)}
-          footer={[
-            <Button key="close" onClick={() => setHelpVisible(false)}>
-              {t('close')}
-            </Button>
-          ]}
-          width={600}
-          centered
+          footer={null}
         >
-          <div style={{ fontSize: 16, lineHeight: 1.6, color: '#333', paddingBottom: 20, minHeight: 200 }}>
-            <p><strong>{t('help_title')}</strong></p>
-            <div style={{ whiteSpace: 'pre-line', marginTop: 16 }}>
-              {t('help_content')}
-            </div>
+          <div style={{ marginBottom: 16 }}>
+            <b>{t('help_csv_title_unit')}</b>
+            <div style={{ color: '#666', fontSize: 14, margin: '8px 0' }}>{t('help_csv_desc_unit')}</div>
+            <pre style={{ background: '#f6f6f6', padding: 12, borderRadius: 6, fontSize: 13 }}>{t('help_csv_example_unit')}</pre>
+          </div>
+          <div style={{ marginBottom: 16 }}>
+            <b>{t('help_json_title_unit')}</b>
+            <div style={{ color: '#666', fontSize: 14, margin: '8px 0' }}>{t('help_json_desc_unit')}</div>
+            <pre style={{ background: '#f6f6f6', padding: 12, borderRadius: 6, fontSize: 13 }}>{t('help_json_example_unit')}</pre>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <Button className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg justify-center" onClick={() => setHelpVisible(false)}>{t('help_close')}</Button>
           </div>
         </Modal>
 

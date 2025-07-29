@@ -61,7 +61,7 @@ const Tabs: React.FC<TabsProps> = ({
   return (
     <div className={`tabs ${className}`} style={style}>
       {/* Tab Headers */}
-      <div className="flex border-b border-gray-200 mb-4">
+      <div className="flex border-b border-gray-200 mb-4 py-1">
         {(items ? tabItems : tabPanes).map((item) => {
           const isActive = item.key === currentActiveKey;
           const isDisabled = 'disabled' in item ? item.disabled : item.props?.disabled;
