@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useParams, Link } from 'react-router';
-import { Button, Text, Title, RadioGroup, RadioButton, Empty, message, Modal, Switch, InputNumber, Space } from '../components/ui';
-import { ArrowLeftIcon, ArrowPathIcon, BookOpenIcon, SpeakerWaveIcon } from '@heroicons/react/24/outline';
+import { Button, Text, Title, RadioGroup, RadioButton, Empty, message, Switch, InputNumber, Space } from '../components/ui';
+import { ArrowLeftIcon, ArrowPathIcon, SpeakerWaveIcon } from '@heroicons/react/24/outline';
 import SpellingReviewCard from '../components/SpellingReviewCard';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import { setWordMasteredStatus, getAllData } from '../utils/wordUtils';
@@ -20,7 +20,7 @@ const SpellingReviewPage: React.FC = () => {
   const { unitId } = useParams<{ unitId: string }>();
   const [reviewMode, setReviewMode] = useState<ReviewMode>('all');
   const [reviewOrder, setReviewOrder] = useState<ReviewOrder>('sequential');
-  const [showCompletionModal, setShowCompletionModal] = useState(false);
+
   const [refreshTrigger, setRefreshTrigger] = useState(0);
   
   // Auto play state - default enabled
@@ -36,7 +36,6 @@ const SpellingReviewPage: React.FC = () => {
   });
 
   // Calculate word counts for each mode - use real-time data
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const wordCounts = useMemo(() => {
     if (!data.unit) return { all: 0, mastered: 0, unmastered: 0 };
     
@@ -82,8 +81,7 @@ const SpellingReviewPage: React.FC = () => {
     completedWords,
     failedWords,
     markCompleted,
-    markFailed,
-    reviewFailedWords
+    markFailed
   } = useReviewNavigation({ words: data.words });
   
   // Simple audio play function
@@ -108,10 +106,8 @@ const SpellingReviewPage: React.FC = () => {
   const handleNext = () => {
     if (!isLast) {
       nextWord();
-    } else {
-      // Review completed
-      setShowCompletionModal(true);
     }
+    // Review completed - SpellingReviewCard handles navigation to Unit Details
   };
 
   const handlePrev = () => {
@@ -133,14 +129,7 @@ const SpellingReviewPage: React.FC = () => {
     setReviewOrder(e.target.value);
   };
 
-  // Handle review failed words
-  const handleReviewFailed = () => {
-    const failedWordsList = reviewFailedWords();
-    if (failedWordsList) {
-      setShowCompletionModal(false);
-      message.info(t('start_review_failed_words', { count: failedWordsList.length }));
-    }
-  };
+
 
   if (loading) {
     return <div className="flex items-center justify-center h-64 text-lg text-gray-600">{t('loading')}</div>;
@@ -176,7 +165,7 @@ const SpellingReviewPage: React.FC = () => {
           <div className="flex items-center gap-3 flex-shrink-0">
             <Link to={`/unit/${unitId}`}>
               <Button 
-                className={`${getTailwindClass('btn-secondary')} ${getTailwindClass('btn-standard')} flex items-center gap-2 font-bold`}
+                className={`${getTailwindClass('btn-secondary')} ${getTailwindClass('btn-standard')} font-bold`}
                 icon={<ArrowLeftIcon className="w-4 h-4" />}
               >
                 {t('back_to_unit')}
@@ -186,7 +175,7 @@ const SpellingReviewPage: React.FC = () => {
               icon={<ArrowPathIcon className="w-4 h-4" />} 
               onClick={handleRestart}
               disabled={isFirst}
-              className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')} flex items-center gap-2`}
+              className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')}`}
               title={isFirst ? t('restart_disabled_tip') : t('restart_tip')}
             >
               {t('restart')}
@@ -434,44 +423,7 @@ const SpellingReviewPage: React.FC = () => {
             </span>
           }
         />
-      )}
-
-      {/* Completion Modal */}
-      <Modal
-        title={t('review_completed')}
-        visible={showCompletionModal}
-        onCancel={() => setShowCompletionModal(false)}
-        onOk={() => setShowCompletionModal(false)}
-        okText={t('return_to_unit')}
-      >
-        <div className="text-center p-4">
-          <div className="mb-4">
-            <Text className="text-xl font-semibold text-gray-900">{t('congratulations')}</Text>
-          </div>
-          <div className="mb-2">
-            <Text className="text-lg text-green-600 font-medium">{t('correct_spelling')}: {completedWords.size}</Text>
-          </div>
-          <div className="mb-4">
-            <Text className="text-lg text-red-600 font-medium">{t('need_improvement')}: {failedWords.size}</Text>
-          </div>
-          {failedWords.size > 0 && (
-            <div className="text-sm text-gray-600 mb-4">
-              {t('suggest_review')}
-            </div>
-          )}
-          {failedWords.size > 0 && (
-            <div className="flex justify-center">
-              <Button 
-                type="primary" 
-                onClick={handleReviewFailed}
-                icon={<BookOpenIcon />}
-              >
-                {t('review_failed_words')} ({failedWords.size})
-              </Button>
-            </div>
-          )}
-        </div>
-      </Modal>
+            )}
     </div>
   );
 };

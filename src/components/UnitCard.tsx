@@ -112,7 +112,7 @@ const UnitCard: React.FC<UnitCardProps> = ({ unit, isSelected = false, onSelect,
           <Link 
             to={`/unit/${unit.id}`} 
             onClick={e => e.stopPropagation()}
-            className="flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-xl px-6 py-4 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 hover:text-blue-100"
+            className="flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-lg px-4 py-2 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 hover:text-blue-100"
           >
             <span className="text-base">{t('view_details')}</span>
             <ArrowRightIcon className="w-5 h-5 ml-3 flex-shrink-0" />

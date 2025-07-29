@@ -59,18 +59,7 @@ export const useReviewNavigation = ({ words }: UseReviewNavigationOptions) => {
     setFailedWords(prev => new Set(prev).add(wordId));
   };
 
-  // Review failed words
-  const reviewFailedWords = () => {
-    const failedWordsList = words.filter(word => failedWords.has(word.id));
-    if (failedWordsList.length > 0) {
-      // Reset to review failed words
-      setCurrentIndex(0);
-      setCompletedWords(new Set());
-      setFailedWords(new Set());
-      return failedWordsList;
-    }
-    return null;
-  };
+
 
   return {
     // Current state
@@ -90,7 +79,6 @@ export const useReviewNavigation = ({ words }: UseReviewNavigationOptions) => {
     completedWords,
     failedWords,
     markCompleted,
-    markFailed,
-    reviewFailedWords
+    markFailed
   };
 }; 

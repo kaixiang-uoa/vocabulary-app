@@ -324,7 +324,7 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
         <Button
           onClick={handlePrev}
           disabled={isFirst}
-          className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')} px-6 py-2 text-base font-medium`}
+          className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')}`}
         >
           {t('previous')}
         </Button>
@@ -332,7 +332,7 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
         {!showResult && (
           <Button
             onClick={handleShowAnswer}
-            className="px-6 py-2 text-base font-medium rounded-lg transition-colors duration-200 bg-yellow-500 text-white border border-yellow-500 hover:bg-yellow-600"
+            className="px-4 py-2 text-base font-medium rounded-lg transition-colors duration-200 bg-yellow-500 text-white border border-yellow-500 hover:bg-yellow-600"
           >
             {t('view_answer')}
           </Button>
@@ -341,7 +341,7 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
         <Button
           onClick={handleNext}
           disabled={isLast && !showResult}
-          className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')} px-6 py-2 text-base font-medium`}
+          className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')}`}
         >
           {isLast ? t('complete') : t('next_word')}
         </Button>

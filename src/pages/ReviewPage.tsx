@@ -175,7 +175,7 @@ const ReviewPage: React.FC = () => {
           <div className="flex items-center gap-3 flex-shrink-0">
             <Link to={`/unit/${unitId}`}>
               <Button 
-                className={`${getTailwindClass('btn-secondary')} ${getTailwindClass('btn-standard')} flex items-center gap-2 font-bold`}
+                className={`${getTailwindClass('btn-secondary')} ${getTailwindClass('btn-standard')} font-bold`}
                 icon={<ArrowLeftIcon className="w-4 h-4" />}
               >
                 {t('back_to_unit')}
@@ -184,7 +184,7 @@ const ReviewPage: React.FC = () => {
             <Button 
               icon={<ArrowPathIcon className="w-4 h-4" />} 
               onClick={handleRestart}
-              className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')} flex items-center gap-2`}
+              className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')}`}
             >
               {t('restart')}
             </Button>
@@ -246,18 +246,15 @@ const ReviewPage: React.FC = () => {
           </div>
           <div className="flex justify-center gap-4 mb-4">
             <Button 
-              size="large" 
               onClick={handlePrev} 
               disabled={currentIndex === 0}
-              className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-large')} ${currentIndex === 0 ? 'opacity-50' : ''}`}
+              className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')} ${currentIndex === 0 ? 'opacity-50' : ''}`}
             >
               {t('prev')}
             </Button>
             <Button 
-              type="primary" 
-              size="large" 
               onClick={handleNext} 
-              className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-large')} ${currentIndex === words.length - 1 ? 'opacity-50' : ''}`}
+              className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')} ${currentIndex === words.length - 1 ? 'opacity-50' : ''}`}
               disabled={currentIndex === words.length - 1}
             >
               {t('next')}

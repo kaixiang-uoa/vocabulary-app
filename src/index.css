@@ -28,3 +28,15 @@ code {
  * 已移除所有 CSS 变量相关的样式
  * 现在使用 Tailwind CSS 类名替代
  */
+
+/* Animation for Popconfirm */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

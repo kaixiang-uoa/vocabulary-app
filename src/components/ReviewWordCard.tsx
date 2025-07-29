@@ -80,7 +80,7 @@ const ReviewWordCard: React.FC<ReviewWordCardProps> = ({ word, isFlipped, onFlip
           )}
           <button
             onClick={(e) => { e.stopPropagation(); onMasteredToggle && onMasteredToggle(word.id); }}
-            className={`px-6 py-3 text-base font-medium rounded-lg transition-colors duration-200 ${
+            className={`px-4 py-2 text-base font-medium rounded-lg transition-colors duration-200 ${
               word.mastered 
                 ? 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200' 
                 : 'bg-blue-500 text-white border border-blue-500 hover:bg-blue-600'

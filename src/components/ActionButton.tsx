@@ -33,7 +33,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
       case 'sm':
         return 'px-3 py-1 text-sm';
       case 'lg':
-        return 'px-6 py-3 text-base';
+        return 'px-5 py-2.5 text-base';
       case 'md':
       default:
         return 'px-4 py-2 text-sm';

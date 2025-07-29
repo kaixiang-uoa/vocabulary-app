@@ -52,11 +52,9 @@ export const useReviewData = ({
           throw new Error('Unit not found');
         }
         
-        // Cache the unit to prevent unnecessary re-renders
-        if (!cachedUnit.current || cachedUnit.current.id !== currentUnit.id) {
-          cachedUnit.current = currentUnit;
-          setUnit(currentUnit);
-        }
+        // Always update unit when refreshTrigger changes to ensure real-time data
+        cachedUnit.current = currentUnit;
+        setUnit(currentUnit);
         
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Failed to load unit data';
@@ -73,7 +71,7 @@ export const useReviewData = ({
     return loadPromise;
   }, []);
 
-  // Load data when unitId changes
+  // Load data when unitId changes or refreshTrigger changes
   useEffect(() => {
     if (!unitId) {
       setUnit(null);
@@ -88,7 +86,7 @@ export const useReviewData = ({
     }
 
     loadData(unitId).catch(console.error);
-  }, [unitId, loadData]);
+  }, [unitId, loadData, refreshTrigger]);
 
   // Memoized filtered words for current mode and order - use real-time data
   const filteredWords = useMemo(() => {

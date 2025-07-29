@@ -37,7 +37,6 @@ export interface UseReviewNavigationReturn {
   failedWords: Set<string>;
   markCompleted: (wordId: string) => void;
   markFailed: (wordId: string) => void;
-  reviewFailedWords: () => Word[] | null;
 }
 
 export interface UseReviewAudioOptions {

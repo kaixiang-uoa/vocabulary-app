@@ -1,13 +1,13 @@
 import React from 'react';
 import { Title } from '../components/ui';
 import { BookOpenIcon, CheckCircleIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
-import UnitList from '../components/UnitList';
+import UnitListTest from '../components/UnitListTest';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import { getMasteredWords, getUnmasteredWords } from '../utils/wordFiltering';
 import { useTranslation } from 'react-i18next';
 import { getTailwindClass } from '../utils/styleMapping';
 
-const HomePage: React.FC = () => {
+const HomePageTest: React.FC = () => {
   const { t } = useTranslation();
   const masteredWords = getMasteredWords();
   const unmasteredWords = getUnmasteredWords();
@@ -88,10 +88,10 @@ const HomePage: React.FC = () => {
 
       {/* Section 3: Unit List Content */}
       <div className="bg-white/90 sm:bg-blue-50/90 md:bg-green-50/90 lg:bg-purple-50/90 xl:bg-orange-50/90 rounded-xl shadow-sm border border-gray-200">
-        <UnitList />
+        <UnitListTest />
       </div>
     </div>
   );
 };
 
-export default HomePage; 
+export default HomePageTest; 

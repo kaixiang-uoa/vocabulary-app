@@ -21,12 +21,12 @@ export const styleMapping = {
   'control-panel-right': 'flex items-center gap-3',
   
   // Button styles
-  'btn-primary': 'bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg font-semibold text-lg border-none shadow-md transition-all duration-200 cursor-pointer px-5 py-2.5 hover:transform hover:-translate-y-0.5 hover:shadow-lg',
-  'btn-secondary': 'bg-gray-100 text-gray-700 rounded-lg font-medium text-lg border-none shadow-sm transition-all duration-200 cursor-pointer px-5 py-2.5',
-  'btn-danger': 'bg-gradient-to-r from-error-500 to-error-600 text-white rounded-lg font-semibold text-lg border-none shadow-md transition-all duration-200 cursor-pointer px-5 py-2.5 hover:transform hover:-translate-y-0.5 hover:shadow-lg',
-  'btn-success': 'bg-gradient-to-r from-success-500 to-success-600 text-white rounded-lg font-semibold text-lg border-none shadow-md transition-all duration-200 cursor-pointer px-5 py-2.5 hover:transform hover:-translate-y-0.5 hover:shadow-lg',
-  'btn-standard': 'px-6 py-2 text-base font-medium',
-  'btn-large': 'px-8 py-3 text-lg font-semibold',
+  'btn-primary': 'bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg font-semibold text-lg border-none shadow-md transition-all duration-200 cursor-pointer px-4 py-2 hover:transform hover:-translate-y-0.5 hover:shadow-lg',
+  'btn-secondary': 'bg-gray-100 text-gray-700 rounded-lg font-medium text-lg border-none shadow-sm transition-all duration-200 cursor-pointer px-4 py-2',
+  'btn-danger': 'bg-gradient-to-r from-error-500 to-error-600 text-white rounded-lg font-semibold text-lg border-none shadow-md transition-all duration-200 cursor-pointer px-4 py-2 hover:transform hover:-translate-y-0.5 hover:shadow-lg',
+  'btn-success': 'bg-gradient-to-r from-success-500 to-success-600 text-white rounded-lg font-semibold text-lg border-none shadow-md transition-all duration-200 cursor-pointer px-4 py-2 hover:transform hover:-translate-y-0.5 hover:shadow-lg',
+  'btn-standard': 'px-4 py-2 text-base font-medium',
+  'btn-large': 'px-6 py-3 text-lg font-semibold',
   
   // Card styles
   'word-card': 'rounded-xl border-2 border-gray-200 bg-white transition-all duration-300 h-full flex flex-col cursor-pointer p-6 relative min-h-[280px] hover:transform hover:-translate-y-1 hover:shadow-wordcard-hover',
@@ -92,7 +92,7 @@ export const styleMapping = {
   'review-card-back': 'absolute inset-0 backface-hidden rotate-y-180 bg-white rounded-xl border-2 border-gray-200 p-8 flex flex-col items-center justify-center',
   'review-card-word': 'text-3xl font-bold text-gray-900',
   'review-card-pronunciation': 'p-2 text-gray-500 hover:text-gray-700 transition-colors duration-200',
-  'review-card-master-btn': 'btn-secondary px-6 py-3 text-base font-medium',
+  'review-card-master-btn': 'btn-secondary px-4 py-2 text-base font-medium',
   
   'spelling-input': 'text-lg h-12 text-center font-mono',
   'spelling-input-display': 'inline-block w-8 h-8 mx-1 text-center leading-8 border-2 rounded font-mono text-lg font-bold',

@@ -22,19 +22,19 @@
 /* Custom component styles */
 @layer components {
   .btn-primary {
-    @apply bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg font-semibold text-lg border-none shadow-md transition-all duration-200 cursor-pointer px-5 py-2.5 hover:transform hover:-translate-y-0.5 hover:shadow-lg;
+    @apply bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg font-semibold text-lg border-none shadow-md transition-all duration-200 cursor-pointer px-4 py-2 hover:transform hover:-translate-y-0.5 hover:shadow-lg;
   }
   
   .btn-secondary {
-    @apply bg-gray-100 text-gray-700 rounded-lg font-medium text-lg border-none shadow-sm transition-all duration-200 cursor-pointer px-5 py-2.5;
+    @apply bg-gray-100 text-gray-700 rounded-lg font-medium text-lg border-none shadow-sm transition-all duration-200 cursor-pointer px-4 py-2;
   }
   
   .btn-danger {
-    @apply bg-gradient-to-r from-error-500 to-error-600 text-white rounded-lg font-semibold text-lg border-none shadow-md transition-all duration-200 cursor-pointer px-5 py-2.5 hover:transform hover:-translate-y-0.5 hover:shadow-lg;
+    @apply bg-gradient-to-r from-error-500 to-error-600 text-white rounded-lg font-semibold text-lg border-none shadow-md transition-all duration-200 cursor-pointer px-4 py-2 hover:transform hover:-translate-y-0.5 hover:shadow-lg;
   }
   
   .btn-success {
-    @apply bg-gradient-to-r from-success-500 to-success-600 text-white rounded-lg font-semibold text-lg border-none shadow-md transition-all duration-200 cursor-pointer px-5 py-2.5 hover:transform hover:-translate-y-0.5 hover:shadow-lg;
+    @apply bg-gradient-to-r from-success-500 to-success-600 text-white rounded-lg font-semibold text-lg border-none shadow-md transition-all duration-200 cursor-pointer px-4 py-2 hover:transform hover:-translate-y-0.5 hover:shadow-lg;
   }
   
   .word-card {

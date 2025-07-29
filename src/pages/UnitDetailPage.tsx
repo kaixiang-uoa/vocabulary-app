@@ -256,14 +256,14 @@ const UnitDetailPage: React.FC = () => {
         <div className="hidden lg:flex flex-wrap gap-3">
           <Link to="/">
             <Button 
-              className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200"
+              className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors duration-200"
               icon={<ArrowLeftIcon className="w-5 h-5" />}
             >{t('back_to_home')}</Button>
           </Link>
           <Link to={`/review/${unitId}`}>
             <Button 
               icon={<ArrowPathIcon />} 
-              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-lg px-4 py-2 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 flex items-center gap-2"
+              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-lg px-4 py-2 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 justify-center"
             >{t('start_review')}</Button>
           </Link>
           <Link to={`/spelling-review/${unitId}`}>
@@ -278,7 +278,7 @@ const UnitDetailPage: React.FC = () => {
         <div className="lg:hidden space-y-3">
           <Link to="/">
             <Button 
-              className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors duration-200 w-full justify-center"
+              className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-colors duration-200 w-full justify-center"
               icon={<ArrowLeftIcon className="w-5 h-5" />}
             >{t('back_to_home')}</Button>
           </Link>

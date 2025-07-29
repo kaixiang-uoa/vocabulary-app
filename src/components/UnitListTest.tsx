@@ -12,7 +12,7 @@ import ImportModal from './ImportModal';
 import { getAllData, updateUnit, deleteItems, createUnit, addWord } from '../utils/wordUtils';
 import { ImportData } from '../types/index';
 
-const UnitList: React.FC = () => {
+const UnitListTest: React.FC = () => {
   const { t } = useTranslation();
   const [units, setUnits] = useState<any[]>([]);
   const [filteredUnits, setFilteredUnits] = useState<any[]>([]);
@@ -653,4 +653,4 @@ const UnitList: React.FC = () => {
   );
 };
 
-export default UnitList; 
+export default UnitListTest; 

@@ -50,10 +50,10 @@ const Button: React.FC<ButtonProps> = ({
   const sizeClasses = {
     small: 'px-3 py-1.5 text-sm',
     medium: 'px-4 py-2 text-base',
-    large: 'px-6 py-3 text-lg',
+    large: 'px-5 py-2.5 text-lg',
   };
   
-  const classes = `${baseClasses} ${typeClasses[finalType]} ${sizeClasses[size]} ${className}`;
+  const classes = `${baseClasses} ${typeClasses[finalType]} ${sizeClasses[size]} ${className}`.replace(/\s+/g, ' ').trim();
   
   return (
     <button

@@ -123,7 +123,7 @@ const ImportModal: React.FC<ImportModalProps> = ({
         <Button onClick={handleCancel} className={getTailwindClass('btn-standard')} style={{ minWidth: 80 }}>
           {t('cancel')}
         </Button>
-        <Button type="primary" onClick={handleOk} className={getTailwindClass('btn-standard')} style={{ minWidth: 80 }}>
+        <Button onClick={handleOk} className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')}`} style={{ minWidth: 80 }}>
           {t('ok')}
         </Button>
       </div>
