@@ -19,7 +19,22 @@ const AddWordForm: React.FC<AddWordFormProps & { onExport?: () => void }> = ({ u
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const { word, meaning } = formData;
-    if (addWord(unitId, word, meaning)) {
+    
+    // Validate input
+    const trimmedWord = word.trim();
+    const trimmedMeaning = meaning.trim();
+    
+    if (!trimmedWord) {
+      message.error(t('word_required'));
+      return;
+    }
+    
+    if (!trimmedMeaning) {
+      message.error(t('meaning_required'));
+      return;
+    }
+    
+    if (addWord(unitId, trimmedWord, trimmedMeaning)) {
       message.success(t('add_word_success'));
       setFormData({ word: '', meaning: '' });
       if (onWordAdded) onWordAdded();

@@ -178,8 +178,8 @@ const UnitList: React.FC = () => {
     }
   };
 
-  const handleEditUnit = (unitId: string, values: string) => {
-    updateUnit(unitId, { name: values });
+  const handleEditUnit = (unitId: string, values: { name: string }) => {
+    updateUnit(unitId, values);
     refreshData();
   };
 
@@ -659,7 +659,7 @@ const UnitList: React.FC = () => {
                 unit={unit}
                 isSelected={selectedUnits.includes(unit.id)}
                 onSelect={() => handleSelectUnit(unit.id)}
-                onEdit={(values) => handleEditUnit(unit.id, values)}
+                onEdit={(unitId, values) => handleEditUnit(unitId, values)}
               />
             ))}
           </div>

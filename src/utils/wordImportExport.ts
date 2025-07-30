@@ -48,7 +48,18 @@ export const addWordsInBatch = (unitId: string, wordsArray: ImportWordData[]): b
   const unitIndex = data.units.findIndex(u => u.id === unitId);
   if (unitIndex === -1) return false;
   
-  const newWords: Word[] = wordsArray.map(item => ({
+  // Filter out empty words and meanings
+  const validWords = wordsArray.filter(item => {
+    const trimmedWord = item.word.trim();
+    const trimmedMeaning = item.meaning.trim();
+    return trimmedWord && trimmedMeaning;
+  });
+  
+  if (validWords.length === 0) {
+    return false;
+  }
+  
+  const newWords: Word[] = validWords.map(item => ({
     id: uuidv4(),
     word: item.word.trim(),
     meaning: item.meaning.trim(),

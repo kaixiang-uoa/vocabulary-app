@@ -148,5 +148,7 @@
   "no_search_results": "No matching units found",
   "no_units_tip": "Start your vocabulary learning journey! Click the 'Create Unit' button above to create your first learning unit.",
   "no_search_results_tip": "No units found containing '{{term}}'. Please try different keywords or create a new unit.",
+  "word_required": "Please enter a word",
+  "meaning_required": "Please enter the meaning",
   "import_placeholder_default": "Please paste or upload JSON/CSV content...\n\nExample JSON format:\n{\n  \"units\": [\n    {\n      \"id\": \"unit1\",\n      \"name\": \"Unit 1\",\n      \"words\": [\n        {\"id\": \"word1\", \"word\": \"apple\", \"meaning\": \"苹果\", \"mastered\": false}\n      ]\n    }\n  ]\n}\n\nExample CSV format:\napple,苹果\nbanana,香蕉\nhello,你好"
 } 

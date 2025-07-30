@@ -98,6 +98,8 @@
   "help": "帮助",
   "flip_mode_en2zh": "英文→释义",
   "flip_mode_zh2en": "释义→英文",
+  "word_required": "请输入单词",
+  "meaning_required": "请输入释义",
   "review_mode": "复习模式",
   "review_order": "复习顺序",
   "flip_mode": "翻转模式",

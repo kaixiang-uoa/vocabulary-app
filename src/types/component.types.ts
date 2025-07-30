@@ -12,14 +12,12 @@ export interface UnitCardProps {
   unit: {
     id: string;
     name: string;
-    wordCount: number;
-    progress: number;
-    completed: number;
-    remaining: number;
+    createTime: number;
+    words: any[];
   };
   isSelected?: boolean;
   onSelect?: (unitId: string) => void;
-  onEdit?: (unitId: string) => void;
+  onEdit?: (unitId: string, values: { name: string }) => void;
   onDelete?: (unitId: string) => void;
   onViewDetails?: (unitId: string) => void;
 }

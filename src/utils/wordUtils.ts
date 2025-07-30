@@ -34,6 +34,14 @@ export const saveAllData = (data: StorageData): boolean => {
 
 // add word to specified unit
 export const addWord = (unitId: string, word: string, meaning: string): boolean => {
+  // Validate input
+  const trimmedWord = word.trim();
+  const trimmedMeaning = meaning.trim();
+  
+  if (!trimmedWord || !trimmedMeaning) {
+    return false;
+  }
+  
   const data = getAllData();
   const unitIndex = data.units.findIndex(u => u.id === unitId);
   
@@ -41,8 +49,8 @@ export const addWord = (unitId: string, word: string, meaning: string): boolean 
   
   const newWord: Word = {
     id: uuidv4(),
-    word: word.trim(),
-    meaning: meaning.trim(),
+    word: trimmedWord,
+    meaning: trimmedMeaning,
     unitId,
     mastered: false,
     createTime: Date.now(),
