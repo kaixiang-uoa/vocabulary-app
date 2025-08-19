@@ -150,5 +150,26 @@
   "no_search_results_tip": "No units found containing '{{term}}'. Please try different keywords or create a new unit.",
   "word_required": "Please enter a word",
   "meaning_required": "Please enter the meaning",
-  "import_placeholder_default": "Please paste or upload JSON/CSV content...\n\nExample JSON format:\n{\n  \"units\": [\n    {\n      \"id\": \"unit1\",\n      \"name\": \"Unit 1\",\n      \"words\": [\n        {\"id\": \"word1\", \"word\": \"apple\", \"meaning\": \"苹果\", \"mastered\": false}\n      ]\n    }\n  ]\n}\n\nExample CSV format:\napple,苹果\nbanana,香蕉\nhello,你好"
-} 
+  "login_title": "Login",
+  "login_description": "Login to sync your learning data across devices",
+  "login_with_google": "Sign in with Google",
+  "logging_in": "Logging in...",
+  "migration_title": "Migrate Your Data",
+  "migration_description": "We found local data that can be migrated to the cloud for better synchronization across devices.",
+  "migrating": "Migrating...",
+  "migrate_now": "Migrate Now",
+  "skip": "Skip",
+  "units": "units",
+  "words": "words",
+  "import_placeholder_default": "Please paste or upload JSON/CSV content...\n\nExample JSON format:\n{\n  \"units\": [\n    {\n      \"id\": \"unit1\",\n      \"name\": \"Unit 1\",\n      \"words\": [\n        {\"id\": \"word1\", \"word\": \"apple\", \"meaning\": \"苹果\", \"mastered\": false}\n      ]\n    }\n  ]\n}\n\nExample CSV format:\napple,苹果\nbanana,香蕉\nhello,你好",
+  "loading": "Loading...",
+  "loading_data": "Loading data...",
+  "loading_units": "Loading units...",
+  "loading_words": "Loading words...",
+  "loading_review": "Loading review...",
+  "loading_word": "Loading word...",
+  "retry": "Retry",
+  "retry_loading": "Retry loading",
+  "loading_failed": "Loading failed",
+  "loading_failed_retry": "Loading failed. Please try again."
+}

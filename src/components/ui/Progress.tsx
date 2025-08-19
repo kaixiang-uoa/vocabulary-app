@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
 export interface ProgressProps {
   percent?: number;
   showInfo?: boolean;
-  status?: 'success' | 'exception' | 'normal' | 'active';
+  status?: "success" | "exception" | "normal" | "active";
   strokeColor?: string;
   strokeWidth?: number;
   format?: (percent?: number) => string;
@@ -14,27 +14,29 @@ export interface ProgressProps {
 const Progress: React.FC<ProgressProps> = ({
   percent = 0,
   showInfo = true,
-  status = 'normal',
+  status = "normal",
   strokeColor,
   strokeWidth = 8,
   format,
-  className = '',
+  className = "",
   style,
 }) => {
   const clampedPercent = Math.min(Math.max(percent, 0), 100);
-  
+
   const statusClasses = {
-    success: 'bg-green-500',
-    exception: 'bg-red-500',
-    normal: 'bg-primary-500',
-    active: 'bg-primary-500',
+    success: "bg-green-500",
+    exception: "bg-red-500",
+    normal: "bg-primary-500",
+    active: "bg-primary-500",
   };
 
   const getStrokeColor = () => {
     if (strokeColor) return strokeColor;
-    return status === 'success' ? '#22c55e' : 
-           status === 'exception' ? '#ef4444' : 
-           '#6366f1';
+    return status === "success"
+      ? "#22c55e"
+      : status === "exception"
+        ? "#ef4444"
+        : "#6366f1";
   };
 
   const getFormatText = () => {
@@ -44,7 +46,10 @@ const Progress: React.FC<ProgressProps> = ({
 
   return (
     <div className={`progress ${className}`} style={style}>
-      <div className="w-full bg-gray-200 rounded-full" style={{ height: strokeWidth }}>
+      <div
+        className="w-full bg-gray-200 rounded-full"
+        style={{ height: strokeWidth }}
+      >
         <div
           className={`h-full rounded-full transition-all duration-300 ${statusClasses[status]}`}
           style={{
@@ -52,7 +57,7 @@ const Progress: React.FC<ProgressProps> = ({
             backgroundColor: getStrokeColor(),
           }}
         >
-          {status === 'active' && (
+          {status === "active" && (
             <div className="h-full bg-gradient-to-r from-transparent via-white to-transparent opacity-30 animate-pulse" />
           )}
         </div>
@@ -66,4 +71,4 @@ const Progress: React.FC<ProgressProps> = ({
   );
 };
 
-export default Progress; 
+export default Progress;

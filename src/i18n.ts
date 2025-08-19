@@ -1,27 +1,25 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
 
-import enTranslation from './locales/en/translation.json';
-import zhTranslation from './locales/zh/translation.json';
+import enTranslation from "./locales/en/translation.json";
+import zhTranslation from "./locales/zh/translation.json";
 
 const resources = {
   en: {
-    translation: enTranslation
+    translation: enTranslation,
   },
   zh: {
-    translation: zhTranslation
-  }
+    translation: zhTranslation,
+  },
 };
 
-i18n
-  .use(initReactI18next)
-  .init({
-    resources,
-    lng: 'en', // default language
-    fallbackLng: 'zh',
-    interpolation: {
-      escapeValue: false
-    }
-  });
+i18n.use(initReactI18next).init({
+  resources,
+  lng: "en", // default language
+  fallbackLng: "zh",
+  interpolation: {
+    escapeValue: false,
+  },
+});
 
-export default i18n; 
+export default i18n;

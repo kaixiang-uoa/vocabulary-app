@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export interface TypographyProps {
   children: React.ReactNode;
@@ -11,7 +11,7 @@ export interface TypographyProps {
 export interface TextProps {
   children: React.ReactNode;
   strong?: boolean;
-  type?: 'secondary' | 'success' | 'warning' | 'danger';
+  type?: "secondary" | "success" | "warning" | "danger";
   className?: string;
   style?: React.CSSProperties;
 }
@@ -27,20 +27,20 @@ const Typography: React.FC<TypographyProps> = ({
   children,
   level = 1,
   strong = false,
-  className = '',
+  className = "",
   style,
 }) => {
   const levelClasses = {
-    1: 'text-4xl font-bold',
-    2: 'text-3xl font-bold',
-    3: 'text-2xl font-semibold',
-    4: 'text-xl font-semibold',
-    5: 'text-lg font-medium',
+    1: "text-4xl font-bold",
+    2: "text-3xl font-bold",
+    3: "text-2xl font-semibold",
+    4: "text-xl font-semibold",
+    5: "text-lg font-medium",
   };
-  
-  const strongClasses = strong ? 'font-bold' : '';
+
+  const strongClasses = strong ? "font-bold" : "";
   const classes = `${levelClasses[level]} ${strongClasses} text-gray-900 ${className}`;
-  
+
   return (
     <div className={classes} style={style}>
       {children}
@@ -52,19 +52,19 @@ const Text: React.FC<TextProps> = ({
   children,
   strong = false,
   type,
-  className = '',
+  className = "",
   style,
 }) => {
   const typeClasses = {
-    secondary: 'text-gray-500',
-    success: 'text-green-600',
-    warning: 'text-yellow-600',
-    danger: 'text-red-600',
+    secondary: "text-gray-500",
+    success: "text-green-600",
+    warning: "text-yellow-600",
+    danger: "text-red-600",
   };
-  
-  const strongClasses = strong ? 'font-semibold' : '';
-  const classes = `text-base ${type ? typeClasses[type] : 'text-gray-700'} ${strongClasses} ${className}`;
-  
+
+  const strongClasses = strong ? "font-semibold" : "";
+  const classes = `text-base ${type ? typeClasses[type] : "text-gray-700"} ${strongClasses} ${className}`;
+
   return (
     <span className={classes} style={style}>
       {children}
@@ -75,7 +75,7 @@ const Text: React.FC<TextProps> = ({
 const Title: React.FC<TitleProps> = ({
   children,
   level = 1,
-  className = '',
+  className = "",
   style,
 }) => {
   return (
@@ -86,4 +86,4 @@ const Title: React.FC<TitleProps> = ({
 };
 
 export { Text, Title };
-export default Typography; 
+export default Typography;

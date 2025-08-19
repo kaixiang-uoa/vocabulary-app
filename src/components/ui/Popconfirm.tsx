@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import Button from './Button';
+import React, { useState, useRef, useEffect } from "react";
+import Button from "./Button";
 
 export interface PopconfirmProps {
   title?: React.ReactNode;
@@ -9,24 +9,24 @@ export interface PopconfirmProps {
   okText?: string;
   cancelText?: string;
   children: React.ReactNode;
-  placement?: 'top' | 'bottom' | 'left' | 'right';
-  trigger?: 'hover' | 'click';
+  placement?: "top" | "bottom" | "left" | "right";
+  trigger?: "hover" | "click";
   className?: string;
   style?: React.CSSProperties;
 }
 
 const Popconfirm: React.FC<PopconfirmProps> = ({
-  title = 'Are you sure?',
+  title = "Are you sure?",
   description,
   onConfirm,
   onCancel,
-  okText = 'Yes',
-  cancelText = 'No',
+  okText = "Yes",
+  cancelText = "No",
   children,
-  placement = 'bottom',
-  trigger = 'hover',
-  className = '',
-  style
+  placement = "bottom",
+  trigger = "hover",
+  className = "",
+  style,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [position, setPosition] = useState({ top: 0, left: 0 });
@@ -37,39 +37,40 @@ const Popconfirm: React.FC<PopconfirmProps> = ({
     if (e) {
       e.stopPropagation();
     }
-    
+
     if (!triggerRef.current) return;
-    
+
     // Find the actual button element within the trigger
-    const buttonElement = triggerRef.current.querySelector('button') || triggerRef.current;
+    const buttonElement =
+      triggerRef.current.querySelector("button") || triggerRef.current;
     const triggerRect = buttonElement.getBoundingClientRect();
-    
+
     // Get viewport dimensions
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
-    
+
     // Estimate popup size
     const estimatedWidth = 320;
     const estimatedHeight = 140;
-    
+
     let top = 0;
     let left = 0;
-    
+
     // Calculate initial position based on placement
     switch (placement) {
-      case 'top':
+      case "top":
         top = triggerRect.top - estimatedHeight - 8;
         left = triggerRect.left + (triggerRect.width - estimatedWidth) / 2;
         break;
-      case 'bottom':
+      case "bottom":
         top = triggerRect.bottom + 8;
         left = triggerRect.left + (triggerRect.width - estimatedWidth) / 2;
         break;
-      case 'left':
+      case "left":
         top = triggerRect.top + (triggerRect.height - estimatedHeight) / 2;
         left = triggerRect.left - estimatedWidth - 8;
         break;
-      case 'right':
+      case "right":
         top = triggerRect.top + (triggerRect.height - estimatedHeight) / 2;
         left = triggerRect.right + 8;
         break;
@@ -77,7 +78,7 @@ const Popconfirm: React.FC<PopconfirmProps> = ({
         top = triggerRect.bottom + 8;
         left = triggerRect.left + (triggerRect.width - estimatedWidth) / 2;
     }
-    
+
     // Ensure popup stays within viewport bounds
     // Adjust horizontal position
     if (left + estimatedWidth > viewportWidth - 16) {
@@ -86,7 +87,7 @@ const Popconfirm: React.FC<PopconfirmProps> = ({
     if (left < 16) {
       left = 16;
     }
-    
+
     // Adjust vertical position - simplified logic
     if (top + estimatedHeight > viewportHeight - 16) {
       // If bottom overflow, show above
@@ -104,7 +105,7 @@ const Popconfirm: React.FC<PopconfirmProps> = ({
         top = Math.max(16, (viewportHeight - estimatedHeight) / 2);
       }
     }
-    
+
     setPosition({ top, left });
     setIsVisible(true);
   };
@@ -138,12 +139,12 @@ const Popconfirm: React.FC<PopconfirmProps> = ({
   useEffect(() => {
     if (isVisible && popupRef.current && triggerRef.current) {
       const popupRect = popupRef.current.getBoundingClientRect();
-      
+
       const viewportWidth = window.innerWidth;
       const viewportHeight = window.innerHeight;
-      
+
       let { top, left } = position;
-      
+
       // Simple boundary adjustments
       if (left + popupRect.width > viewportWidth - 16) {
         left = viewportWidth - popupRect.width - 16;
@@ -151,14 +152,14 @@ const Popconfirm: React.FC<PopconfirmProps> = ({
       if (left < 16) {
         left = 16;
       }
-      
+
       if (top + popupRect.height > viewportHeight - 16) {
         top = viewportHeight - popupRect.height - 16;
       }
       if (top < 16) {
         top = 16;
       }
-      
+
       if (top !== position.top || left !== position.left) {
         setPosition({ top, left });
       }
@@ -177,18 +178,18 @@ const Popconfirm: React.FC<PopconfirmProps> = ({
           hidePopup();
         }
       };
-      
+
       const handleScroll = () => hidePopup();
       const handleResize = () => hidePopup();
-      
-      document.addEventListener('mousedown', handleClickOutside);
-      window.addEventListener('scroll', handleScroll);
-      window.addEventListener('resize', handleResize);
-      
+
+      document.addEventListener("mousedown", handleClickOutside);
+      window.addEventListener("scroll", handleScroll);
+      window.addEventListener("resize", handleResize);
+
       return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-        window.removeEventListener('scroll', handleScroll);
-        window.removeEventListener('resize', handleResize);
+        document.removeEventListener("mousedown", handleClickOutside);
+        window.removeEventListener("scroll", handleScroll);
+        window.removeEventListener("resize", handleResize);
       };
     }
   }, [isVisible]);
@@ -196,9 +197,9 @@ const Popconfirm: React.FC<PopconfirmProps> = ({
   return (
     <div
       ref={triggerRef}
-      onMouseEnter={trigger === 'hover' ? showPopup : undefined}
-      onMouseLeave={trigger === 'hover' ? hidePopup : undefined}
-      onClick={trigger === 'click' ? (e) => showPopup(e) : undefined}
+      onMouseEnter={trigger === "hover" ? showPopup : undefined}
+      onMouseLeave={trigger === "hover" ? hidePopup : undefined}
+      onClick={trigger === "click" ? (e) => showPopup(e) : undefined}
       className={className}
       style={style}
     >
@@ -210,7 +211,7 @@ const Popconfirm: React.FC<PopconfirmProps> = ({
           style={{
             top: position.top,
             left: position.left,
-            animation: 'fadeIn 0.2s ease-out'
+            animation: "fadeIn 0.2s ease-out",
           }}
         >
           <div className="mb-4">
@@ -247,4 +248,4 @@ const Popconfirm: React.FC<PopconfirmProps> = ({
   );
 };
 
-export default Popconfirm; 
+export default Popconfirm;

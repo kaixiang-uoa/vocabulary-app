@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
 export interface RowProps {
   children: React.ReactNode;
   gutter?: number | [number, number];
-  justify?: 'start' | 'end' | 'center' | 'space-around' | 'space-between';
-  align?: 'top' | 'middle' | 'bottom';
+  justify?: "start" | "end" | "center" | "space-around" | "space-between";
+  align?: "top" | "middle" | "bottom";
   className?: string;
   style?: React.CSSProperties;
 }
@@ -21,30 +21,33 @@ export interface ColProps {
 const Row: React.FC<RowProps> = ({
   children,
   gutter = 0,
-  justify = 'start',
-  align = 'top',
-  className = '',
+  justify = "start",
+  align = "top",
+  className = "",
   style,
 }) => {
   const gutterValue = Array.isArray(gutter) ? gutter[0] : gutter;
-  const gutterStyle = gutterValue > 0 ? { marginLeft: -gutterValue / 2, marginRight: -gutterValue / 2 } : {};
-  
+  const gutterStyle =
+    gutterValue > 0
+      ? { marginLeft: -gutterValue / 2, marginRight: -gutterValue / 2 }
+      : {};
+
   const justifyClasses = {
-    start: 'justify-start',
-    end: 'justify-end',
-    center: 'justify-center',
-    'space-around': 'justify-around',
-    'space-between': 'justify-between',
+    start: "justify-start",
+    end: "justify-end",
+    center: "justify-center",
+    "space-around": "justify-around",
+    "space-between": "justify-between",
   };
-  
+
   const alignClasses = {
-    top: 'items-start',
-    middle: 'items-center',
-    bottom: 'items-end',
+    top: "items-start",
+    middle: "items-center",
+    bottom: "items-end",
   };
-  
+
   const classes = `flex flex-wrap ${justifyClasses[justify]} ${alignClasses[align]} ${className}`;
-  
+
   return (
     <div className={classes} style={{ ...gutterStyle, ...style }}>
       {React.Children.map(children, (child) => {
@@ -62,16 +65,16 @@ const Col: React.FC<ColProps> = ({
   children,
   span = 24,
   offset = 0,
-  className = '',
+  className = "",
   style,
   gutter = 0,
 }) => {
   const width = (span / 24) * 100;
   const marginLeft = (offset / 24) * 100;
   const padding = gutter > 0 ? gutter / 2 : 0;
-  
+
   const classes = `flex-shrink-0 ${className}`;
-  
+
   return (
     <div
       className={classes}
@@ -88,4 +91,4 @@ const Col: React.FC<ColProps> = ({
   );
 };
 
-export { Row, Col }; 
+export { Row, Col };

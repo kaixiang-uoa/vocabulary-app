@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export interface StatisticProps {
   title?: React.ReactNode;
@@ -17,10 +17,10 @@ const Statistic: React.FC<StatisticProps> = ({
   suffix,
   precision,
   valueStyle,
-  className = '',
+  className = "",
 }) => {
   const formatValue = (val: any) => {
-    if (typeof val === 'number' && precision !== undefined) {
+    if (typeof val === "number" && precision !== undefined) {
       return val.toFixed(precision);
     }
     return val;
@@ -35,21 +35,17 @@ const Statistic: React.FC<StatisticProps> = ({
       )}
       <div className="statistic-content flex items-center" style={valueStyle}>
         {prefix && (
-          <span className="statistic-prefix mr-1 text-gray-500">
-            {prefix}
-          </span>
+          <span className="statistic-prefix mr-1 text-gray-500">{prefix}</span>
         )}
         <span className="statistic-value text-2xl font-bold text-gray-900">
           {formatValue(value)}
         </span>
         {suffix && (
-          <span className="statistic-suffix ml-1 text-gray-500">
-            {suffix}
-          </span>
+          <span className="statistic-suffix ml-1 text-gray-500">{suffix}</span>
         )}
       </div>
     </div>
   );
 };
 
-export default Statistic; 
+export default Statistic;

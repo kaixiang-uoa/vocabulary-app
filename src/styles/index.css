@@ -1,11 +1,11 @@
-/* Styles Index - Styles Index */ 
+/* Styles Index - Styles Index */
 
 /* Import TailwindCSS */
-@import './tailwind.css';
+@import "./tailwind.css";
 
-/* Import remaining styles */ 
+/* Import remaining styles */
 
-/* Global styles reset and base styles */ 
+/* Global styles reset and base styles */
 * {
   box-sizing: border-box;
 }
@@ -260,7 +260,7 @@ body {
   font-weight: 500;
 }
 
-/* Scrollbar styles */ 
+/* Scrollbar styles */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -280,19 +280,19 @@ body {
   background: #a8a8a8;
 }
 
-/* Selection text styles */ 
+/* Selection text styles */
 ::selection {
   background: #bae6fd; /* blue-200 */
   color: #075985; /* blue-800 */
 }
 
-/* Focus styles */ 
+/* Focus styles */
 :focus {
   outline: 2px solid #3b82f6; /* blue-500 */
   outline-offset: 2px;
 }
 
-/* Link styles */ 
+/* Link styles */
 a {
   color: #2563eb; /* blue-600 */
   text-decoration: none;
@@ -304,7 +304,7 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Button base styles */ 
+/* Button base styles */
 button {
   cursor: pointer;
   border: none;
@@ -319,26 +319,29 @@ button:disabled {
   opacity: 0.6;
 }
 
-/* Input base styles */ 
-input, textarea, select {
+/* Input base styles */
+input,
+textarea,
+select {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
 }
 
-/* Image styles */ 
+/* Image styles */
 img {
   max-width: 100%;
   height: auto;
 }
 
-/* Table styles */ 
+/* Table styles */
 table {
   border-collapse: collapse;
   width: 100%;
 }
 
-th, td {
+th,
+td {
   padding: 8px 12px;
   text-align: left;
   border-bottom: 1px solid #e8e8e8;
@@ -349,8 +352,9 @@ th {
   font-weight: 600;
 }
 
-/* List styles */ 
-ul, ol {
+/* List styles */
+ul,
+ol {
   padding-left: 20px;
 }
 
@@ -358,7 +362,7 @@ li {
   margin-bottom: 4px;
 }
 
-/* Blockquote styles */ 
+/* Blockquote styles */
 blockquote {
   margin: 0;
   padding: 12px 16px;
@@ -367,14 +371,14 @@ blockquote {
   font-style: italic;
 }
 
-/* Code block styles */ 
+/* Code block styles */
 pre {
   background-color: #f6f8fa;
   border: 1px solid #e1e4e8;
   border-radius: 6px;
   padding: 16px;
   overflow-x: auto;
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
   font-size: 14px;
   line-height: 1.45;
 }
@@ -384,7 +388,7 @@ code {
   border: 1px solid #e1e4e8;
   border-radius: 3px;
   padding: 2px 4px;
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
   font-size: 85%;
 }
 
@@ -394,29 +398,34 @@ pre code {
   padding: 0;
 }
 
-/* Horizontal divider styles */ 
+/* Horizontal divider styles */
 hr {
   border: none;
   height: 1px;
-  background: linear-gradient(to right, transparent, #d4d4d8, transparent); /* gray-300 */
+  background: linear-gradient(
+    to right,
+    transparent,
+    #d4d4d8,
+    transparent
+  ); /* gray-300 */
   margin: 24px 0;
 }
 
-/* Responsive image */ 
+/* Responsive image */
 .responsive-img {
   max-width: 100%;
   height: auto;
   display: block;
 }
 
-/* Clear float */ 
+/* Clear float */
 .clearfix::after {
   content: "";
   display: table;
   clear: both;
 }
 
-/* Text ellipsis */ 
+/* Text ellipsis */
 .text-ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -439,28 +448,28 @@ hr {
   text-overflow: ellipsis;
 }
 
-/* Print styles */ 
+/* Print styles */
 @media print {
   .no-print {
     display: none !important;
   }
-  
+
   body {
     background: white !important;
   }
-  
+
   .page-container {
     background: white !important;
     padding: 0 !important;
   }
 }
 
-/* High contrast mode */ 
+/* High contrast mode */
 @media (prefers-contrast: high) {
   /* 高对比度模式现在通过 Tailwind CSS 的 prefers-contrast 变体处理 */
 }
 
-/* Reduced animation mode */ 
+/* Reduced animation mode */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

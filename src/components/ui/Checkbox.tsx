@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 export interface CheckboxProps {
   checked?: boolean;
@@ -19,7 +19,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
   onChange,
   onClick,
   children,
-  className = '',
+  className = "",
 }) => {
   const [isChecked, setIsChecked] = React.useState(checked ?? defaultChecked);
 
@@ -31,14 +31,14 @@ const Checkbox: React.FC<CheckboxProps> = ({
 
   const handleChange = () => {
     if (disabled) return;
-    
+
     const newValue = !isChecked;
     setIsChecked(newValue);
     onChange?.(newValue);
   };
 
-  const baseClasses = 'inline-flex items-center cursor-pointer';
-  const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed' : '';
+  const baseClasses = "inline-flex items-center cursor-pointer";
+  const disabledClasses = disabled ? "opacity-50 cursor-not-allowed" : "";
   const classes = `${baseClasses} ${disabledClasses} ${className}`;
 
   return (
@@ -54,9 +54,9 @@ const Checkbox: React.FC<CheckboxProps> = ({
         <div
           className={`w-4 h-4 border-2 rounded transition-all duration-200 ${
             isChecked
-              ? 'bg-primary-600 border-primary-600'
-              : 'bg-white border-gray-300'
-          } ${disabled ? 'opacity-50' : ''}`}
+              ? "bg-primary-600 border-primary-600"
+              : "bg-white border-gray-300"
+          } ${disabled ? "opacity-50" : ""}`}
         >
           {isChecked && !indeterminate && (
             <svg
@@ -83,4 +83,4 @@ const Checkbox: React.FC<CheckboxProps> = ({
   );
 };
 
-export default Checkbox; 
+export default Checkbox;

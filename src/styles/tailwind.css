@@ -24,32 +24,32 @@
   .btn-primary {
     @apply bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg font-semibold text-lg border-none shadow-md transition-all duration-200 cursor-pointer px-4 py-2 hover:transform hover:-translate-y-0.5 hover:shadow-lg;
   }
-  
+
   .btn-secondary {
     @apply bg-gray-100 text-gray-700 rounded-lg font-medium text-lg border-none shadow-sm transition-all duration-200 cursor-pointer px-4 py-2;
   }
-  
+
   .btn-danger {
     @apply bg-gradient-to-r from-error-500 to-error-600 text-white rounded-lg font-semibold text-lg border-none shadow-md transition-all duration-200 cursor-pointer px-4 py-2 hover:transform hover:-translate-y-0.5 hover:shadow-lg;
   }
-  
+
   .btn-success {
     @apply bg-gradient-to-r from-success-500 to-success-600 text-white rounded-lg font-semibold text-lg border-none shadow-md transition-all duration-200 cursor-pointer px-4 py-2 hover:transform hover:-translate-y-0.5 hover:shadow-lg;
   }
-  
+
   .word-card {
     @apply rounded-xl border-2 border-gray-200 bg-white transition-all duration-300 h-full flex flex-col cursor-pointer p-6 relative min-h-[280px] hover:transform hover:-translate-y-1 hover:shadow-wordcard-hover;
   }
-  
+
   .unit-card {
     @apply rounded-xl border-2 border-gray-200 bg-white shadow-wordcard transition-all duration-300 h-full flex flex-col cursor-pointer p-5 relative overflow-hidden hover:transform hover:-translate-y-1 hover:shadow-wordcard-hover;
   }
-  
+
   .review-card {
     @apply rounded-xl border-2 border-gray-200 bg-white transition-all duration-300 h-full flex flex-col cursor-pointer p-6 relative min-h-[280px] hover:transform hover:-translate-y-1 hover:shadow-wordcard-hover;
   }
-  
+
   .stats-card {
     @apply rounded-xl border-2 border-gray-200 bg-white shadow-wordcard transition-all duration-300 h-full flex flex-col cursor-pointer p-5 relative hover:transform hover:-translate-y-1 hover:shadow-wordcard-hover;
   }
-} 
+}

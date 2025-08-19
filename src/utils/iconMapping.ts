@@ -13,15 +13,15 @@ import {
   MagnifyingGlassIcon,
   ArrowUpTrayIcon,
   QuestionMarkCircleIcon,
-  ArrowDownTrayIcon
-} from '@heroicons/react/24/outline';
+  ArrowDownTrayIcon,
+} from "@heroicons/react/24/outline";
 
 // Icon mapping object
 export const iconMapping = {
   // Navigation icons
   ArrowLeftOutlined: ArrowLeftIcon,
   ArrowRightOutlined: ArrowRightIcon,
-  
+
   // Action icons
   ReloadOutlined: ArrowPathIcon,
   EditOutlined: PencilIcon,
@@ -30,16 +30,16 @@ export const iconMapping = {
   SearchOutlined: MagnifyingGlassIcon,
   UploadOutlined: ArrowUpTrayIcon,
   ExportOutlined: ArrowDownTrayIcon,
-  
+
   // Status icons
   CheckCircleOutlined: CheckCircleIcon,
   CloseCircleOutlined: XCircleIcon,
-  
+
   // Feature icons
   BookOutlined: BookOpenIcon,
   SoundOutlined: SpeakerWaveIcon,
   QuestionCircleOutlined: QuestionMarkCircleIcon,
-  
+
   // Sync icon (using ArrowPathIcon as replacement)
   SyncOutlined: ArrowPathIcon,
 };
@@ -50,4 +50,4 @@ export const getIcon = (antIconName: string) => {
 };
 
 // Type for icon names
-export type IconName = keyof typeof iconMapping; 
+export type IconName = keyof typeof iconMapping;

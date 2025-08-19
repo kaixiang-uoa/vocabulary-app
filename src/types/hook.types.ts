@@ -1,9 +1,10 @@
 // Hook-related type definitions
+import { Unit, Word } from "./index";
 
 export interface UseReviewDataOptions {
   unitId: string | undefined;
-  reviewMode: 'all' | 'unmastered' | 'mastered';
-  reviewOrder: 'sequential' | 'random';
+  reviewMode: "all" | "unmastered" | "mastered";
+  reviewOrder: "sequential" | "random";
   refreshTrigger?: number;
 }
 
@@ -25,13 +26,13 @@ export interface UseReviewNavigationReturn {
   isFirst: boolean;
   isLast: boolean;
   progress: number;
-  
+
   // Navigation
   nextWord: () => void;
   prevWord: () => void;
   restart: () => void;
   goToWord: (index: number) => void;
-  
+
   // Progress tracking
   completedWords: Set<string>;
   failedWords: Set<string>;
@@ -63,6 +64,3 @@ export interface UseAutoPlayReturn {
   setAutoPlay: (enabled: boolean) => void;
   setPronunciationDelay: (delay: number) => void;
 }
-
-// Import existing types
-import { Unit, Word } from './index'; 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 
 export interface ModalProps {
   visible?: boolean;
@@ -26,27 +26,27 @@ const Modal: React.FC<ModalProps> = ({
   children,
   onOk,
   onCancel,
-  okText = '确定',
-  cancelText = '取消',
+  okText = "确定",
+  cancelText = "取消",
   okButtonProps = {},
   cancelButtonProps = {},
   width = 520,
   centered = true,
   maskClosable = true,
-  className = '',
+  className = "",
   footer,
   destroyOnClose,
 }) => {
   const isVisible = visible !== undefined ? visible : open;
   useEffect(() => {
     if (isVisible) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
-    
+
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isVisible]);
 
@@ -59,7 +59,7 @@ const Modal: React.FC<ModalProps> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape' && onCancel) {
+    if (e.key === "Escape" && onCancel) {
       onCancel();
     }
   };
@@ -67,16 +67,16 @@ const Modal: React.FC<ModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       {/* Backdrop */}
-      <div 
+      <div
         className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
         onClick={handleMaskClick}
       />
-      
+
       {/* Modal */}
       <div className="flex min-h-full items-center justify-center p-4">
-        <div 
+        <div
           className={`relative bg-white rounded-lg shadow-xl max-w-full ${className}`}
-          style={{ width: typeof width === 'number' ? `${width}px` : width }}
+          style={{ width: typeof width === "number" ? `${width}px` : width }}
           onKeyDown={handleKeyDown}
           tabIndex={-1}
         >
@@ -89,48 +89,56 @@ const Modal: React.FC<ModalProps> = ({
                   onClick={onCancel}
                   className="text-gray-400 hover:text-gray-600 transition-colors"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </button>
               )}
             </div>
           )}
-          
+
           {/* Content */}
-          <div className="p-6">
-            {children}
-          </div>
-          
+          <div className="p-6">{children}</div>
+
           {/* Footer */}
-          {footer !== undefined ? (
-            footer
-          ) : (onOk || onCancel) && (
-            <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200">
-              {onCancel && (
-                <button
-                  onClick={onCancel}
-                  className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
-                  {...cancelButtonProps}
-                >
-                  {cancelText}
-                </button>
+          {footer !== undefined
+            ? footer
+            : (onOk || onCancel) && (
+                <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200">
+                  {onCancel && (
+                    <button
+                      onClick={onCancel}
+                      className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg font-medium transition-colors"
+                      {...cancelButtonProps}
+                    >
+                      {cancelText}
+                    </button>
+                  )}
+                  {onOk && (
+                    <button
+                      onClick={onOk}
+                      className="px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg font-medium hover:from-primary-600 hover:to-primary-700 transition-all shadow-md hover:shadow-lg"
+                      {...okButtonProps}
+                    >
+                      {okText}
+                    </button>
+                  )}
+                </div>
               )}
-              {onOk && (
-                <button
-                  onClick={onOk}
-                  className="px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-lg font-medium hover:from-primary-600 hover:to-primary-700 transition-all shadow-md hover:shadow-lg"
-                  {...okButtonProps}
-                >
-                  {okText}
-                </button>
-              )}
-            </div>
-          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default Modal; 
+export default Modal;
