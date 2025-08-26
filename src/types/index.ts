@@ -78,6 +78,7 @@ export interface UnitListProps {
 export interface AddWordFormProps {
   unitId: string;
   onWordAdded?: () => void;
+  onAddWord?: (word: string, meaning: string) => Promise<boolean>;
 }
 
 export interface EditModalProps {

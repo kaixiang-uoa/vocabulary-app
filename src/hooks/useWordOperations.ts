@@ -1,6 +1,6 @@
 // Custom hook for word operations state management with caching
 import { useState, useCallback } from "react";
-import { StorageData, Word, Unit } from "../types";
+import { StorageData, Word, Unit, ImportData, ImportUnitData, ImportWordData } from "../types";
 import {
   getAllData,
   saveAllData,
@@ -13,6 +13,7 @@ import {
   deleteItems,
 } from "../services/wordService";
 import { isUsingFirebase } from "../services/dataServiceManager";
+import { v4 as uuidv4 } from "uuid";
 import {
   validateWord,
   validateUnitName,
@@ -63,6 +64,9 @@ interface UseWordOperationsReturn {
   // Delete operations
   deleteWords: (unitId: string, wordIds: string[]) => Promise<boolean>;
   deleteUnits: (unitIds: string[]) => Promise<boolean>;
+
+  // Batch operations
+  batchImportData: (importData: ImportData) => Promise<{ success: boolean; count: number }>;
 
   // Utility functions
   getUnitStatistics: (unitId: string) => any;
@@ -438,6 +442,138 @@ export const useWordOperations = (): UseWordOperationsReturn => {
     [data, invalidateCache],
   );
 
+  // Batch import data (optimized for performance)
+  const batchImportData = useCallback(
+    async (importData: ImportData): Promise<{ success: boolean; count: number }> => {
+      if (!data) return { success: false, count: 0 };
+
+      setError(null);
+      try {
+        let importedCount = 0;
+        // Create a new top-level object and a new units array to ensure reference changes
+        const updatedData: StorageData = { ...data, units: [...data.units] };
+
+        if (Array.isArray(importData)) {
+          // Handle ImportUnitData[] or ImportWordData[]
+          if (importData.length > 0 && "unit" in importData[0]) {
+            // ImportUnitData[] - multiple units with words
+            const unitMap = new Map<string, string>();
+
+            for (const item of importData as ImportUnitData[]) {
+              const { unit, word, meaning } = item;
+              if (!unitMap.has(unit)) {
+                // Create unit in local state
+                const newUnitId = uuidv4();
+                const newUnit: Unit = {
+                  id: newUnitId,
+                  name: unit.trim(),
+                  createTime: Date.now(),
+                  words: [],
+                };
+                updatedData.units.push(newUnit);
+                unitMap.set(unit, newUnitId);
+              }
+
+              const unitId = unitMap.get(unit);
+              if (unitId) {
+                const newWord: Word = {
+                  id: uuidv4(),
+                  word: word.trim(),
+                  meaning: meaning.trim(),
+                  unitId,
+                  mastered: false,
+                  createTime: Date.now(),
+                  reviewTimes: 0,
+                  lastReviewTime: null,
+                };
+                const unit = updatedData.units.find((u) => u.id === unitId);
+                if (unit) {
+                  // Ensure words array reference changes as well
+                  unit.words = [...unit.words, newWord];
+                  importedCount++;
+                }
+              }
+            }
+          } else {
+            // ImportWordData[] - words for a single unit
+            const newUnitId = uuidv4();
+            const newUnit: Unit = {
+              id: newUnitId,
+              name: "Imported Unit",
+              createTime: Date.now(),
+              words: [],
+            };
+            updatedData.units.push(newUnit);
+
+            for (const item of importData as ImportWordData[]) {
+              const newWord: Word = {
+                id: uuidv4(),
+                word: item.word.trim(),
+                meaning: item.meaning.trim(),
+                unitId: newUnitId,
+                mastered: false,
+                createTime: Date.now(),
+                reviewTimes: 0,
+                lastReviewTime: null,
+              };
+              newUnit.words = [...newUnit.words, newWord];
+              importedCount++;
+            }
+          }
+        } else if (importData && importData.units) {
+          // ImportCompleteData - complete structure
+          for (const unitData of importData.units) {
+            const newUnitId = uuidv4();
+            const newUnit: Unit = {
+              id: newUnitId,
+              name: unitData.name.trim(),
+              createTime: Date.now(),
+              words: [],
+            };
+            updatedData.units.push(newUnit);
+
+            for (const wordData of unitData.words || []) {
+              const newWord: Word = {
+                id: uuidv4(),
+                word: wordData.word.trim(),
+                meaning: wordData.meaning.trim(),
+                unitId: newUnitId,
+                mastered: false,
+                createTime: Date.now(),
+                reviewTimes: 0,
+                lastReviewTime: null,
+              };
+              newUnit.words = [...newUnit.words, newWord];
+              importedCount++;
+            }
+          }
+        }
+
+        // Optimistic update: update UI immediately
+        const previousData = data;
+        setData(updatedData);
+
+        // Update cache with new data to prevent overwrite
+        globalCacheManager.set(CACHE_KEYS.UNITS, updatedData, 300000);
+
+        // Persist all data once (async, don't block UI)
+        const success = await saveAllData(updatedData);
+        if (success) {
+          return { success: true, count: importedCount };
+        }
+
+        // Rollback on failure
+        setData(previousData);
+        globalCacheManager.delete(CACHE_KEYS.UNITS);
+        return { success: false, count: 0 };
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to import data");
+        return { success: false, count: 0 };
+      }
+    },
+    [data],
+  );
+
   // Get unit statistics
   const getUnitStatistics = useCallback(
     (unitId: string) => {
@@ -498,6 +634,9 @@ export const useWordOperations = (): UseWordOperationsReturn => {
     // Delete operations
     deleteWords,
     deleteUnits,
+
+    // Batch operations
+    batchImportData,
 
     // Utility functions
     getUnitStatistics,

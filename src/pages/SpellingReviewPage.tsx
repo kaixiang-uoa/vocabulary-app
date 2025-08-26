@@ -19,7 +19,7 @@ import {
 } from "@heroicons/react/24/outline";
 import SpellingReviewCard from "../components/SpellingReviewCard";
 import LanguageSwitcher from "../components/LanguageSwitcher";
-import { useWordOperations } from "../hooks/useWordOperations";
+import { useWordContext } from "../contexts/WordContext";
 import { useTranslation } from "react-i18next";
 import { getTailwindClass } from "../utils/styleMapping";
 import { useReviewData, useReviewNavigation } from "../hooks";
@@ -100,8 +100,15 @@ const SpellingReviewPage: React.FC = () => {
     playPronunciation(word);
   };
 
-  // Use word operations hook for mastered status
-  const { setWordMasteredStatusDirect } = useWordOperations();
+  // Use word operations from global context for mastered status
+  const { setWordMasteredStatusDirect, loadData: loadOpsData } = useWordContext();
+
+  // Ensure operations hook has data loaded to avoid early returns
+  useEffect(() => {
+    if (unitId) {
+      loadOpsData();
+    }
+  }, [unitId, loadOpsData]);
 
   // Set mastered state for spelling review
   const handleSetMasteredStatus = async (wordId: string, mastered: boolean) => {

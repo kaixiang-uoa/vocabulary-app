@@ -6,7 +6,7 @@ import { SpellingReviewCardProps, InputHistoryItem } from "../types";
 import { useNavigate, useParams } from "react-router";
 import { isValidLetter } from "../utils/spellingUtils";
 import { getTailwindClass } from "../utils/styleMapping";
-import { playPronunciation } from "../services/pronunciationService";
+import { usePronunciation } from "../hooks/usePronunciation";
 
 const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
   word,
@@ -32,6 +32,7 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
   const [inputHistory, setInputHistory] = useState<InputHistoryItem[]>([]);
   const inputRef = useRef<any>(null);
   const lastWordId = useRef<string>("");
+  const { play } = usePronunciation();
 
   const maxErrors = 3;
   const targetWord = word.word.toLowerCase();
@@ -49,12 +50,12 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
   // Simple audio play functions
   const playErrorPronunciation = () => {
     setTimeout(() => {
-      playPronunciation(word.word);
+      play(word.word);
     }, 300);
   };
 
   const playManualPronunciation = () => {
-    playPronunciation(word.word);
+    play(word.word);
   };
 
   // Reset state when word changes - Qwerty Learner style
@@ -75,7 +76,6 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
   useEffect(() => {
     if (autoPlay && word.id !== lastWordId.current) {
       lastWordId.current = word.id;
-      console.log("Qwerty Learner style: Auto playing", word.word);
       setTimeout(() => {
         try {
           const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word.word)}&type=2`;

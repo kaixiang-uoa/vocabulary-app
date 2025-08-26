@@ -9,7 +9,7 @@ import LanguageSwitcher from "../components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import { getTailwindClass } from "../utils/styleMapping";
 import { useAuthContext } from "../contexts/AuthContext";
-import { useWordOperations } from "../hooks/useWordOperations";
+import { useWordContext } from "../contexts/WordContext";
 import { Word } from "../types";
 import { StatCardSkeleton, GridSkeleton } from "../components/ui";
 import { useInitialLoading } from "../hooks";
@@ -17,7 +17,7 @@ import { useInitialLoading } from "../hooks";
 const HomePage: React.FC = () => {
   const { t } = useTranslation();
   const { state, showLoginModal } = useAuthContext();
-  const { data: unitsData, loading: unitsLoading } = useWordOperations();
+  const { data: unitsData, loading: unitsLoading } = useWordContext();
 
   // State for words data
   const [masteredWords, setMasteredWords] = useState<Word[]>([]);
@@ -66,6 +66,8 @@ const HomePage: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unitsData, unitsLoading, state.loading]); // 移除loadingState依赖
 
+  // 刷新入口集中在 WordContext，此处无需再监听
+
   // Calculate total words
   const totalWords = masteredWords.length + unmasteredWords.length;
 
@@ -81,9 +83,7 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Loading state with skeleton */}
-      {state.user &&
-        loadingState.showSkeleton &&
-        (loadingState.isInitialLoading || unitsLoading) && (
+      {state.user && unitsLoading && (!unitsData || unitsData.units.length === 0) && (
           <div className="space-y-8">
             {/* Statistics Cards Skeleton */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mb-8 lg:mb-12">
@@ -124,7 +124,7 @@ const HomePage: React.FC = () => {
       )}
 
       {/* Section 1: Statistics Cards */}
-      {state.user && !loadingState.showSkeleton && !unitsLoading && (
+      {state.user && (!!unitsData && unitsData.units.length >= 0) && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mb-8 lg:mb-12">
           {/* Total Words Card */}
           <div className="bg-white/80 sm:bg-blue-100/80 md:bg-green-100/80 lg:bg-purple-100/80 xl:bg-orange-100/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 p-6">
@@ -185,7 +185,7 @@ const HomePage: React.FC = () => {
       )}
 
       {/* Section 2: Unit List Title */}
-      {state.user && !loadingState.showSkeleton && !unitsLoading && (
+      {state.user && (!!unitsData && unitsData.units.length >= 0) && (
         <div className="mb-8 lg:mb-12">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -200,7 +200,7 @@ const HomePage: React.FC = () => {
       )}
 
       {/* Section 3: Unit List Content */}
-      {state.user && !loadingState.showSkeleton && !unitsLoading && (
+      {state.user && (!!unitsData && unitsData.units.length >= 0) && (
         <div className="bg-white/90 sm:bg-blue-50/90 md:bg-green-50/90 lg:bg-purple-50/90 xl:bg-orange-50/90 rounded-xl shadow-sm border border-gray-200">
           <UnitList />
         </div>

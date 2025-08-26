@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 
 // Import AuthProvider and context
 import { AuthProvider, useAuthContext } from "./contexts/AuthContext";
+import { WordProvider } from "./contexts/WordContext";
 import { LoginModal } from "./components/LoginModal";
 import { MigrationPrompt } from "./components/MigrationPrompt";
 import { FirebaseStatus } from "./components/FirebaseStatus";
@@ -93,7 +94,9 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
+      <WordProvider>
+        <AppContent />
+      </WordProvider>
     </AuthProvider>
   );
 }

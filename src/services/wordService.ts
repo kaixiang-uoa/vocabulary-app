@@ -11,7 +11,6 @@ export const getAllData = async (): Promise<StorageData> => {
     const dataService = getDataService();
     return await dataService.getAllData();
   } catch (error) {
-    console.error("Error getting all data:", error);
     // Fallback to localStorage
     let data: StorageData = getData(STORAGE_KEY) || initialData;
     let changed = false;

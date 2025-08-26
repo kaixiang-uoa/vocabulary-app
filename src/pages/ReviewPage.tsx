@@ -16,7 +16,7 @@ import LanguageSwitcher from "../components/LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 
 import { getTailwindClass } from "../utils/styleMapping";
-import { useWordOperations } from "../hooks/useWordOperations";
+import { useWordContext } from "../contexts/WordContext";
 
 type ReviewMode = "all" | "unmastered" | "mastered";
 type ReviewOrder = "sequential" | "random";
@@ -30,8 +30,8 @@ const ReviewPage: React.FC = () => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [flipMode, setFlipMode] = useState<"en2zh" | "zh2en">("en2zh");
 
-  // Use word operations hook
-  const { data, loadData, toggleWordMasteredStatus } = useWordOperations();
+  // Use global word context
+  const { data, loadData, toggleWordMasteredStatus } = useWordContext();
 
   // Get current unit and words from hook data
   const unit = data?.units.find((u) => u.id === unitId) || null;
@@ -81,12 +81,6 @@ const ReviewPage: React.FC = () => {
 
   // Next/prev/restart handlers
   const handleNext = () => {
-    console.log(
-      "Next button clicked, currentIndex:",
-      currentIndex,
-      "words.length:",
-      words.length,
-    );
     if (currentIndex < words.length - 1) {
       setCurrentIndex(currentIndex + 1);
       setIsFlipped(false);
@@ -96,7 +90,6 @@ const ReviewPage: React.FC = () => {
   };
 
   const handlePrev = () => {
-    console.log("Prev button clicked, currentIndex:", currentIndex);
     if (currentIndex > 0) {
       setCurrentIndex(currentIndex - 1);
       setIsFlipped(false);
@@ -104,26 +97,22 @@ const ReviewPage: React.FC = () => {
   };
 
   const handleRestart = () => {
-    console.log("Restart button clicked");
     setCurrentIndex(0);
     message.info(t("review_restart"));
   };
 
   const handleModeChange = (e: any) => {
     const value = e.target?.value || e;
-    console.log("Mode change:", value);
     setReviewMode(value);
   };
 
   const handleOrderChange = (e: any) => {
     const value = e.target?.value || e;
-    console.log("Order change:", value);
     setReviewOrder(value);
   };
 
   const handleFlipModeChange = (e: any) => {
     const value = e.target?.value || e;
-    console.log("Flip mode change:", value);
     setFlipMode(value);
   };
 

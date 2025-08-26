@@ -1,12 +1,10 @@
 // Word filtering utilities
-import { Word } from "../types";
-import { getAllData } from "../services/wordService";
+import { Word, StorageData } from "../types";
 
 /**
  * Get all unmastered words
  */
-export const getUnmasteredWords = async (): Promise<Word[]> => {
-  const data = await getAllData();
+export const getUnmasteredWords = (data: StorageData): Promise<Word[]> => {
   const unmasteredWords: Word[] = [];
 
   data.units.forEach((unit) => {
@@ -17,14 +15,13 @@ export const getUnmasteredWords = async (): Promise<Word[]> => {
     });
   });
 
-  return unmasteredWords;
+  return Promise.resolve(unmasteredWords);
 };
 
 /**
  * Get all mastered words
  */
-export const getMasteredWords = async (): Promise<Word[]> => {
-  const data = await getAllData();
+export const getMasteredWords = (data: StorageData): Promise<Word[]> => {
   const masteredWords: Word[] = [];
 
   data.units.forEach((unit) => {
@@ -35,14 +32,16 @@ export const getMasteredWords = async (): Promise<Word[]> => {
     });
   });
 
-  return masteredWords;
+  return Promise.resolve(masteredWords);
 };
 
 /**
  * Get words by unit ID
  */
-export const getUnitWords = async (unitId: string): Promise<Word[]> => {
-  const data = await getAllData();
+export const getUnitWords = async (
+  data: StorageData,
+  unitId: string,
+): Promise<Word[]> => {
   const unit = data.units.find((u) => u.id === unitId);
   return unit ? unit.words : [];
 };
@@ -51,9 +50,9 @@ export const getUnitWords = async (unitId: string): Promise<Word[]> => {
  * Get words by review status
  */
 export const getWordsByReviewStatus = async (
+  data: StorageData,
   mastered: boolean,
 ): Promise<Word[]> => {
-  const data = await getAllData();
   const filteredWords: Word[] = [];
 
   data.units.forEach((unit) => {
@@ -70,8 +69,9 @@ export const getWordsByReviewStatus = async (
 /**
  * Get words that need review (unmastered or recently reviewed)
  */
-export const getWordsNeedingReview = async (): Promise<Word[]> => {
-  const data = await getAllData();
+export const getWordsNeedingReview = async (
+  data: StorageData,
+): Promise<Word[]> => {
   const now = Date.now();
   const oneDay = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 

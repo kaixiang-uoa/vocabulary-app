@@ -26,12 +26,12 @@ import {
 import AddWordForm from "../components/AddWordForm";
 import LanguageSwitcher from "../components/LanguageSwitcher";
 
-import { exportUnitWordsToCSV } from "../utils/wordImportExport";
+import { exportWordsToCSV } from "../utils/wordImportExport";
 import { useTranslation } from "react-i18next";
 import EditModal from "../components/EditModal";
 import { Word } from "../types";
 import { getTailwindClass } from "../utils/styleMapping";
-import { useWordOperations } from "../hooks/useWordOperations";
+import { useWordContext } from "../contexts/WordContext";
 
 const UnitDetailPage: React.FC = () => {
   const { t } = useTranslation();
@@ -50,7 +50,8 @@ const UnitDetailPage: React.FC = () => {
     toggleWordMasteredStatus,
     deleteWords,
     updateWordInUnit,
-  } = useWordOperations();
+    addWordToUnit,
+  } = useWordContext();
 
   // Get current unit and words from hook data
   const unit = data?.units.find((u) => u.id === unitId) || null;
@@ -71,6 +72,8 @@ const UnitDetailPage: React.FC = () => {
     }
   }, [unitId, loadData]);
 
+  // 刷新入口集中在 WordContext，此处无需再监听
+
   const handleMasteredToggle = async (wordId: string) => {
     if (!unitId) return;
 
@@ -85,7 +88,7 @@ const UnitDetailPage: React.FC = () => {
   const handleExport = async () => {
     if (!unitId) return;
 
-    const csvContent = await exportUnitWordsToCSV(unitId);
+    const csvContent = exportWordsToCSV(words);
 
     if (!csvContent) {
       message.error(t("no_words_to_export"));
@@ -167,16 +170,16 @@ const UnitDetailPage: React.FC = () => {
 
       // Handle audio loading errors gracefully
       audio.addEventListener("error", (e) => {
-        console.warn("Audio failed to load for word:", word, e);
+        // ignore
         // Don't throw error, just log it
       });
 
       audio.play().catch((error) => {
-        console.warn("Audio playback failed for word:", word, error);
+        // ignore
         // Don't throw error, just log it
       });
     } catch (error) {
-      console.warn("playPronunciation error for word:", word, error);
+      // ignore
       // Don't throw error, just log it
     }
   };
@@ -315,6 +318,10 @@ const UnitDetailPage: React.FC = () => {
       <AddWordForm
         unitId={unitId}
         onWordAdded={loadData}
+        onAddWord={async (word, meaning) => {
+          if (!unitId) return false;
+          return addWordToUnit(unitId, word, meaning);
+        }}
         onExport={handleExport}
       />
 

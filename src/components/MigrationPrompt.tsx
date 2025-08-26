@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
-import {
-  MigrationService,
-  MigrationResult,
-} from "../services/migrationService";
+import { MigrationResult } from "../services/migrationService";
+import { useMigration } from "../hooks/useMigration";
 import { useAuthContext } from "../contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import {
@@ -14,6 +12,7 @@ import {
 export const MigrationPrompt: React.FC = () => {
   const { state } = useAuthContext();
   const { t } = useTranslation();
+  const migration = useMigration();
   const [showPrompt, setShowPrompt] = useState(false);
   const [isMigrating, setIsMigrating] = useState(false);
   const [migrationResult, setMigrationResult] =
@@ -27,20 +26,18 @@ export const MigrationPrompt: React.FC = () => {
     if (!state.user) return;
 
     try {
-      const hasLocalData = await MigrationService.hasLocalData();
-      const hasFirebaseData = await MigrationService.hasFirebaseData(
-        state.user.uid,
-      );
+      const hasLocalData = await migration.hasLocalData();
+      const hasFirebaseData = await migration.hasFirebaseData(state.user.uid);
 
       if (hasLocalData && !hasFirebaseData) {
-        const summary = await MigrationService.getLocalDataSummary();
+        const summary = await migration.getLocalDataSummary();
         setLocalDataSummary(summary);
         setShowPrompt(true);
       }
     } catch (error) {
-      console.error("Error checking migration status:", error);
+      // ignore
     }
-  }, [state.user]);
+  }, [state.user, migration]);
 
   useEffect(() => {
     if (state.user) {
@@ -55,7 +52,7 @@ export const MigrationPrompt: React.FC = () => {
     setMigrationResult(null);
 
     try {
-      const result = await MigrationService.migrateToFirebase(state.user.uid);
+      const result = await migration.migrateToFirebase(state.user.uid);
       setMigrationResult(result);
 
       if (result.success) {
@@ -65,7 +62,6 @@ export const MigrationPrompt: React.FC = () => {
         }, 3000);
       }
     } catch (error) {
-      console.error("Migration error:", error);
       setMigrationResult({
         success: false,
         message: "Migration failed unexpectedly",

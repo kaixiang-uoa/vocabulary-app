@@ -6,8 +6,6 @@ import {
   Popconfirm,
   Modal,
   message,
-  UnitCardSkeleton,
-  GridSkeleton,
 } from "./ui";
 import { useTranslation } from "react-i18next";
 import {
@@ -19,14 +17,12 @@ import {
 import UnitCard from "./UnitCard";
 import ImportModal from "./ImportModal";
 
-import { ImportData, ImportUnitData, ImportWordData } from "../types/index";
-import { useWordOperations } from "../hooks/useWordOperations";
-import { useAuthContext } from "../contexts/AuthContext";
-import { useProgressiveLoading } from "../hooks";
+import { ImportData } from "../types/index";
+import { useWordContext } from "../contexts/WordContext";
+// Loading is handled globally via WordContext/HomePage
 
 const UnitList: React.FC = () => {
   const { t } = useTranslation();
-  const { state } = useAuthContext();
   const [selectedUnits, setSelectedUnits] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [pageSize, setPageSize] = useState(6);
@@ -37,21 +33,9 @@ const UnitList: React.FC = () => {
   const [newUnitName, setNewUnitName] = useState("");
 
   // Use word operations hook
-  const {
-    data,
-    loadData,
-    createNewUnit,
-    updateUnitData,
-    deleteUnits,
-    addWordToUnit,
-  } = useWordOperations();
+  const { data, createNewUnit, updateUnitData, deleteUnits, batchImportData } = useWordContext();
 
-  // Progressive loading state
-  const loadingState = useProgressiveLoading({
-    skeletonDelay: 200,
-    showSkeleton: true,
-    showSkeletonOnRefresh: true,
-  });
+  // Progressive loading is centralized; UnitList renders based on provided data
 
   // Filter units based on search term
   const filteredUnits = React.useMemo(() => {
@@ -61,23 +45,7 @@ const UnitList: React.FC = () => {
     );
   }, [data?.units, searchTerm]);
 
-  // Load data when auth state changes
-  useEffect(() => {
-    // Only load data when not loading auth state
-    if (!state.loading) {
-      loadingState.startLoading();
-      loadData()
-        .then((result) => {
-          loadingState.setData(result);
-        })
-        .catch((error) => {
-          loadingState.setError(
-            error instanceof Error ? error.message : "Failed to load data",
-          );
-        });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadData, state.user, state.loading]); // Re-run when user or loading state changes
+  // Data is loaded by WordContext; no local fetching here
 
   // Reset to first page when searching
   useEffect(() => {
@@ -179,68 +147,14 @@ const UnitList: React.FC = () => {
 
   const handleImportConfirm = async (parsed: ImportData) => {
     try {
-      let importedCount = 0;
-
-      if (Array.isArray(parsed)) {
-        // Handle ImportUnitData[] or ImportWordData[]
-        if (parsed.length > 0 && "unit" in parsed[0]) {
-          // ImportUnitData[] - multiple units with words
-          const unitMap = new Map<string, string>();
-
-          for (const item of parsed as ImportUnitData[]) {
-            const { unit, word, meaning } = item;
-            if (!unitMap.has(unit)) {
-              const unitId = await createNewUnit(unit);
-              if (unitId) {
-                unitMap.set(unit, unitId);
-              }
-            }
-
-            const unitId = unitMap.get(unit);
-            if (unitId) {
-              const success = await addWordToUnit(unitId, word, meaning);
-              if (success) {
-                importedCount++;
-              }
-            }
-          }
-        } else {
-          // ImportWordData[] - words for a single unit
-          const unitId = await createNewUnit("Imported Unit");
-          if (unitId) {
-            for (const item of parsed as ImportWordData[]) {
-              const success = await addWordToUnit(
-                unitId,
-                item.word,
-                item.meaning,
-              );
-              if (success) {
-                importedCount++;
-              }
-            }
-          }
-        }
-      } else if (parsed && parsed.units) {
-        // ImportCompleteData - complete structure
-        for (const unitData of parsed.units) {
-          const unitId = await createNewUnit(unitData.name);
-          if (unitId) {
-            for (const wordData of unitData.words || []) {
-              const success = await addWordToUnit(
-                unitId,
-                wordData.word,
-                wordData.meaning,
-              );
-              if (success) {
-                importedCount++;
-              }
-            }
-          }
-        }
+      const result = await batchImportData(parsed);
+      
+      if (result.success) {
+        setIsImportModalVisible(false);
+        message.success(t("import_batch_success", { count: result.count }));
+      } else {
+        message.error(t("import_fail"));
       }
-
-      setIsImportModalVisible(false);
-      message.success(t("import_batch_success", { count: importedCount }));
     } catch (error) {
       console.error("Import failed:", error);
       message.error(t("import_fail"));
@@ -747,13 +661,7 @@ const UnitList: React.FC = () => {
 
       {/* Unit cards grid */}
       <div className="px-5 pb-5">
-        {loadingState.showSkeleton ? (
-          <GridSkeleton
-            items={6}
-            columns={3}
-            renderItem={() => <UnitCardSkeleton />}
-          />
-        ) : paginatedUnits.length > 0 ? (
+        {paginatedUnits.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {paginatedUnits.map((unit) => (
               <UnitCard

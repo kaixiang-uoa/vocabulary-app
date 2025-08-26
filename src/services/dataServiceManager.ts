@@ -257,11 +257,11 @@ export class DataServiceManager {
     if (userId) {
       // User is logged in, use Firebase
       this.currentService = new FirebaseDataService(userId);
-      console.log("Using Firebase data service");
+      
     } else {
       // User is not logged in, use localStorage
       this.currentService = new LocalStorageService();
-      console.log("Using localStorage data service");
+      
     }
   }
 

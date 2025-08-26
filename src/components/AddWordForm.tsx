@@ -6,7 +6,7 @@ import {
   QuestionMarkCircleIcon,
   ArrowDownTrayIcon,
 } from "@heroicons/react/24/outline";
-import { addWordsInBatch } from "../utils/wordImportExport";
+// Batch import will iterate and use onAddWord to ensure unified data flow
 import ImportModal from "./ImportModal";
 import { useTranslation } from "react-i18next";
 import {
@@ -15,13 +15,11 @@ import {
   AddWordFormProps,
   FormValues,
 } from "../types";
-import { useWordOperations } from "../hooks/useWordOperations";
+// Note: business logic (state) should be provided by page via props
 
-const AddWordForm: React.FC<AddWordFormProps & { onExport?: () => void }> = ({
-  unitId,
-  onWordAdded,
-  onExport,
-}) => {
+const AddWordForm: React.FC<
+  AddWordFormProps & { onExport?: () => void }
+> = ({ unitId, onWordAdded, onAddWord, onExport }) => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState<FormValues>({
     word: "",
@@ -30,8 +28,7 @@ const AddWordForm: React.FC<AddWordFormProps & { onExport?: () => void }> = ({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [helpVisible, setHelpVisible] = useState(false);
 
-  // Use word operations hook
-  const { addWordToUnit } = useWordOperations();
+  // addWordToUnit is provided from parent via onAddWord
 
   // Handle form submit
   const handleSubmit = async (e: React.FormEvent) => {
@@ -52,7 +49,10 @@ const AddWordForm: React.FC<AddWordFormProps & { onExport?: () => void }> = ({
       return;
     }
 
-    const success = await addWordToUnit(unitId, trimmedWord, trimmedMeaning);
+    const performAdd = onAddWord;
+    const success = performAdd
+      ? await performAdd(trimmedWord, trimmedMeaning)
+      : false;
     if (success) {
       message.success(t("add_word_success"));
       setFormData({ word: "", meaning: "" });
@@ -75,9 +75,23 @@ const AddWordForm: React.FC<AddWordFormProps & { onExport?: () => void }> = ({
   const handleImportConfirm = async (parsed: ImportData) => {
     // For AddWordForm, we only support word array format
     if (Array.isArray(parsed) && parsed.length > 0 && !("unit" in parsed[0])) {
-      // Handle direct word array import
-      if (await addWordsInBatch(unitId, parsed as ImportWordData[])) {
-        message.success(t("import_words_success", { count: parsed.length }));
+      // Handle direct word array import via onAddWord to keep single data source
+      const items = parsed as ImportWordData[];
+      if (!onAddWord) {
+        message.error(t("import_csv_fail"));
+        return;
+      }
+      let successCount = 0;
+      for (const item of items) {
+        const word = (item.word || "").trim();
+        const meaning = (item.meaning || "").trim();
+        if (!word || !meaning) continue;
+        // delegate to parent add handler
+        const ok = await onAddWord(word, meaning);
+        if (ok) successCount++;
+      }
+      if (successCount > 0) {
+        message.success(t("import_words_success", { count: successCount }));
         setIsModalVisible(false);
         if (onWordAdded) onWordAdded();
       } else {
