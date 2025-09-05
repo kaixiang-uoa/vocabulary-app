@@ -1,11 +1,11 @@
 // Word statistics utilities
-import { Word, LearningStats, StorageData } from "../types";
+import { Word, LearningStats, StorageData } from '../types';
 
 /**
  * Calculate learning statistics
  */
 export const calculateLearningStats = async (
-  data: StorageData,
+  data: StorageData
 ): Promise<LearningStats> => {
   const now = Date.now();
   const today = new Date(now).setHours(0, 0, 0, 0);
@@ -16,8 +16,8 @@ export const calculateLearningStats = async (
   let todayReviewed = 0;
   let todayNewWords = 0;
 
-  data.units.forEach((unit) => {
-    unit.words.forEach((word) => {
+  data.units.forEach(unit => {
+    unit.words.forEach(word => {
       totalWords++;
 
       if (word.mastered) {
@@ -54,7 +54,7 @@ export const calculateLearningStats = async (
  * Get unit statistics
  */
 export const getUnitStats = async (data: StorageData, unitId: string) => {
-  const unit = data.units.find((u) => u.id === unitId);
+  const unit = data.units.find(u => u.id === unitId);
 
   if (!unit) {
     return {
@@ -66,7 +66,7 @@ export const getUnitStats = async (data: StorageData, unitId: string) => {
   }
 
   const totalWords = unit.words.length;
-  const masteredWords = unit.words.filter((word) => word.mastered).length;
+  const masteredWords = unit.words.filter(word => word.mastered).length;
   const unmasteredWords = totalWords - masteredWords;
   const accuracy = totalWords > 0 ? (masteredWords / totalWords) * 100 : 0;
 
@@ -111,7 +111,7 @@ export const getOverallProgress = async (data: StorageData) => {
   const stats = await calculateLearningStats(data);
 
   const totalUnits = data.units.length;
-  const completedUnits = data.units.filter(async (unit) => {
+  const completedUnits = data.units.filter(async unit => {
     const unitStats = await getUnitStats(data, unit.id);
     return unitStats.totalWords > 0 && unitStats.accuracy === 100;
   }).length;

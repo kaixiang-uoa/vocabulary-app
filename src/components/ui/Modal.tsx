@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
 export interface ModalProps {
   visible?: boolean;
@@ -26,27 +26,27 @@ const Modal: React.FC<ModalProps> = ({
   children,
   onOk,
   onCancel,
-  okText = "确定",
-  cancelText = "取消",
+  okText = '确定',
+  cancelText = '取消',
   okButtonProps = {},
   cancelButtonProps = {},
   width = 520,
   centered = true,
   maskClosable = true,
-  className = "",
+  className = '',
   footer,
   destroyOnClose,
 }) => {
   const isVisible = visible !== undefined ? visible : open;
   useEffect(() => {
     if (isVisible) {
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = 'unset';
     }
 
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = 'unset';
     };
   }, [isVisible]);
 
@@ -59,7 +59,7 @@ const Modal: React.FC<ModalProps> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Escape" && onCancel) {
+    if (e.key === 'Escape' && onCancel) {
       onCancel();
     }
   };
@@ -76,7 +76,7 @@ const Modal: React.FC<ModalProps> = ({
       <div className="flex min-h-full items-center justify-center p-4">
         <div
           className={`relative bg-white rounded-lg shadow-xl max-w-full ${className}`}
-          style={{ width: typeof width === "number" ? `${width}px` : width }}
+          style={{ width: typeof width === 'number' ? `${width}px` : width }}
           onKeyDown={handleKeyDown}
           tabIndex={-1}
         >

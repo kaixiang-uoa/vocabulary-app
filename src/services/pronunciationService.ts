@@ -1,5 +1,5 @@
 // Simple pronunciation service following Qwerty Learner design
-import { PronunciationOptions } from "../types";
+import { PronunciationOptions } from '../types';
 
 /**
  * Simple pronunciation service for playing word audio
@@ -28,26 +28,30 @@ export class PronunciationService {
 
     try {
       const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=${type}`;
+      // eslint-disable-next-line no-console
       console.log(
-        "PronunciationService: Playing audio for:",
+        'PronunciationService: Playing audio for:',
         word,
-        "URL:",
-        url,
+        'URL:',
+        url
       );
       const audio = new Audio(url);
 
       // Handle audio loading errors gracefully
-      audio.addEventListener("error", (e) => {
-        console.warn("Audio failed to load for word:", word, e);
+      audio.addEventListener('error', e => {
+        // eslint-disable-next-line no-console
+        console.warn('Audio failed to load for word:', word, e);
         // Don't throw error, just log it
       });
 
-      audio.play().catch((error) => {
-        console.warn("Audio playback failed for word:", word, error);
+      audio.play().catch(error => {
+        // eslint-disable-next-line no-console
+        console.warn('Audio playback failed for word:', word, error);
         // Don't throw error, just log it
       });
     } catch (error) {
-      console.warn("Pronunciation service error for word:", word, error);
+      // eslint-disable-next-line no-console
+      console.warn('Pronunciation service error for word:', word, error);
       // Don't throw error, just log it
     }
   }
@@ -59,7 +63,7 @@ export class PronunciationService {
   autoPlayWithDelay(
     word: string,
     delay: number = 500,
-    options: PronunciationOptions = {},
+    options: PronunciationOptions = {}
   ): void {
     if (!word) return;
 
@@ -78,21 +82,25 @@ export const playPronunciation = (word: string, type: number = 2): void => {
 
   try {
     const url = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(word)}&type=${type}`;
-    console.log("playPronunciation: Playing audio for:", word, "URL:", url);
+    // eslint-disable-next-line no-console
+    console.log('playPronunciation: Playing audio for:', word, 'URL:', url);
     const audio = new Audio(url);
 
     // Handle audio loading errors gracefully
-    audio.addEventListener("error", (e) => {
-      console.warn("Audio failed to load for word:", word, e);
+    audio.addEventListener('error', e => {
+      // eslint-disable-next-line no-console
+      console.warn('Audio failed to load for word:', word, e);
       // Don't throw error, just log it
     });
 
-    audio.play().catch((error) => {
-      console.warn("Audio playback failed for word:", word, error);
+    audio.play().catch(error => {
+      // eslint-disable-next-line no-console
+      console.warn('Audio playback failed for word:', word, error);
       // Don't throw error, just log it
     });
   } catch (error) {
-    console.warn("playPronunciation error for word:", word, error);
+    // eslint-disable-next-line no-console
+    console.warn('playPronunciation error for word:', word, error);
     // Don't throw error, just log it
   }
 };

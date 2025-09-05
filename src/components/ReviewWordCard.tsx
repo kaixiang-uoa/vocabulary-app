@@ -1,7 +1,8 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { ReviewWordCardProps } from "../types";
-import { getTailwindClass } from "../utils/styleMapping";
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { ReviewWordCardProps } from '../types';
+import { getTailwindClass } from '../utils/styleMapping';
 
 // Play pronunciation using Youdao API
 const playYoudaoVoice = (word: string, type: number = 2): void => {
@@ -10,17 +11,17 @@ const playYoudaoVoice = (word: string, type: number = 2): void => {
     const audio = new window.Audio(url);
 
     // Handle audio loading errors gracefully
-    audio.addEventListener("error", (e) => {
-      console.warn("Audio failed to load for word:", word, e);
+    audio.addEventListener('error', e => {
+      // Audio failed to load - graceful fallback
       // Don't throw error, just log it
     });
 
-    audio.play().catch((error) => {
-      console.warn("Audio playback failed for word:", word, error);
+    audio.play().catch(error => {
+      // Audio playback failed - graceful fallback
       // Don't throw error, just log it
     });
   } catch (error) {
-    console.warn("playYoudaoVoice error for word:", word, error);
+    // Audio service error - graceful fallback
     // Don't throw error, just log it
   }
 };
@@ -33,25 +34,25 @@ const ReviewWordCard: React.FC<ReviewWordCardProps> = ({
   flipMode,
 }) => {
   const { t } = useTranslation();
-  const isEn2Zh = flipMode === "en2zh";
+  const isEn2Zh = flipMode === 'en2zh';
 
   return (
     <div
-      className={`${getTailwindClass("review-card")} ${word.mastered ? "mastered" : ""} ${isFlipped ? "flipped" : ""} cursor-pointer`}
+      className={`${getTailwindClass('review-card')} ${word.mastered ? 'mastered' : ''} ${isFlipped ? 'flipped' : ''} cursor-pointer`}
       onClick={onFlip}
-      style={{ perspective: "1000px" }}
+      style={{ perspective: '1000px' }}
     >
       <div
         className="relative w-full h-full transition-transform duration-500"
         style={{
-          transformStyle: "preserve-3d",
-          transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)",
+          transformStyle: 'preserve-3d',
+          transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
         }}
       >
         {/* Front: Display English or meaning based on mode */}
         <div
-          className={`absolute inset-0 rounded-xl border-2 p-8 flex flex-col items-center justify-center ${word.mastered ? "bg-green-50 border-green-500" : "bg-white border-gray-200"}`}
-          style={{ backfaceVisibility: "hidden" }}
+          className={`absolute inset-0 rounded-xl border-2 p-8 flex flex-col items-center justify-center ${word.mastered ? 'bg-green-50 border-green-500' : 'bg-white border-gray-200'}`}
+          style={{ backfaceVisibility: 'hidden' }}
         >
           {isEn2Zh ? (
             <div className="flex items-center gap-3">
@@ -59,12 +60,12 @@ const ReviewWordCard: React.FC<ReviewWordCardProps> = ({
                 {word.word}
               </span>
               <button
-                onClick={(e) => {
+                onClick={e => {
                   e.stopPropagation();
                   playYoudaoVoice(word.word, 2);
                 }}
                 className="p-2 text-gray-500 hover:text-gray-700 transition-colors duration-200"
-                title={t("play_pronunciation")}
+                title={t('play_pronunciation')}
               >
                 <svg
                   width="22"
@@ -85,10 +86,10 @@ const ReviewWordCard: React.FC<ReviewWordCardProps> = ({
 
         {/* Back: Display meaning or English based on mode */}
         <div
-          className={`absolute inset-0 rounded-xl border-2 p-8 flex flex-col items-center justify-center ${word.mastered ? "bg-green-50 border-green-500" : "bg-white border-gray-200"}`}
+          className={`absolute inset-0 rounded-xl border-2 p-8 flex flex-col items-center justify-center ${word.mastered ? 'bg-green-50 border-green-500' : 'bg-white border-gray-200'}`}
           style={{
-            backfaceVisibility: "hidden",
-            transform: "rotateY(180deg)",
+            backfaceVisibility: 'hidden',
+            transform: 'rotateY(180deg)',
           }}
         >
           {isEn2Zh ? (
@@ -101,17 +102,17 @@ const ReviewWordCard: React.FC<ReviewWordCardProps> = ({
             </span>
           )}
           <button
-            onClick={(e) => {
+            onClick={e => {
               e.stopPropagation();
               onMasteredToggle && onMasteredToggle(word.id);
             }}
             className={`px-4 py-2 text-base font-medium rounded-lg transition-colors duration-200 ${
               word.mastered
-                ? "bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200"
-                : "bg-blue-500 text-white border border-blue-500 hover:bg-blue-600"
+                ? 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200'
+                : 'bg-blue-500 text-white border border-blue-500 hover:bg-blue-600'
             }`}
           >
-            {word.mastered ? t("mark_unmastered") : t("mark_mastered")}
+            {word.mastered ? t('mark_unmastered') : t('mark_mastered')}
           </button>
         </div>
       </div>

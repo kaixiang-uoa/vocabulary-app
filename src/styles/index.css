@@ -1,7 +1,7 @@
 /* Styles Index - Styles Index */
 
 /* Import TailwindCSS */
-@import "./tailwind.css";
+@import './tailwind.css';
 
 /* Import remaining styles */
 
@@ -378,7 +378,7 @@ pre {
   border-radius: 6px;
   padding: 16px;
   overflow-x: auto;
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   font-size: 14px;
   line-height: 1.45;
 }
@@ -388,7 +388,7 @@ code {
   border: 1px solid #e1e4e8;
   border-radius: 3px;
   padding: 2px 4px;
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   font-size: 85%;
 }
 
@@ -420,7 +420,7 @@ hr {
 
 /* Clear float */
 .clearfix::after {
-  content: "";
+  content: '';
   display: table;
   clear: both;
 }

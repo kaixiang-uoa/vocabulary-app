@@ -1,5 +1,5 @@
 // Performance monitoring hook
-import { useEffect, useRef, useCallback } from "react";
+import { useCallback, useEffect, useRef } from 'react';
 
 interface PerformanceMetrics {
   renderTime: number;
@@ -23,7 +23,7 @@ interface UsePerformanceMonitorReturn {
 }
 
 export function usePerformanceMonitor(
-  options: UsePerformanceMonitorOptions = {},
+  options: UsePerformanceMonitorOptions = {}
 ): UsePerformanceMonitorReturn {
   const { enabled = true, threshold = 16, onPerformanceIssue } = options;
   const metricsRef = useRef<PerformanceMetrics[]>([]);
@@ -51,14 +51,14 @@ export function usePerformanceMonitor(
       if (currentTime - lastFrameTimeRef.current >= 1000) {
         const fps = Math.round(
           (frameCountRef.current * 1000) /
-            (currentTime - lastFrameTimeRef.current),
+            (currentTime - lastFrameTimeRef.current)
         );
         frameCountRef.current = 0;
         lastFrameTimeRef.current = currentTime;
 
         // Get memory usage if available
         let memoryUsage: number | undefined;
-        if ("memory" in performance) {
+        if ('memory' in performance) {
           const memory = (performance as any).memory;
           memoryUsage = memory.usedJSHeapSize / 1024 / 1024; // MB
         }
@@ -74,14 +74,15 @@ export function usePerformanceMonitor(
 
         // Check for performance issues
         if (renderTime > threshold) {
+          // eslint-disable-next-line no-console
           console.warn(
-            `Performance issue detected in ${componentName || "component"}:`,
+            `Performance issue detected in ${componentName || 'component'}:`,
             {
               renderTime: `${renderTime.toFixed(2)}ms`,
               threshold: `${threshold}ms`,
               fps,
-              memoryUsage: memoryUsage ? `${memoryUsage.toFixed(2)}MB` : "N/A",
-            },
+              memoryUsage: memoryUsage ? `${memoryUsage.toFixed(2)}MB` : 'N/A',
+            }
           );
 
           onPerformanceIssue?.(metric);
@@ -95,7 +96,7 @@ export function usePerformanceMonitor(
 
       startTimeRef.current = 0;
     },
-    [enabled, threshold, onPerformanceIssue],
+    [enabled, threshold, onPerformanceIssue]
   );
 
   // Get all metrics
@@ -129,7 +130,7 @@ export function usePerformanceMonitor(
     startMeasure();
 
     return () => {
-      endMeasure("Component");
+      endMeasure('Component');
     };
   }, [enabled, startMeasure, endMeasure]);
 
@@ -145,7 +146,7 @@ export function usePerformanceMonitor(
 // Hook for monitoring specific operations
 export function useOperationMonitor(
   operationName: string,
-  options: UsePerformanceMonitorOptions = {},
+  options: UsePerformanceMonitorOptions = {}
 ) {
   const { startMeasure, endMeasure, getMetrics } =
     usePerformanceMonitor(options);
@@ -160,7 +161,7 @@ export function useOperationMonitor(
         endMeasure(operationName);
       }
     },
-    [startMeasure, endMeasure, operationName],
+    [startMeasure, endMeasure, operationName]
   );
 
   return {
@@ -172,7 +173,7 @@ export function useOperationMonitor(
 // Hook for monitoring render performance
 export function useRenderMonitor(
   componentName: string,
-  options: UsePerformanceMonitorOptions = {},
+  options: UsePerformanceMonitorOptions = {}
 ) {
   const { startMeasure, endMeasure, isPerformanceGood } =
     usePerformanceMonitor(options);

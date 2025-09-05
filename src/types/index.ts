@@ -57,7 +57,7 @@ export interface ReviewWordCardProps {
   isFlipped: boolean;
   onFlip: () => void;
   onMasteredToggle?: (wordId: string) => void;
-  flipMode: "en2zh" | "zh2en";
+  flipMode: 'en2zh' | 'zh2en';
 }
 
 export interface UnitCardProps {
@@ -208,8 +208,8 @@ export interface AudioPlayFunction {
 // New review data hook types
 export interface UseReviewDataProps {
   unitId: string;
-  reviewMode?: "all" | "unmastered" | "mastered";
-  reviewOrder?: "sequential" | "random";
+  reviewMode?: 'all' | 'unmastered' | 'mastered';
+  reviewOrder?: 'sequential' | 'random';
   refreshTrigger?: number;
 }
 

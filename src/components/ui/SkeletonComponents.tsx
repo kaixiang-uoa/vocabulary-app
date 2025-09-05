@@ -1,5 +1,6 @@
-import React from "react";
-import Skeleton from "./Skeleton";
+import React from 'react';
+
+import Skeleton from './Skeleton';
 
 // Unit Card Skeleton
 export const UnitCardSkeleton: React.FC = () => (

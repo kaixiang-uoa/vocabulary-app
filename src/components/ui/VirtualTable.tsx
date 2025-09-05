@@ -1,8 +1,10 @@
 // Virtual scrolling table component
-import React, { useMemo, useCallback } from "react";
-import { VirtualList } from "./VirtualList";
-import { Checkbox } from "./index";
-import { useTranslation } from "react-i18next";
+import React, { useMemo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { VirtualList } from './VirtualList';
+
+import { Checkbox } from './index';
 
 export interface ColumnType<T = any> {
   title: string;
@@ -10,7 +12,7 @@ export interface ColumnType<T = any> {
   key: string;
   width?: number | string;
   render?: (value: any, record: T, index: number) => React.ReactNode;
-  fixed?: "left" | "right";
+  fixed?: 'left' | 'right';
 }
 
 interface VirtualTableProps<T = any> {
@@ -27,7 +29,7 @@ interface VirtualTableProps<T = any> {
     onSelectAll?: (
       selected: boolean,
       selectedRows: T[],
-      changeRows: T[],
+      changeRows: T[]
     ) => void;
   };
   className?: string;
@@ -42,7 +44,7 @@ export function VirtualTable<T extends Record<string, any>>({
   containerHeight = 400,
   pagination = false,
   rowSelection,
-  className = "",
+  className = '',
   loading = false,
 }: VirtualTableProps<T>) {
   const { t } = useTranslation();
@@ -50,12 +52,12 @@ export function VirtualTable<T extends Record<string, any>>({
   // Get row key
   const getRowKey = useCallback(
     (record: T, index: number): string => {
-      if (typeof rowKey === "function") {
+      if (typeof rowKey === 'function') {
         return rowKey(record);
       }
       return String(record[rowKey]);
     },
-    [rowKey],
+    [rowKey]
   );
 
   // Check if row is selected
@@ -65,7 +67,7 @@ export function VirtualTable<T extends Record<string, any>>({
       const key = getRowKey(record, 0);
       return rowSelection.selectedRowKeys.includes(key);
     },
-    [rowSelection, getRowKey],
+    [rowSelection, getRowKey]
   );
 
   // Handle row selection
@@ -76,12 +78,12 @@ export function VirtualTable<T extends Record<string, any>>({
       const key = getRowKey(record, 0);
       const newSelectedKeys = selected
         ? [...rowSelection.selectedRowKeys, key]
-        : rowSelection.selectedRowKeys.filter((k) => k !== key);
+        : rowSelection.selectedRowKeys.filter(k => k !== key);
 
       rowSelection.onChange(newSelectedKeys);
       rowSelection.onSelect?.(record, selected);
     },
-    [rowSelection, getRowKey],
+    [rowSelection, getRowKey]
   );
 
   // Handle select all
@@ -90,25 +92,25 @@ export function VirtualTable<T extends Record<string, any>>({
       if (!rowSelection) return;
 
       const newSelectedKeys = selected
-        ? dataSource.map((record) => getRowKey(record, 0))
+        ? dataSource.map(record => getRowKey(record, 0))
         : [];
       rowSelection.onChange(newSelectedKeys);
       rowSelection.onSelectAll?.(selected, dataSource, []);
     },
-    [rowSelection, dataSource, getRowKey],
+    [rowSelection, dataSource, getRowKey]
   );
 
   // Check if all rows are selected
   const isAllSelected = useMemo(() => {
     if (!rowSelection || dataSource.length === 0) return false;
-    return dataSource.every((record) => isRowSelected(record));
+    return dataSource.every(record => isRowSelected(record));
   }, [rowSelection, dataSource, isRowSelected]);
 
   // Check if some rows are selected
   const isIndeterminate = useMemo(() => {
     if (!rowSelection || dataSource.length === 0) return false;
-    const selectedCount = dataSource.filter((record) =>
-      isRowSelected(record),
+    const selectedCount = dataSource.filter(record =>
+      isRowSelected(record)
     ).length;
     return selectedCount > 0 && selectedCount < dataSource.length;
   }, [rowSelection, dataSource, isRowSelected]);
@@ -122,39 +124,39 @@ export function VirtualTable<T extends Record<string, any>>({
       return (
         <div
           key={rowKeyValue}
-          className={`virtual-table-row ${selected ? "selected" : ""}`}
+          className={`virtual-table-row ${selected ? 'selected' : ''}`}
           style={{
-            display: "flex",
-            alignItems: "center",
+            display: 'flex',
+            alignItems: 'center',
             height: rowHeight,
-            borderBottom: "1px solid #f0f0f0",
-            backgroundColor: selected ? "#f0f8ff" : "transparent",
-            transition: "background-color 0.2s",
+            borderBottom: '1px solid #f0f0f0',
+            backgroundColor: selected ? '#f0f8ff' : 'transparent',
+            transition: 'background-color 0.2s',
           }}
         >
           {/* Selection checkbox */}
           {rowSelection && (
             <div
-              style={{ width: 50, display: "flex", justifyContent: "center" }}
+              style={{ width: 50, display: 'flex', justifyContent: 'center' }}
             >
               <Checkbox
                 checked={selected}
-                onChange={(checked) => handleRowSelect(record, checked)}
+                onChange={checked => handleRowSelect(record, checked)}
               />
             </div>
           )}
 
           {/* Data columns */}
-          {columns.map((column) => (
+          {columns.map(column => (
             <div
               key={column.key}
               style={{
                 flex: column.width ? 0 : 1,
                 width: column.width,
-                padding: "0 12px",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
+                padding: '0 12px',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
               }}
             >
               {column.render
@@ -172,7 +174,7 @@ export function VirtualTable<T extends Record<string, any>>({
       isRowSelected,
       handleRowSelect,
       getRowKey,
-    ],
+    ]
   );
 
   // Render table header
@@ -181,37 +183,37 @@ export function VirtualTable<T extends Record<string, any>>({
       <div
         className="virtual-table-header"
         style={{
-          display: "flex",
-          alignItems: "center",
+          display: 'flex',
+          alignItems: 'center',
           height: 50,
-          backgroundColor: "#fafafa",
-          borderBottom: "2px solid #f0f0f0",
-          fontWeight: "bold",
-          fontSize: "14px",
+          backgroundColor: '#fafafa',
+          borderBottom: '2px solid #f0f0f0',
+          fontWeight: 'bold',
+          fontSize: '14px',
         }}
       >
         {/* Selection checkbox */}
         {rowSelection && (
-          <div style={{ width: 50, display: "flex", justifyContent: "center" }}>
+          <div style={{ width: 50, display: 'flex', justifyContent: 'center' }}>
             <Checkbox
               checked={isAllSelected}
               indeterminate={isIndeterminate}
-              onChange={(checked) => handleSelectAll(checked)}
+              onChange={checked => handleSelectAll(checked)}
             />
           </div>
         )}
 
         {/* Column headers */}
-        {columns.map((column) => (
+        {columns.map(column => (
           <div
             key={column.key}
             style={{
               flex: column.width ? 0 : 1,
               width: column.width,
-              padding: "0 12px",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
+              padding: '0 12px',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
             }}
           >
             {column.title}
@@ -219,7 +221,7 @@ export function VirtualTable<T extends Record<string, any>>({
         ))}
       </div>
     ),
-    [columns, rowSelection, isAllSelected, isIndeterminate, handleSelectAll],
+    [columns, rowSelection, isAllSelected, isIndeterminate, handleSelectAll]
   );
 
   if (loading) {
@@ -231,14 +233,14 @@ export function VirtualTable<T extends Record<string, any>>({
         <div
           className="loading-placeholder"
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "100%",
-            color: "#999",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+            color: '#999',
           }}
         >
-          {t("loading")}...
+          {t('loading')}...
         </div>
       </div>
     );
@@ -253,14 +255,14 @@ export function VirtualTable<T extends Record<string, any>>({
         <div
           className="empty-placeholder"
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "100%",
-            color: "#999",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+            color: '#999',
           }}
         >
-          {t("no_data")}
+          {t('no_data')}
         </div>
       </div>
     );
@@ -280,9 +282,9 @@ export function VirtualTable<T extends Record<string, any>>({
         itemHeight={rowHeight}
         renderItem={renderRow}
         containerHeight={
-          typeof containerHeight === "number"
+          typeof containerHeight === 'number'
             ? containerHeight - 50
-            : "calc(100% - 50px)"
+            : 'calc(100% - 50px)'
         }
         className="virtual-table-body"
       />

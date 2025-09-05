@@ -1,5 +1,6 @@
-import { FirebaseDataService } from "./firebaseDataService";
-import { StorageData, Unit, Word } from "../types";
+import { StorageData, Unit, Word } from '../types';
+
+import { FirebaseDataService } from './firebaseDataService';
 
 // Interface for data service
 export interface DataService {
@@ -10,21 +11,21 @@ export interface DataService {
   updateWord(
     unitId: string,
     wordId: string,
-    updatedWord: Partial<Word>,
+    updatedWord: Partial<Word>
   ): Promise<boolean>;
   updateUnit(unitId: string, updatedUnit: Partial<Unit>): Promise<boolean>;
   toggleWordMastered(unitId: string, wordId: string): Promise<boolean>;
   setWordMasteredStatus(
     unitId: string,
     wordId: string,
-    mastered: boolean,
+    mastered: boolean
   ): Promise<boolean>;
   deleteItems({
     type,
     ids,
     unitId,
   }: {
-    type: "word" | "unit";
+    type: 'word' | 'unit';
     ids: string[];
     unitId?: string;
   }): Promise<boolean>;
@@ -34,14 +35,15 @@ export interface DataService {
 
 // Local storage service implementation
 class LocalStorageService implements DataService {
-  private readonly STORAGE_KEY = "vocabulary-app-data";
+  private readonly STORAGE_KEY = 'vocabulary-app-data';
 
   private getData(): StorageData {
     try {
       const data = localStorage.getItem(this.STORAGE_KEY);
       return data ? JSON.parse(data) : { units: [] };
     } catch (error) {
-      console.error("Failed to get data from localStorage:", error);
+      // eslint-disable-next-line no-console
+      console.error('Failed to get data from localStorage:', error);
       return { units: [] };
     }
   }
@@ -51,7 +53,8 @@ class LocalStorageService implements DataService {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
       return true;
     } catch (error) {
-      console.error("Failed to save data to localStorage:", error);
+      // eslint-disable-next-line no-console
+      console.error('Failed to save data to localStorage:', error);
       return false;
     }
   }
@@ -82,7 +85,7 @@ class LocalStorageService implements DataService {
   async addWord(
     unitId: string,
     word: string,
-    meaning: string,
+    meaning: string
   ): Promise<boolean> {
     const trimmedWord = word.trim();
     const trimmedMeaning = meaning.trim();
@@ -92,7 +95,7 @@ class LocalStorageService implements DataService {
     }
 
     const data = this.getData();
-    const unitIndex = data.units.findIndex((u) => u.id === unitId);
+    const unitIndex = data.units.findIndex(u => u.id === unitId);
 
     if (unitIndex === -1) return false;
 
@@ -114,15 +117,15 @@ class LocalStorageService implements DataService {
   async updateWord(
     unitId: string,
     wordId: string,
-    updatedWord: Partial<Word>,
+    updatedWord: Partial<Word>
   ): Promise<boolean> {
     const data = this.getData();
-    const unitIndex = data.units.findIndex((u) => u.id === unitId);
+    const unitIndex = data.units.findIndex(u => u.id === unitId);
 
     if (unitIndex === -1) return false;
 
     const wordIndex = data.units[unitIndex].words.findIndex(
-      (w) => w.id === wordId,
+      w => w.id === wordId
     );
 
     if (wordIndex === -1) return false;
@@ -137,10 +140,10 @@ class LocalStorageService implements DataService {
 
   async updateUnit(
     unitId: string,
-    updatedUnit: Partial<Unit>,
+    updatedUnit: Partial<Unit>
   ): Promise<boolean> {
     const data = this.getData();
-    const unitIndex = data.units.findIndex((u) => u.id === unitId);
+    const unitIndex = data.units.findIndex(u => u.id === unitId);
 
     if (unitIndex === -1) return false;
 
@@ -154,12 +157,12 @@ class LocalStorageService implements DataService {
 
   async toggleWordMastered(unitId: string, wordId: string): Promise<boolean> {
     const data = this.getData();
-    const unitIndex = data.units.findIndex((u) => u.id === unitId);
+    const unitIndex = data.units.findIndex(u => u.id === unitId);
 
     if (unitIndex === -1) return false;
 
     const wordIndex = data.units[unitIndex].words.findIndex(
-      (w) => w.id === wordId,
+      w => w.id === wordId
     );
 
     if (wordIndex === -1) return false;
@@ -175,15 +178,15 @@ class LocalStorageService implements DataService {
   async setWordMasteredStatus(
     unitId: string,
     wordId: string,
-    mastered: boolean,
+    mastered: boolean
   ): Promise<boolean> {
     const data = this.getData();
-    const unitIndex = data.units.findIndex((u) => u.id === unitId);
+    const unitIndex = data.units.findIndex(u => u.id === unitId);
 
     if (unitIndex === -1) return false;
 
     const wordIndex = data.units[unitIndex].words.findIndex(
-      (w) => w.id === wordId,
+      w => w.id === wordId
     );
 
     if (wordIndex === -1) return false;
@@ -200,21 +203,21 @@ class LocalStorageService implements DataService {
     ids,
     unitId,
   }: {
-    type: "word" | "unit";
+    type: 'word' | 'unit';
     ids: string[];
     unitId?: string;
   }): Promise<boolean> {
     const data = this.getData();
 
-    if (type === "word" && unitId) {
-      const unitIndex = data.units.findIndex((u) => u.id === unitId);
+    if (type === 'word' && unitId) {
+      const unitIndex = data.units.findIndex(u => u.id === unitId);
       if (unitIndex === -1) return false;
 
       data.units[unitIndex].words = data.units[unitIndex].words.filter(
-        (word) => !ids.includes(word.id),
+        word => !ids.includes(word.id)
       );
-    } else if (type === "unit") {
-      data.units = data.units.filter((unit) => !ids.includes(unit.id));
+    } else if (type === 'unit') {
+      data.units = data.units.filter(unit => !ids.includes(unit.id));
     }
 
     return this.saveData(data);
@@ -222,15 +225,13 @@ class LocalStorageService implements DataService {
 
   async getMasteredWords(): Promise<Word[]> {
     const data = this.getData();
-    return data.units.flatMap((unit) =>
-      unit.words.filter((word) => word.mastered),
-    );
+    return data.units.flatMap(unit => unit.words.filter(word => word.mastered));
   }
 
   async getUnmasteredWords(): Promise<Word[]> {
     const data = this.getData();
-    return data.units.flatMap((unit) =>
-      unit.words.filter((word) => !word.mastered),
+    return data.units.flatMap(unit =>
+      unit.words.filter(word => !word.mastered)
     );
   }
 }
@@ -257,11 +258,9 @@ export class DataServiceManager {
     if (userId) {
       // User is logged in, use Firebase
       this.currentService = new FirebaseDataService(userId);
-      
     } else {
       // User is not logged in, use localStorage
       this.currentService = new LocalStorageService();
-      
     }
   }
 

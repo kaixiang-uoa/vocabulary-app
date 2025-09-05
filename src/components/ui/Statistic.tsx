@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export interface StatisticProps {
   title?: React.ReactNode;
@@ -17,10 +17,10 @@ const Statistic: React.FC<StatisticProps> = ({
   suffix,
   precision,
   valueStyle,
-  className = "",
+  className = '',
 }) => {
   const formatValue = (val: any) => {
-    if (typeof val === "number" && precision !== undefined) {
+    if (typeof val === 'number' && precision !== undefined) {
       return val.toFixed(precision);
     }
     return val;

@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useMemo,
   useCallback,
-} from "react";
+} from 'react';
 
 interface VirtualListProps<T> {
   items: T[];
@@ -26,9 +26,9 @@ export function VirtualList<T>({
   items,
   itemHeight,
   renderItem,
-  containerHeight = "100%",
+  containerHeight = '100%',
   overscan = 5,
-  className = "",
+  className = '',
   onScroll,
 }: VirtualListProps<T>) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -43,7 +43,7 @@ export function VirtualList<T>({
     const startIndex = Math.floor(scrollTop / itemHeight);
     const endIndex = Math.min(
       startIndex + Math.ceil(containerHeight / itemHeight) + overscan,
-      items.length,
+      items.length
     );
 
     return {
@@ -64,10 +64,10 @@ export function VirtualList<T>({
   const handleScroll = useCallback(
     (event: React.UIEvent<HTMLDivElement>) => {
       const scrollTop = event.currentTarget.scrollTop;
-      setState((prev) => ({ ...prev, scrollTop }));
+      setState(prev => ({ ...prev, scrollTop }));
       onScroll?.(scrollTop);
     },
-    [onScroll],
+    [onScroll]
   );
 
   // Update container height on mount and resize
@@ -75,10 +75,10 @@ export function VirtualList<T>({
     const updateContainerHeight = () => {
       if (containerRef.current) {
         const height =
-          typeof containerHeight === "number"
+          typeof containerHeight === 'number'
             ? containerHeight
             : containerRef.current.clientHeight;
-        setState((prev) => ({ ...prev, containerHeight: height }));
+        setState(prev => ({ ...prev, containerHeight: height }));
       }
     };
 
@@ -103,8 +103,8 @@ export function VirtualList<T>({
       className={`virtual-list ${className}`}
       style={{
         height: containerHeight,
-        overflow: "auto",
-        position: "relative",
+        overflow: 'auto',
+        position: 'relative',
       }}
       onScroll={handleScroll}
     >
@@ -113,7 +113,7 @@ export function VirtualList<T>({
         {/* Visible items container */}
         <div style={{ transform: `translateY(${offsetY}px)` }}>
           {visibleItems.map((item, index) =>
-            renderItem(item, visibleRange.startIndex + index),
+            renderItem(item, visibleRange.startIndex + index)
           )}
         </div>
       </div>
@@ -125,7 +125,7 @@ export function VirtualList<T>({
 export function useVirtualList<T>(
   items: T[],
   itemHeight: number,
-  containerHeight: number,
+  containerHeight: number
 ) {
   const [scrollTop, setScrollTop] = useState(0);
   const overscan = 5;
@@ -134,7 +134,7 @@ export function useVirtualList<T>(
     const startIndex = Math.floor(scrollTop / itemHeight);
     const endIndex = Math.min(
       startIndex + Math.ceil(containerHeight / itemHeight) + overscan,
-      items.length,
+      items.length
     );
 
     return {

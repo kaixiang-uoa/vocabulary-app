@@ -1,5 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router";
+import { ArrowLeftIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useParams, Link } from 'react-router';
+
+import LanguageSwitcher from '../components/LanguageSwitcher';
+import ReviewWordCard from '../components/ReviewWordCard';
 import {
   Button,
   Progress,
@@ -9,45 +14,40 @@ import {
   RadioButton,
   Empty,
   message,
-} from "../components/ui";
-import { ArrowLeftIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
-import ReviewWordCard from "../components/ReviewWordCard";
-import LanguageSwitcher from "../components/LanguageSwitcher";
-import { useTranslation } from "react-i18next";
+} from '../components/ui';
+import { useWordContext } from '../contexts/WordContext';
+import { getTailwindClass } from '../utils/styleMapping';
 
-import { getTailwindClass } from "../utils/styleMapping";
-import { useWordContext } from "../contexts/WordContext";
-
-type ReviewMode = "all" | "unmastered" | "mastered";
-type ReviewOrder = "sequential" | "random";
+type ReviewMode = 'all' | 'unmastered' | 'mastered';
+type ReviewOrder = 'sequential' | 'random';
 
 const ReviewPage: React.FC = () => {
   const { t } = useTranslation();
   const { unitId } = useParams<{ unitId: string }>();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [reviewMode, setReviewMode] = useState<ReviewMode>("all");
-  const [reviewOrder, setReviewOrder] = useState<ReviewOrder>("sequential");
+  const [reviewMode, setReviewMode] = useState<ReviewMode>('all');
+  const [reviewOrder, setReviewOrder] = useState<ReviewOrder>('sequential');
   const [isFlipped, setIsFlipped] = useState(false);
-  const [flipMode, setFlipMode] = useState<"en2zh" | "zh2en">("en2zh");
+  const [flipMode, setFlipMode] = useState<'en2zh' | 'zh2en'>('en2zh');
 
   // Use global word context
   const { data, loadData, toggleWordMasteredStatus } = useWordContext();
 
   // Get current unit and words from hook data
-  const unit = data?.units.find((u) => u.id === unitId) || null;
+  const unit = data?.units.find(u => u.id === unitId) || null;
 
   // Filter and sort words based on review mode and order
   const words = React.useMemo(() => {
     const allWords = unit?.words || [];
     let filteredWords = [...allWords];
 
-    if (reviewMode === "unmastered") {
-      filteredWords = filteredWords.filter((word) => !word.mastered);
-    } else if (reviewMode === "mastered") {
-      filteredWords = filteredWords.filter((word) => word.mastered);
+    if (reviewMode === 'unmastered') {
+      filteredWords = filteredWords.filter(word => !word.mastered);
+    } else if (reviewMode === 'mastered') {
+      filteredWords = filteredWords.filter(word => word.mastered);
     }
 
-    if (reviewOrder === "random") {
+    if (reviewOrder === 'random') {
       filteredWords = [...filteredWords].sort(() => Math.random() - 0.5);
     }
 
@@ -73,9 +73,9 @@ const ReviewPage: React.FC = () => {
 
     const success = await toggleWordMasteredStatus(unitId, wordId);
     if (success) {
-      message.success(t("status_updated"));
+      message.success(t('status_updated'));
     } else {
-      message.error(t("status_update_failed"));
+      message.error(t('status_update_failed'));
     }
   };
 
@@ -85,7 +85,7 @@ const ReviewPage: React.FC = () => {
       setCurrentIndex(currentIndex + 1);
       setIsFlipped(false);
     } else {
-      message.success(t("review_complete"));
+      message.success(t('review_complete'));
     }
   };
 
@@ -98,7 +98,7 @@ const ReviewPage: React.FC = () => {
 
   const handleRestart = () => {
     setCurrentIndex(0);
-    message.info(t("review_restart"));
+    message.info(t('review_restart'));
   };
 
   const handleModeChange = (e: any) => {
@@ -119,7 +119,7 @@ const ReviewPage: React.FC = () => {
   if (!unit) {
     return (
       <div className="flex items-center justify-center h-64 text-lg text-gray-600">
-        {t("loading")}
+        {t('loading')}
       </div>
     );
   }
@@ -131,11 +131,11 @@ const ReviewPage: React.FC = () => {
       : 0;
 
   return (
-    <div className={getTailwindClass("review-page")}>
+    <div className={getTailwindClass('review-page')}>
       {/* First row: Title and language switcher */}
-      <div className={getTailwindClass("page-header")}>
-        <Title level={2} className={getTailwindClass("page-title")}>
-          {unit.name} - {t("word_review")}
+      <div className={getTailwindClass('page-header')}>
+        <Title level={2} className={getTailwindClass('page-title')}>
+          {unit.name} - {t('word_review')}
         </Title>
         <LanguageSwitcher className="flex items-center gap-2" />
       </div>
@@ -148,18 +148,18 @@ const ReviewPage: React.FC = () => {
           <div className="flex items-center gap-3 flex-shrink-0">
             <Link to={`/unit/${unitId}`}>
               <Button
-                className={`${getTailwindClass("btn-secondary")} ${getTailwindClass("btn-standard")} font-bold`}
+                className={`${getTailwindClass('btn-secondary')} ${getTailwindClass('btn-standard')} font-bold`}
                 icon={<ArrowLeftIcon className="w-4 h-4" />}
               >
-                {t("back_to_unit")}
+                {t('back_to_unit')}
               </Button>
             </Link>
             <Button
               icon={<ArrowPathIcon className="w-4 h-4" />}
               onClick={handleRestart}
-              className={`${getTailwindClass("btn-primary")} ${getTailwindClass("btn-standard")}`}
+              className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')}`}
             >
-              {t("restart")}
+              {t('restart')}
             </Button>
           </div>
 
@@ -168,46 +168,46 @@ const ReviewPage: React.FC = () => {
             {/* Review mode controls */}
             <div className="flex flex-col gap-3 flex-shrink-0 min-w-[140px]">
               <label className="text-sm font-bold text-gray-700">
-                {t("review_mode")}
+                {t('review_mode')}
               </label>
               <RadioGroup
                 value={reviewMode}
                 onChange={handleModeChange}
                 className="flex gap-2"
               >
-                <RadioButton value="all">{t("all")}</RadioButton>
-                <RadioButton value="unmastered">{t("unmastered")}</RadioButton>
-                <RadioButton value="mastered">{t("mastered")}</RadioButton>
+                <RadioButton value="all">{t('all')}</RadioButton>
+                <RadioButton value="unmastered">{t('unmastered')}</RadioButton>
+                <RadioButton value="mastered">{t('mastered')}</RadioButton>
               </RadioGroup>
             </div>
 
             {/* Review order controls */}
             <div className="flex flex-col gap-3 flex-shrink-0 min-w-[140px]">
               <label className="text-sm font-bold text-gray-700">
-                {t("review_order")}
+                {t('review_order')}
               </label>
               <RadioGroup
                 value={reviewOrder}
                 onChange={handleOrderChange}
                 className="flex gap-2"
               >
-                <RadioButton value="sequential">{t("sequential")}</RadioButton>
-                <RadioButton value="random">{t("random")}</RadioButton>
+                <RadioButton value="sequential">{t('sequential')}</RadioButton>
+                <RadioButton value="random">{t('random')}</RadioButton>
               </RadioGroup>
             </div>
 
             {/* Flip mode controls */}
             <div className="flex flex-col gap-3 flex-shrink-0 min-w-[140px]">
               <label className="text-sm font-bold text-gray-700">
-                {t("flip_mode")}
+                {t('flip_mode')}
               </label>
               <RadioGroup
                 value={flipMode}
                 onChange={handleFlipModeChange}
                 className="flex gap-2"
               >
-                <RadioButton value="en2zh">{t("flip_mode_en2zh")}</RadioButton>
-                <RadioButton value="zh2en">{t("flip_mode_zh2en")}</RadioButton>
+                <RadioButton value="en2zh">{t('flip_mode_en2zh')}</RadioButton>
+                <RadioButton value="zh2en">{t('flip_mode_zh2en')}</RadioButton>
               </RadioGroup>
             </div>
           </div>
@@ -220,7 +220,7 @@ const ReviewPage: React.FC = () => {
               percent={progress}
               status="active"
               format={() => `${currentIndex + 1}/${words.length}`}
-              className={getTailwindClass("progress-text")}
+              className={getTailwindClass('progress-text')}
             />
           </div>
           <div className="flex justify-center mb-8">
@@ -229,7 +229,7 @@ const ReviewPage: React.FC = () => {
                 key={words[currentIndex]?.id || currentIndex}
                 word={words[currentIndex]}
                 isFlipped={isFlipped}
-                onFlip={() => setIsFlipped((f) => !f)}
+                onFlip={() => setIsFlipped(f => !f)}
                 onMasteredToggle={() =>
                   handleMasteredToggle(words[currentIndex].id)
                 }
@@ -241,24 +241,24 @@ const ReviewPage: React.FC = () => {
             <Button
               onClick={handlePrev}
               disabled={currentIndex === 0}
-              className={`${getTailwindClass("btn-primary")} ${getTailwindClass("btn-standard")} ${currentIndex === 0 ? "opacity-50" : ""}`}
+              className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')} ${currentIndex === 0 ? 'opacity-50' : ''}`}
             >
-              {t("prev")}
+              {t('prev')}
             </Button>
             <Button
               onClick={handleNext}
-              className={`${getTailwindClass("btn-primary")} ${getTailwindClass("btn-standard")} ${currentIndex === words.length - 1 ? "opacity-50" : ""}`}
+              className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')} ${currentIndex === words.length - 1 ? 'opacity-50' : ''}`}
               disabled={currentIndex === words.length - 1}
             >
-              {t("next")}
+              {t('next')}
             </Button>
           </div>
           <div className="text-center mt-4">
             <Text
-              className={`${getTailwindClass("text-secondary")} text-lg font-medium`}
+              className={`${getTailwindClass('text-secondary')} text-lg font-medium`}
             >
-              {t("flip_card_tip", {
-                side: words[currentIndex].mastered ? t("word") : t("meaning"),
+              {t('flip_card_tip', {
+                side: words[currentIndex].mastered ? t('word') : t('meaning'),
               })}
             </Text>
           </div>
@@ -267,13 +267,13 @@ const ReviewPage: React.FC = () => {
         <Empty
           description={
             <span>
-              {t("no_words", {
+              {t('no_words', {
                 mode:
-                  reviewMode === "unmastered"
-                    ? t("unmastered")
-                    : reviewMode === "mastered"
-                      ? t("mastered")
-                      : t("all"),
+                  reviewMode === 'unmastered'
+                    ? t('unmastered')
+                    : reviewMode === 'mastered'
+                      ? t('mastered')
+                      : t('all'),
               })}
             </span>
           }

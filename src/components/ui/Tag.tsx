@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 
 export interface TagProps {
   children: React.ReactNode;
   color?:
-    | "default"
-    | "primary"
-    | "success"
-    | "warning"
-    | "error"
-    | "processing"
+    | 'default'
+    | 'primary'
+    | 'success'
+    | 'warning'
+    | 'error'
+    | 'processing'
     | string;
   closable?: boolean;
   onClose?: () => void;
@@ -19,24 +19,24 @@ export interface TagProps {
 
 const Tag: React.FC<TagProps> = ({
   children,
-  color = "default",
+  color = 'default',
   closable = false,
   onClose,
   icon,
-  className = "",
+  className = '',
   style,
 }) => {
   const colorClasses = {
-    default: "bg-gray-100 text-gray-800 border-gray-200",
-    primary: "bg-blue-100 text-blue-800 border-blue-200",
-    success: "bg-green-100 text-green-800 border-green-200",
-    warning: "bg-yellow-100 text-yellow-800 border-yellow-200",
-    error: "bg-red-100 text-red-800 border-red-200",
-    processing: "bg-purple-100 text-purple-800 border-purple-200",
+    default: 'bg-gray-100 text-gray-800 border-gray-200',
+    primary: 'bg-blue-100 text-blue-800 border-blue-200',
+    success: 'bg-green-100 text-green-800 border-green-200',
+    warning: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+    error: 'bg-red-100 text-red-800 border-red-200',
+    processing: 'bg-purple-100 text-purple-800 border-purple-200',
   };
 
   const baseClasses =
-    "inline-flex items-center px-2 py-1 text-xs font-medium rounded border";
+    'inline-flex items-center px-2 py-1 text-xs font-medium rounded border';
   const colorClass =
     colorClasses[color as keyof typeof colorClasses] || colorClasses.default;
   const classes = `${baseClasses} ${colorClass} ${className}`;

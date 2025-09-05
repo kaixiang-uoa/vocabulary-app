@@ -1,12 +1,12 @@
 // Application base constants
-export const APP_NAME = "Vocabulary App";
-export const APP_VERSION = "1.0.0";
+export const APP_NAME = 'Vocabulary App';
+export const APP_VERSION = '1.0.0';
 
 // Storage keys
 export const STORAGE_KEYS = {
-  VOCABULARY_DATA: "vocabulary_data",
-  USER_SETTINGS: "user_settings",
-  REVIEW_PROGRESS: "review_progress",
+  VOCABULARY_DATA: 'vocabulary_data',
+  USER_SETTINGS: 'user_settings',
+  REVIEW_PROGRESS: 'review_progress',
 } as const;
 
 // UI constants

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export interface TabPaneProps {
   tab: React.ReactNode;
@@ -32,11 +32,11 @@ const Tabs: React.FC<TabsProps> = ({
   onChange,
   children,
   items,
-  className = "",
+  className = '',
   style,
 }) => {
   const [currentActiveKey, setCurrentActiveKey] = React.useState(
-    activeKey ?? defaultActiveKey,
+    activeKey ?? defaultActiveKey
   );
 
   React.useEffect(() => {
@@ -55,24 +55,24 @@ const Tabs: React.FC<TabsProps> = ({
   const tabPanes = children
     ? React.Children.toArray(children).filter(
         (child): child is React.ReactElement<TabPaneProps> =>
-          React.isValidElement(child) && child.type === TabPane,
+          React.isValidElement(child) && child.type === TabPane
       )
     : [];
 
   const activePane =
-    tabPanes.find((pane) => pane.key === currentActiveKey) || tabPanes[0];
+    tabPanes.find(pane => pane.key === currentActiveKey) || tabPanes[0];
   const activeItem =
-    tabItems.find((item) => item.key === currentActiveKey) || tabItems[0];
+    tabItems.find(item => item.key === currentActiveKey) || tabItems[0];
 
   return (
     <div className={`tabs ${className}`} style={style}>
       {/* Tab Headers */}
       <div className="flex border-b border-gray-200 mb-4 py-1">
-        {(items ? tabItems : tabPanes).map((item) => {
+        {(items ? tabItems : tabPanes).map(item => {
           const isActive = item.key === currentActiveKey;
           const isDisabled =
-            "disabled" in item ? item.disabled : item.props?.disabled;
-          const label = "label" in item ? item.label : item.props?.tab;
+            'disabled' in item ? item.disabled : item.props?.disabled;
+          const label = 'label' in item ? item.label : item.props?.tab;
 
           return (
             <button
@@ -81,9 +81,9 @@ const Tabs: React.FC<TabsProps> = ({
               disabled={isDisabled}
               className={`px-4 py-2 text-base font-medium border-b-2 transition-all duration-200 ${
                 isActive
-                  ? "border-primary-500 text-primary-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-              } ${isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+                  ? 'border-primary-500 text-primary-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              } ${isDisabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
             >
               {label}
             </button>

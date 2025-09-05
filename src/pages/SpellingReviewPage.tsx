@@ -1,5 +1,14 @@
-import React, { useState, useMemo, useEffect } from "react";
-import { useParams, Link } from "react-router";
+import {
+  ArrowLeftIcon,
+  ArrowPathIcon,
+  SpeakerWaveIcon,
+} from '@heroicons/react/24/outline';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useParams, Link } from 'react-router';
+
+import LanguageSwitcher from '../components/LanguageSwitcher';
+import SpellingReviewCard from '../components/SpellingReviewCard';
 import {
   Button,
   Text,
@@ -11,28 +20,20 @@ import {
   Switch,
   InputNumber,
   Space,
-} from "../components/ui";
-import {
-  ArrowLeftIcon,
-  ArrowPathIcon,
-  SpeakerWaveIcon,
-} from "@heroicons/react/24/outline";
-import SpellingReviewCard from "../components/SpellingReviewCard";
-import LanguageSwitcher from "../components/LanguageSwitcher";
-import { useWordContext } from "../contexts/WordContext";
-import { useTranslation } from "react-i18next";
-import { getTailwindClass } from "../utils/styleMapping";
-import { useReviewData, useReviewNavigation } from "../hooks";
-import { playPronunciation } from "../services/pronunciationService";
+} from '../components/ui';
+import { useWordContext } from '../contexts/WordContext';
+import { useReviewData, useReviewNavigation } from '../hooks';
+import { playPronunciation } from '../services/pronunciationService';
+import { getTailwindClass } from '../utils/styleMapping';
 
-type ReviewMode = "all" | "unmastered" | "mastered";
-type ReviewOrder = "sequential" | "random";
+type ReviewMode = 'all' | 'unmastered' | 'mastered';
+type ReviewOrder = 'sequential' | 'random';
 
 const SpellingReviewPage: React.FC = () => {
   const { t } = useTranslation();
   const { unitId } = useParams<{ unitId: string }>();
-  const [reviewMode, setReviewMode] = useState<ReviewMode>("all");
-  const [reviewOrder, setReviewOrder] = useState<ReviewOrder>("sequential");
+  const [reviewMode, setReviewMode] = useState<ReviewMode>('all');
+  const [reviewOrder, setReviewOrder] = useState<ReviewOrder>('sequential');
 
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
@@ -57,8 +58,8 @@ const SpellingReviewPage: React.FC = () => {
 
     return {
       all: allWords.length,
-      mastered: allWords.filter((word) => word.mastered).length,
-      unmastered: allWords.filter((word) => !word.mastered).length,
+      mastered: allWords.filter(word => word.mastered).length,
+      unmastered: allWords.filter(word => !word.mastered).length,
     };
   }, [data.unit]);
 
@@ -67,14 +68,14 @@ const SpellingReviewPage: React.FC = () => {
     if (data.unit && wordCounts[reviewMode] === 0) {
       // Find a mode with words
       if (wordCounts.all > 0) {
-        setReviewMode("all");
-        message.info(t("switched_to_all_mode"));
+        setReviewMode('all');
+        message.info(t('switched_to_all_mode'));
       } else if (wordCounts.unmastered > 0) {
-        setReviewMode("unmastered");
-        message.info(t("switched_to_unmastered_mode"));
+        setReviewMode('unmastered');
+        message.info(t('switched_to_unmastered_mode'));
       } else if (wordCounts.mastered > 0) {
-        setReviewMode("mastered");
-        message.info(t("switched_to_mastered_mode"));
+        setReviewMode('mastered');
+        message.info(t('switched_to_mastered_mode'));
       }
     }
   }, [data.unit, reviewMode, wordCounts, t]);
@@ -101,7 +102,8 @@ const SpellingReviewPage: React.FC = () => {
   };
 
   // Use word operations from global context for mastered status
-  const { setWordMasteredStatusDirect, loadData: loadOpsData } = useWordContext();
+  const { setWordMasteredStatusDirect, loadData: loadOpsData } =
+    useWordContext();
 
   // Ensure operations hook has data loaded to avoid early returns
   useEffect(() => {
@@ -116,11 +118,11 @@ const SpellingReviewPage: React.FC = () => {
 
     const success = await setWordMasteredStatusDirect(unitId, wordId, mastered);
     if (success) {
-      message.success(t("status_updated"));
+      message.success(t('status_updated'));
       // Trigger refresh to update word counts
-      setRefreshTrigger((prev) => prev + 1);
+      setRefreshTrigger(prev => prev + 1);
     } else {
-      message.error(t("status_update_failed"));
+      message.error(t('status_update_failed'));
     }
   };
 
@@ -140,7 +142,7 @@ const SpellingReviewPage: React.FC = () => {
 
   const handleRestart = () => {
     restart();
-    message.info(t("review_restart"));
+    message.info(t('review_restart'));
   };
 
   const handleModeChange = (e: any) => {
@@ -154,7 +156,7 @@ const SpellingReviewPage: React.FC = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64 text-lg text-gray-600">
-        {t("loading")}
+        {t('loading')}
       </div>
     );
   }
@@ -162,7 +164,7 @@ const SpellingReviewPage: React.FC = () => {
   if (error || !data.unit) {
     return (
       <div className="flex items-center justify-center h-64 text-lg text-gray-600">
-        {error || t("unit_not_found")}
+        {error || t('unit_not_found')}
       </div>
     );
   }
@@ -170,17 +172,17 @@ const SpellingReviewPage: React.FC = () => {
   if (data.words.length === 0) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Empty description={t("no_words_to_review", { mode: reviewMode })} />
+        <Empty description={t('no_words_to_review', { mode: reviewMode })} />
       </div>
     );
   }
 
   return (
-    <div className={getTailwindClass("spelling-review-page")}>
+    <div className={getTailwindClass('spelling-review-page')}>
       {/* First row: Title and language switcher */}
-      <div className={getTailwindClass("page-header")}>
-        <Title level={2} className={getTailwindClass("page-title")}>
-          {data.unit.name} - {t("spelling_review_title")}
+      <div className={getTailwindClass('page-header')}>
+        <Title level={2} className={getTailwindClass('page-title')}>
+          {data.unit.name} - {t('spelling_review_title')}
         </Title>
         <LanguageSwitcher className="flex items-center gap-2" />
       </div>
@@ -193,20 +195,20 @@ const SpellingReviewPage: React.FC = () => {
           <div className="flex items-center gap-3 flex-shrink-0">
             <Link to={`/unit/${unitId}`}>
               <Button
-                className={`${getTailwindClass("btn-secondary")} ${getTailwindClass("btn-standard")} font-bold`}
+                className={`${getTailwindClass('btn-secondary')} ${getTailwindClass('btn-standard')} font-bold`}
                 icon={<ArrowLeftIcon className="w-4 h-4" />}
               >
-                {t("back_to_unit")}
+                {t('back_to_unit')}
               </Button>
             </Link>
             <Button
               icon={<ArrowPathIcon className="w-4 h-4" />}
               onClick={handleRestart}
               disabled={isFirst}
-              className={`${getTailwindClass("btn-primary")} ${getTailwindClass("btn-standard")}`}
-              title={isFirst ? t("restart_disabled_tip") : t("restart_tip")}
+              className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')}`}
+              title={isFirst ? t('restart_disabled_tip') : t('restart_tip')}
             >
-              {t("restart")}
+              {t('restart')}
             </Button>
           </div>
 
@@ -215,7 +217,7 @@ const SpellingReviewPage: React.FC = () => {
             {/* Review mode controls */}
             <div className="flex flex-col gap-3 flex-shrink-0 min-w-[140px]">
               <label className="text-sm font-bold text-gray-700">
-                {t("review_mode")}
+                {t('review_mode')}
               </label>
               <RadioGroup
                 value={reviewMode}
@@ -223,19 +225,19 @@ const SpellingReviewPage: React.FC = () => {
                 className="flex gap-2"
               >
                 <RadioButton value="all" disabled={wordCounts.all === 0}>
-                  {t("all")} ({wordCounts.all})
+                  {t('all')} ({wordCounts.all})
                 </RadioButton>
                 <RadioButton
                   value="unmastered"
                   disabled={wordCounts.unmastered === 0}
                 >
-                  {t("unmastered")} ({wordCounts.unmastered})
+                  {t('unmastered')} ({wordCounts.unmastered})
                 </RadioButton>
                 <RadioButton
                   value="mastered"
                   disabled={wordCounts.mastered === 0}
                 >
-                  {t("mastered")} ({wordCounts.mastered})
+                  {t('mastered')} ({wordCounts.mastered})
                 </RadioButton>
               </RadioGroup>
             </div>
@@ -243,15 +245,15 @@ const SpellingReviewPage: React.FC = () => {
             {/* Review order controls */}
             <div className="flex flex-col gap-3 flex-shrink-0 min-w-[140px]">
               <label className="text-sm font-bold text-gray-700">
-                {t("review_order")}
+                {t('review_order')}
               </label>
               <RadioGroup
                 value={reviewOrder}
                 onChange={handleOrderChange}
                 className="flex gap-2"
               >
-                <RadioButton value="sequential">{t("sequential")}</RadioButton>
-                <RadioButton value="random">{t("random")}</RadioButton>
+                <RadioButton value="sequential">{t('sequential')}</RadioButton>
+                <RadioButton value="random">{t('random')}</RadioButton>
               </RadioGroup>
             </div>
           </div>
@@ -265,20 +267,20 @@ const SpellingReviewPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <SpeakerWaveIcon className="w-5 h-5 text-gray-600" />
             <Text className="text-base font-medium text-gray-700">
-              {t("auto_play_pronunciation")}:
+              {t('auto_play_pronunciation')}:
             </Text>
             <Switch checked={autoPlay} onChange={setAutoPlay} size="small" />
             <Text
-              className={`text-sm ${autoPlay ? "text-green-600 font-medium" : "text-gray-500"}`}
+              className={`text-sm ${autoPlay ? 'text-green-600 font-medium' : 'text-gray-500'}`}
             >
-              {autoPlay ? t("auto_play_enabled") : t("auto_play_disabled")}
+              {autoPlay ? t('auto_play_enabled') : t('auto_play_disabled')}
             </Text>
           </div>
 
           {autoPlay && (
             <div className="flex items-center gap-1">
               <Text className="text-sm text-gray-600">
-                {t("pronunciation_delay")}:
+                {t('pronunciation_delay')}:
               </Text>
               <InputNumber
                 min={0}
@@ -286,10 +288,10 @@ const SpellingReviewPage: React.FC = () => {
                 step={1}
                 precision={0}
                 value={pronunciationDelay}
-                onChange={(value) => setPronunciationDelay(value ?? 1)}
+                onChange={value => setPronunciationDelay(value ?? 1)}
                 size="small"
                 className="w-12"
-                title={t("pronunciation_delay_tip")}
+                title={t('pronunciation_delay_tip')}
               />
               <Text className="text-sm text-gray-600">s</Text>
             </div>
@@ -301,9 +303,9 @@ const SpellingReviewPage: React.FC = () => {
               icon={<SpeakerWaveIcon />}
               onClick={() => handlePlayPronunciation(currentWord.word)}
               size="small"
-              className={`${getTailwindClass("btn-primary")} ${getTailwindClass("btn-standard")}`}
+              className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')}`}
             >
-              {t("play_pronunciation")}
+              {t('play_pronunciation')}
             </Button>
           )}
         </div>
@@ -314,13 +316,13 @@ const SpellingReviewPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <SpeakerWaveIcon className="w-5 h-5 text-gray-600" />
             <Text className="text-base font-medium text-gray-700">
-              {t("auto_play_pronunciation")}:
+              {t('auto_play_pronunciation')}:
             </Text>
             <Switch checked={autoPlay} onChange={setAutoPlay} size="small" />
             <Text
-              className={`text-sm ${autoPlay ? "text-green-600 font-medium" : "text-gray-500"}`}
+              className={`text-sm ${autoPlay ? 'text-green-600 font-medium' : 'text-gray-500'}`}
             >
-              {autoPlay ? t("auto_play_enabled") : t("auto_play_disabled")}
+              {autoPlay ? t('auto_play_enabled') : t('auto_play_disabled')}
             </Text>
           </div>
 
@@ -330,7 +332,7 @@ const SpellingReviewPage: React.FC = () => {
               {autoPlay && (
                 <div className="flex items-center gap-2">
                   <Text className="text-sm text-gray-600">
-                    {t("pronunciation_delay")}:
+                    {t('pronunciation_delay')}:
                   </Text>
                   <InputNumber
                     min={0}
@@ -338,10 +340,10 @@ const SpellingReviewPage: React.FC = () => {
                     step={1}
                     precision={0}
                     value={pronunciationDelay}
-                    onChange={(value) => setPronunciationDelay(value ?? 1)}
+                    onChange={value => setPronunciationDelay(value ?? 1)}
                     size="small"
                     className="w-16"
-                    title={t("pronunciation_delay_tip")}
+                    title={t('pronunciation_delay_tip')}
                   />
                   <Text className="text-sm text-gray-600">s</Text>
                 </div>
@@ -373,9 +375,9 @@ const SpellingReviewPage: React.FC = () => {
                 icon={<SpeakerWaveIcon />}
                 onClick={() => handlePlayPronunciation(currentWord.word)}
                 size="small"
-                className={`${getTailwindClass("btn-primary")} ${getTailwindClass("btn-standard")} flex-1 max-w-[200px]`}
+                className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')} flex-1 max-w-[200px]`}
               >
-                {t("play_pronunciation")}
+                {t('play_pronunciation')}
               </Button>
             )}
           </div>
@@ -385,7 +387,7 @@ const SpellingReviewPage: React.FC = () => {
       {/* Game rules explanation */}
       <div className="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
         <Text className="text-base text-blue-800">
-          💡 {t("spelling_rules")}
+          💡 {t('spelling_rules')}
         </Text>
       </div>
 
@@ -394,7 +396,7 @@ const SpellingReviewPage: React.FC = () => {
           <div className="mb-6">
             <div className="flex items-center justify-between mb-3">
               <span className="text-base font-semibold text-gray-700">
-                {t("learning_progress")}
+                {t('learning_progress')}
               </span>
               <span className="text-lg font-bold text-blue-600">
                 {currentIndex + 1}/{data.words.length}
@@ -414,7 +416,7 @@ const SpellingReviewPage: React.FC = () => {
                 <SpellingReviewCard
                   key={currentWord.id || currentIndex}
                   word={currentWord}
-                  onMasteredToggle={(mastered) =>
+                  onMasteredToggle={mastered =>
                     handleSetMasteredStatus(currentWord.id, mastered)
                   }
                   onNext={handleNext}
@@ -430,7 +432,7 @@ const SpellingReviewPage: React.FC = () => {
                 />
               ) : (
                 <div className="text-center text-gray-500">
-                  {t("loading_word")}
+                  {t('loading_word')}
                 </div>
               )}
             </div>
@@ -444,7 +446,7 @@ const SpellingReviewPage: React.FC = () => {
             >
               <div className="flex items-center gap-2">
                 <Text strong className="text-base text-gray-700">
-                  {t("completed")}:{" "}
+                  {t('completed')}:{' '}
                 </Text>
                 <Text className="text-lg font-semibold text-green-600">
                   {completedWords.size}
@@ -452,7 +454,7 @@ const SpellingReviewPage: React.FC = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Text strong className="text-base text-gray-700">
-                  {t("failed")}:{" "}
+                  {t('failed')}:{' '}
                 </Text>
                 <Text className="text-lg font-semibold text-red-600">
                   {failedWords.size}
@@ -460,7 +462,7 @@ const SpellingReviewPage: React.FC = () => {
               </div>
               <div className="flex items-center gap-2">
                 <Text strong className="text-base text-gray-700">
-                  {t("remaining")}:{" "}
+                  {t('remaining')}:{' '}
                 </Text>
                 <Text className="text-lg font-semibold text-gray-600">
                   {data.words.length - currentIndex - 1}
@@ -473,13 +475,13 @@ const SpellingReviewPage: React.FC = () => {
         <Empty
           description={
             <span>
-              {t("no_words", {
+              {t('no_words', {
                 mode:
-                  reviewMode === "unmastered"
-                    ? t("unmastered")
-                    : reviewMode === "mastered"
-                      ? t("mastered")
-                      : t("all"),
+                  reviewMode === 'unmastered'
+                    ? t('unmastered')
+                    : reviewMode === 'mastered'
+                      ? t('mastered')
+                      : t('all'),
               })}
             </span>
           }

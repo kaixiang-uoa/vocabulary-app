@@ -104,7 +104,7 @@ export class CacheManager {
   private evictOldest(): void {
     const entries = Array.from(this.cache.entries());
     const sortedEntries = entries.sort(
-      (a, b) => a[1].timestamp - b[1].timestamp,
+      (a, b) => a[1].timestamp - b[1].timestamp
     );
 
     // Remove 20% of oldest entries
@@ -126,7 +126,7 @@ export class CacheManager {
       }
     }
 
-    keysToDelete.forEach((key) => this.cache.delete(key));
+    keysToDelete.forEach(key => this.cache.delete(key));
   }
 }
 
@@ -135,9 +135,9 @@ export const globalCacheManager = new CacheManager();
 
 // Cache keys constants
 export const CACHE_KEYS = {
-  UNITS: "units",
+  UNITS: 'units',
   UNIT: (id: string) => `unit:${id}`,
   WORDS: (unitId: string) => `words:${unitId}`,
-  STATISTICS: "statistics",
-  USER_DATA: "user_data",
+  STATISTICS: 'statistics',
+  USER_DATA: 'user_data',
 } as const;

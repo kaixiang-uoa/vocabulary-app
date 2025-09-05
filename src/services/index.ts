@@ -2,5 +2,5 @@
 export {
   pronunciationService,
   playPronunciation,
-} from "./pronunciationService";
-export * from "./wordService";
+} from './pronunciationService';
+export * from './wordService';

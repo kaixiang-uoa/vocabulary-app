@@ -1,11 +1,13 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { PencilIcon } from "@heroicons/react/24/outline";
-import { useTranslation } from "react-i18next";
-import EditModal from "./EditModal";
-import { WordCardProps, DifficultyColors } from "../types";
-import { getTailwindClass } from "../utils/styleMapping";
+import { PencilIcon } from '@heroicons/react/24/outline';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { DifficultyColors, WordCardProps } from '../types';
+import { getTailwindClass } from '../utils/styleMapping';
+
+import EditModal from './EditModal';
 
 // Simple icons as React components
 const CheckCircleIcon: React.FC = () => (
@@ -27,9 +29,9 @@ const SoundIcon: React.FC = () => (
 );
 
 const difficultyColors: DifficultyColors = {
-  easy: { bg: "#ecfdf5", color: "#10b981", border: "#a7f3d0" }, // green-50, green-500, green-200
-  medium: { bg: "#fffbeb", color: "#f59e0b", border: "#fde68a" }, // yellow-50, yellow-500, yellow-200
-  hard: { bg: "#fef2f2", color: "#ef4444", border: "#fecaca" }, // red-50, red-500, red-200
+  easy: { bg: '#ecfdf5', color: '#10b981', border: '#a7f3d0' }, // green-50, green-500, green-200
+  medium: { bg: '#fffbeb', color: '#f59e0b', border: '#fde68a' }, // yellow-50, yellow-500, yellow-200
+  hard: { bg: '#fef2f2', color: '#ef4444', border: '#fecaca' }, // red-50, red-500, red-200
 };
 
 const playYoudaoVoice = (word: string, type: number = 2): void => {
@@ -38,17 +40,17 @@ const playYoudaoVoice = (word: string, type: number = 2): void => {
     const audio = new window.Audio(url);
 
     // Handle audio loading errors gracefully
-    audio.addEventListener("error", (e) => {
-      console.warn("Audio failed to load for word:", word, e);
+    audio.addEventListener('error', e => {
+      // Audio failed to load - graceful fallback
       // Don't throw error, just log it
     });
 
-    audio.play().catch((error) => {
-      console.warn("Audio playback failed for word:", word, error);
+    audio.play().catch(error => {
+      // Audio playback failed - graceful fallback
       // Don't throw error, just log it
     });
   } catch (error) {
-    console.warn("playYoudaoVoice error for word:", word, error);
+    // Audio service error - graceful fallback
     // Don't throw error, just log it
   }
 };
@@ -65,7 +67,7 @@ const WordCard: React.FC<WordCardProps> = ({
   const [showEditModal, setShowEditModal] = useState(false);
 
   // Use TailwindCSS classes with fallback to original classes
-  const cardClassName = `${getTailwindClass("word-card")} ${word.mastered ? getTailwindClass("word-card.mastered") : ""} ${hovered ? "hover" : ""}`;
+  const cardClassName = `${getTailwindClass('word-card')} ${word.mastered ? getTailwindClass('word-card.mastered') : ''} ${hovered ? 'hover' : ''}`;
 
   return (
     <div
@@ -75,12 +77,12 @@ const WordCard: React.FC<WordCardProps> = ({
     >
       {/* Edit button, positioned in the top-right corner */}
       <button
-        onClick={(e) => {
+        onClick={e => {
           e.stopPropagation();
           setShowEditModal(true);
         }}
         className="absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-700 transition-colors duration-200"
-        aria-label={t("edit_word")}
+        aria-label={t('edit_word')}
       >
         <PencilIcon className="w-4 h-4" />
       </button>
@@ -92,19 +94,19 @@ const WordCard: React.FC<WordCardProps> = ({
         cancelText="cancel"
         fields={[
           {
-            name: "word",
-            label: "word",
+            name: 'word',
+            label: 'word',
             value: word.word,
-            placeholder: "input_word_placeholder",
+            placeholder: 'input_word_placeholder',
           },
           {
-            name: "meaning",
-            label: "meaning",
+            name: 'meaning',
+            label: 'meaning',
             value: word.meaning,
-            placeholder: "input_meaning_placeholder",
+            placeholder: 'input_meaning_placeholder',
           },
         ]}
-        onOk={(values) => {
+        onOk={values => {
           setShowEditModal(false);
           onEdit &&
             onEdit(word.id, { word: values.word, meaning: values.meaning });
@@ -120,14 +122,14 @@ const WordCard: React.FC<WordCardProps> = ({
             <input
               type="checkbox"
               checked={isSelected}
-              onChange={(e) => {
+              onChange={e => {
                 e.stopPropagation();
                 onSelect && onSelect(word.id);
               }}
               className="w-4 h-4"
             />
             <div
-              className={`p-1 rounded-full ${word.mastered ? "text-green-500" : "text-blue-500"}`}
+              className={`p-1 rounded-full ${word.mastered ? 'text-green-500' : 'text-blue-500'}`}
             >
               {word.mastered ? <CheckCircleIcon /> : <SyncIcon />}
             </div>
@@ -151,12 +153,12 @@ const WordCard: React.FC<WordCardProps> = ({
         <div className="flex items-center gap-2 mb-4">
           <span className="text-2xl font-bold text-gray-900">{word.word}</span>
           <button
-            onClick={(e) => {
+            onClick={e => {
               e.stopPropagation();
               playYoudaoVoice(word.word, 2);
             }}
             className="p-1 text-gray-500 hover:text-gray-700 transition-colors duration-200"
-            title={t("play_pronunciation")}
+            title={t('play_pronunciation')}
           >
             <SoundIcon />
           </button>
@@ -171,27 +173,27 @@ const WordCard: React.FC<WordCardProps> = ({
 
         {/* Bottom operation area */}
         <div
-          className={`${getTailwindClass("flex-between")} pt-4 border-t border-gray-200 mt-auto`}
+          className={`${getTailwindClass('flex-between')} pt-4 border-t border-gray-200 mt-auto`}
         >
           <span
-            className={`${getTailwindClass("text-secondary")} ${getTailwindClass("text-small")} flex items-center gap-2`}
+            className={`${getTailwindClass('text-secondary')} ${getTailwindClass('text-small')} flex items-center gap-2`}
           >
             <SyncIcon />
-            {t("review_times", { count: word.reviewTimes })}
+            {t('review_times', { count: word.reviewTimes })}
           </span>
 
           <button
-            onClick={(e) => {
+            onClick={e => {
               e.stopPropagation();
               onMasteredToggle && onMasteredToggle(word.id);
             }}
             className={`px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
               word.mastered
-                ? "bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200"
-                : "bg-blue-500 text-white hover:bg-blue-600"
+                ? 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200'
+                : 'bg-blue-500 text-white hover:bg-blue-600'
             }`}
           >
-            {word.mastered ? t("mark_unmastered") : t("mark_mastered")}
+            {word.mastered ? t('mark_unmastered') : t('mark_mastered')}
           </button>
         </div>
       </div>

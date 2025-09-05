@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from "react";
 import {
+  ArrowPathIcon,
   BookOpenIcon,
   CheckCircleIcon,
-  ArrowPathIcon,
-} from "@heroicons/react/24/outline";
-import UnitList from "../components/UnitList";
-import LanguageSwitcher from "../components/LanguageSwitcher";
-import { useTranslation } from "react-i18next";
-import { getTailwindClass } from "../utils/styleMapping";
-import { useAuthContext } from "../contexts/AuthContext";
-import { useWordContext } from "../contexts/WordContext";
-import { Word } from "../types";
-import { StatCardSkeleton, GridSkeleton } from "../components/ui";
-import { useInitialLoading } from "../hooks";
+} from '@heroicons/react/24/outline';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import LanguageSwitcher from '../components/LanguageSwitcher';
+import { GridSkeleton, StatCardSkeleton } from '../components/ui';
+import UnitList from '../components/UnitList';
+import { useAuthContext } from '../contexts/AuthContext';
+import { useWordContext } from '../contexts/WordContext';
+import { useInitialLoading } from '../hooks';
+import { Word } from '../types';
+import { getTailwindClass } from '../utils/styleMapping';
 
 const HomePage: React.FC = () => {
   const { t } = useTranslation();
@@ -36,8 +37,8 @@ const HomePage: React.FC = () => {
         const mastered: Word[] = [];
         const unmastered: Word[] = [];
 
-        unitsData.units.forEach((unit) => {
-          unit.words.forEach((word) => {
+        unitsData.units.forEach(unit => {
+          unit.words.forEach(word => {
             if (word.mastered) {
               mastered.push(word);
             } else {
@@ -50,11 +51,12 @@ const HomePage: React.FC = () => {
         setUnmasteredWords(unmastered);
         loadingState.setData({ mastered, unmastered });
       } catch (error) {
-        console.error("Error processing words data:", error);
+        // eslint-disable-next-line no-console
+        console.error('Error processing words data:', error);
         setMasteredWords([]);
         setUnmasteredWords([]);
         loadingState.setError(
-          error instanceof Error ? error.message : "Failed to process data",
+          error instanceof Error ? error.message : 'Failed to process data'
         );
       }
     } else if (!state.loading && !unitsLoading && !unitsData) {
@@ -76,14 +78,16 @@ const HomePage: React.FC = () => {
     totalWords > 0 ? Math.round((masteredWords.length / totalWords) * 100) : 0;
 
   return (
-    <div className={getTailwindClass("unit-detail-page")}>
+    <div className={getTailwindClass('unit-detail-page')}>
       {/* Language switcher only */}
       <div className="flex justify-end mb-6">
         <LanguageSwitcher className="flex items-center gap-2" />
       </div>
 
       {/* Loading state with skeleton */}
-      {state.user && unitsLoading && (!unitsData || unitsData.units.length === 0) && (
+      {state.user &&
+        unitsLoading &&
+        (!unitsData || unitsData.units.length === 0) && (
           <div className="space-y-8">
             {/* Statistics Cards Skeleton */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mb-8 lg:mb-12">
@@ -124,14 +128,14 @@ const HomePage: React.FC = () => {
       )}
 
       {/* Section 1: Statistics Cards */}
-      {state.user && (!!unitsData && unitsData.units.length >= 0) && (
+      {state.user && !!unitsData && unitsData.units.length >= 0 && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-6 mb-8 lg:mb-12">
           {/* Total Words Card */}
           <div className="bg-white/80 sm:bg-blue-100/80 md:bg-green-100/80 lg:bg-purple-100/80 xl:bg-orange-100/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100 p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
-                  {t("total_words")}
+                  {t('total_words')}
                 </p>
                 <p className="text-3xl font-bold text-gray-900">{totalWords}</p>
               </div>
@@ -146,7 +150,7 @@ const HomePage: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
-                  {t("mastered")}
+                  {t('mastered')}
                 </p>
                 <p className="text-3xl font-bold text-gray-900">
                   {masteredWords.length}
@@ -163,7 +167,7 @@ const HomePage: React.FC = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
-                  {t("mastery_rate")}
+                  {t('mastery_rate')}
                 </p>
                 <p className="text-3xl font-bold text-gray-900">
                   {masteryRate}%
@@ -185,14 +189,14 @@ const HomePage: React.FC = () => {
       )}
 
       {/* Section 2: Unit List Title */}
-      {state.user && (!!unitsData && unitsData.units.length >= 0) && (
+      {state.user && !!unitsData && unitsData.units.length >= 0 && (
         <div className="mb-8 lg:mb-12">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
               <BookOpenIcon className="w-6 h-6 text-blue-600" />
             </div>
             <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">
-              {t("unit_list")}
+              {t('unit_list')}
             </h2>
           </div>
           <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
@@ -200,7 +204,7 @@ const HomePage: React.FC = () => {
       )}
 
       {/* Section 3: Unit List Content */}
-      {state.user && (!!unitsData && unitsData.units.length >= 0) && (
+      {state.user && !!unitsData && unitsData.units.length >= 0 && (
         <div className="bg-white/90 sm:bg-blue-50/90 md:bg-green-50/90 lg:bg-purple-50/90 xl:bg-orange-50/90 rounded-xl shadow-sm border border-gray-200">
           <UnitList />
         </div>

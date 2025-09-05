@@ -1,5 +1,9 @@
-import { useCallback } from "react";
-import { MigrationService, MigrationResult } from "../services/migrationService";
+import { useCallback } from 'react';
+
+import {
+  MigrationService,
+  MigrationResult,
+} from '../services/migrationService';
 
 export const useMigration = () => {
   const hasLocalData = useCallback(async (): Promise<boolean> => {
@@ -17,11 +21,12 @@ export const useMigration = () => {
     return MigrationService.getLocalDataSummary();
   }, []);
 
-  const migrateToFirebase = useCallback(async (
-    uid: string,
-  ): Promise<MigrationResult> => {
-    return MigrationService.migrateToFirebase(uid);
-  }, []);
+  const migrateToFirebase = useCallback(
+    async (uid: string): Promise<MigrationResult> => {
+      return MigrationService.migrateToFirebase(uid);
+    },
+    []
+  );
 
   return {
     hasLocalData,
@@ -30,5 +35,3 @@ export const useMigration = () => {
     migrateToFirebase,
   };
 };
-
-

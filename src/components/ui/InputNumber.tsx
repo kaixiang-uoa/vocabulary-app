@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export interface InputNumberProps {
   value?: number;
@@ -8,7 +8,7 @@ export interface InputNumberProps {
   step?: number;
   precision?: number;
   disabled?: boolean;
-  size?: "small" | "medium" | "large";
+  size?: 'small' | 'medium' | 'large';
   onChange?: (value: number | null) => void;
   className?: string;
   style?: React.CSSProperties;
@@ -23,14 +23,14 @@ const InputNumber: React.FC<InputNumberProps> = ({
   step = 1,
   precision = 0,
   disabled = false,
-  size = "medium",
+  size = 'medium',
   onChange,
-  className = "",
+  className = '',
   style,
   title,
 }) => {
   const [inputValue, setInputValue] = React.useState(
-    value ?? defaultValue ?? 0,
+    value ?? defaultValue ?? 0
   );
 
   React.useEffect(() => {
@@ -40,13 +40,13 @@ const InputNumber: React.FC<InputNumberProps> = ({
   }, [value]);
 
   const sizeClasses = {
-    small: "px-2 py-1 text-sm",
-    medium: "px-3 py-2 text-base",
-    large: "px-4 py-3 text-lg",
+    small: 'px-2 py-1 text-sm',
+    medium: 'px-3 py-2 text-base',
+    large: 'px-4 py-3 text-lg',
   };
 
   const baseClasses =
-    "w-full border border-gray-300 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed";
+    'w-full border border-gray-300 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed';
   const classes = `${baseClasses} ${sizeClasses[size]} ${className}`;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

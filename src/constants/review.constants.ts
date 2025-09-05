@@ -19,9 +19,9 @@ export const REVIEW_CONSTANTS = {
 
   // Review modes
   MODES: {
-    NORMAL: "normal",
-    SPELLING: "spelling",
-    LISTENING: "listening",
+    NORMAL: 'normal',
+    SPELLING: 'spelling',
+    LISTENING: 'listening',
   } as const,
 
   // Auto-play settings
@@ -34,15 +34,15 @@ export const REVIEW_CONSTANTS = {
 
 // Review status
 export const REVIEW_STATUS = {
-  NOT_STARTED: "not_started",
-  IN_PROGRESS: "in_progress",
-  COMPLETED: "completed",
-  PAUSED: "paused",
+  NOT_STARTED: 'not_started',
+  IN_PROGRESS: 'in_progress',
+  COMPLETED: 'completed',
+  PAUSED: 'paused',
 } as const;
 
 // Review result types
 export const REVIEW_RESULT = {
-  CORRECT: "correct",
-  INCORRECT: "incorrect",
-  SKIPPED: "skipped",
+  CORRECT: 'correct',
+  INCORRECT: 'incorrect',
+  SKIPPED: 'skipped',
 } as const;

@@ -1,6 +1,7 @@
 // Word import/export utilities
-import { Word, ImportWordData } from "../types";
-import { validateCSVLine, cleanWordText } from "./wordValidation";
+import { Word, ImportWordData } from '../types';
+
+import { validateCSVLine, cleanWordText } from './wordValidation';
 // Keep this file pure; no service or storage access here
 
 /**
@@ -8,18 +9,16 @@ import { validateCSVLine, cleanWordText } from "./wordValidation";
  */
 export const exportWordsToCSV = (words: Word[]): string => {
   const csvContent = words
-    .map((word) => `${word.word},${word.meaning}`)
-    .join("\n");
+    .map(word => `${word.word},${word.meaning}`)
+    .join('\n');
   return `word,meaning\n${csvContent}`;
 };
 
 /**
  * Import words from CSV
  */
-export const parseWordsFromCSV = (
-  csvContent: string,
-): ImportWordData[] => {
-  const lines = csvContent.trim().split("\n");
+export const parseWordsFromCSV = (csvContent: string): ImportWordData[] => {
+  const lines = csvContent.trim().split('\n');
   const wordsArray: ImportWordData[] = [];
 
   // Skip header line
@@ -28,7 +27,7 @@ export const parseWordsFromCSV = (
     if (!line) continue;
 
     if (validateCSVLine(line)) {
-      const parts = line.split(",");
+      const parts = line.split(',');
       const word = cleanWordText(parts[0]);
       const meaning = cleanWordText(parts[1]);
 

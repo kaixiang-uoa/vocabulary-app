@@ -1,6 +1,6 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 // Firebase configuration from environment variables
 const firebaseConfig = {
@@ -11,28 +11,41 @@ const firebaseConfig = {
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
 };
-
-// Check if any required config is missing
+// Check if any required config is missing (skip in test environment)
 const missingConfigs = Object.entries(firebaseConfig).filter(
-  ([key, value]) => !value,
+  ([key, value]) => !value
 );
-if (missingConfigs.length > 0) {
+if (missingConfigs.length > 0 && process.env.NODE_ENV !== 'test') {
+  // eslint-disable-next-line no-console
   console.error(
-    "Missing Firebase configs:",
-    missingConfigs.map(([key]) => key),
+    'Missing Firebase configs:',
+    missingConfigs.map(([key]) => key)
   );
   throw new Error(
-    `Missing Firebase configuration: ${missingConfigs.map(([key]) => key).join(", ")}`,
+    `Missing Firebase configuration: ${missingConfigs.map(([key]) => key).join(', ')}`
   );
 }
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// Initialize Firebase (skip in test environment)
+let app: any;
+let db: any;
+let auth: any;
 
-// Initialize Firestore Database
-export const db = getFirestore(app);
+if (process.env.NODE_ENV === 'test') {
+  // Mock objects for testing
+  app = {};
+  db = {};
+  auth = {
+    onAuthStateChanged: () => () => {},
+    signInWithPopup: () => Promise.resolve({ user: null }),
+    signOut: () => Promise.resolve(),
+    currentUser: null,
+  };
+} else {
+  app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  auth = getAuth(app);
+}
 
-// Initialize Firebase Authentication
-export const auth = getAuth(app);
-
+export { auth, db };
 export default app;

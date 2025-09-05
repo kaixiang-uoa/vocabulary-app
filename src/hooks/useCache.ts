@@ -1,6 +1,7 @@
 // Cache hook for React components
-import { useCallback, useMemo } from "react";
-import { globalCacheManager, CACHE_KEYS } from "../utils/cacheManager";
+import { useCallback, useMemo } from 'react';
+
+import { globalCacheManager, CACHE_KEYS } from '../utils/cacheManager';
 
 interface UseCacheOptions {
   ttl?: number;
@@ -29,7 +30,7 @@ export const useCache = <T>(options: UseCacheOptions): UseCacheReturn<T> => {
     (data: T): void => {
       globalCacheManager.set<T>(key, data, ttl);
     },
-    [key, ttl],
+    [key, ttl]
   );
 
   const has = useCallback((): boolean => {
@@ -52,7 +53,7 @@ export const useCache = <T>(options: UseCacheOptions): UseCacheReturn<T> => {
       delete: deleteCache,
       clear,
     }),
-    [get, set, has, deleteCache, clear],
+    [get, set, has, deleteCache, clear]
   );
 };
 
@@ -62,7 +63,7 @@ export const useCache = <T>(options: UseCacheOptions): UseCacheReturn<T> => {
 export const useAsyncCache = <T>(
   key: string,
   fetcher: () => Promise<T>,
-  options: { ttl?: number } = {},
+  options: { ttl?: number } = {}
 ) => {
   const { ttl } = options;
   const cache = useCache<T>({ key, ttl });

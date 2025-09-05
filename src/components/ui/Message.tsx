@@ -1,9 +1,9 @@
-import React from "react";
-import { createRoot } from "react-dom/client";
+import React from 'react';
+import { createRoot } from 'react-dom/client';
 
 export interface MessageConfig {
   content: string;
-  type?: "success" | "error" | "warning" | "info";
+  type?: 'success' | 'error' | 'warning' | 'info';
   duration?: number;
   onClose?: () => void;
 }
@@ -13,8 +13,8 @@ let messageContainer: HTMLDivElement | null = null;
 const createMessageContainer = () => {
   if (messageContainer) return messageContainer;
 
-  messageContainer = document.createElement("div");
-  messageContainer.className = "fixed top-4 right-4 z-50 flex flex-col gap-2";
+  messageContainer = document.createElement('div');
+  messageContainer.className = 'fixed top-4 right-4 z-50 flex flex-col gap-2';
   document.body.appendChild(messageContainer);
   return messageContainer;
 };
@@ -28,7 +28,7 @@ const removeMessageContainer = () => {
 
 const Message: React.FC<MessageConfig> = ({
   content,
-  type = "info",
+  type = 'info',
   duration = 3,
   onClose,
 }) => {
@@ -46,22 +46,22 @@ const Message: React.FC<MessageConfig> = ({
   }, [duration, onClose]);
 
   const typeClasses = {
-    success: "bg-green-50 border-green-200 text-green-800",
-    error: "bg-red-50 border-red-200 text-red-800",
-    warning: "bg-yellow-50 border-yellow-200 text-yellow-800",
-    info: "bg-blue-50 border-blue-200 text-blue-800",
+    success: 'bg-green-50 border-green-200 text-green-800',
+    error: 'bg-red-50 border-red-200 text-red-800',
+    warning: 'bg-yellow-50 border-yellow-200 text-yellow-800',
+    info: 'bg-blue-50 border-blue-200 text-blue-800',
   };
 
   const iconClasses = {
-    success: "text-green-500",
-    error: "text-red-500",
-    warning: "text-yellow-500",
-    info: "text-blue-500",
+    success: 'text-green-500',
+    error: 'text-red-500',
+    warning: 'text-yellow-500',
+    info: 'text-blue-500',
   };
 
   const getIcon = () => {
     switch (type) {
-      case "success":
+      case 'success':
         return (
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
             <path
@@ -71,7 +71,7 @@ const Message: React.FC<MessageConfig> = ({
             />
           </svg>
         );
-      case "error":
+      case 'error':
         return (
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
             <path
@@ -81,7 +81,7 @@ const Message: React.FC<MessageConfig> = ({
             />
           </svg>
         );
-      case "warning":
+      case 'warning':
         return (
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
             <path
@@ -108,7 +108,7 @@ const Message: React.FC<MessageConfig> = ({
     <div
       className={`flex items-center gap-3 p-4 rounded-lg border transition-all duration-300 ${
         typeClasses[type]
-      } ${isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full"}`}
+      } ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-full'}`}
     >
       <div className={iconClasses[type]}>{getIcon()}</div>
       <span className="text-sm font-medium">{content}</span>
@@ -138,7 +138,7 @@ const Message: React.FC<MessageConfig> = ({
 const message = {
   success: (content: string, duration?: number) => {
     const container = createMessageContainer();
-    const div = document.createElement("div");
+    const div = document.createElement('div');
     container.appendChild(div);
 
     const onClose = () => {
@@ -153,13 +153,13 @@ const message = {
         type="success"
         duration={duration}
         onClose={onClose}
-      />,
+      />
     );
   },
 
   error: (content: string, duration?: number) => {
     const container = createMessageContainer();
-    const div = document.createElement("div");
+    const div = document.createElement('div');
     container.appendChild(div);
 
     const onClose = () => {
@@ -174,13 +174,13 @@ const message = {
         type="error"
         duration={duration}
         onClose={onClose}
-      />,
+      />
     );
   },
 
   warning: (content: string, duration?: number) => {
     const container = createMessageContainer();
-    const div = document.createElement("div");
+    const div = document.createElement('div');
     container.appendChild(div);
 
     const onClose = () => {
@@ -195,13 +195,13 @@ const message = {
         type="warning"
         duration={duration}
         onClose={onClose}
-      />,
+      />
     );
   },
 
   info: (content: string, duration?: number) => {
     const container = createMessageContainer();
-    const div = document.createElement("div");
+    const div = document.createElement('div');
     container.appendChild(div);
 
     const onClose = () => {
@@ -216,7 +216,7 @@ const message = {
         type="info"
         duration={duration}
         onClose={onClose}
-      />,
+      />
     );
   },
 };

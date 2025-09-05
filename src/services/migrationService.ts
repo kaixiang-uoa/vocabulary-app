@@ -1,6 +1,8 @@
-import { getAllData } from "./wordService";
-import { db } from "../config/firebase";
-import { collection, doc, getDocs, writeBatch } from "firebase/firestore";
+import { collection, doc, getDocs, writeBatch } from 'firebase/firestore';
+
+import { db } from '../config/firebase';
+
+import { getAllData } from './wordService';
 
 export interface MigrationResult {
   success: boolean;
@@ -16,11 +18,12 @@ export class MigrationService {
       const localData = await getAllData();
       const totalWords = localData.units.reduce(
         (sum, unit) => sum + unit.words.length,
-        0,
+        0
       );
       return localData.units.length > 0 || totalWords > 0;
     } catch (error) {
-      console.error("Error checking local data:", error);
+      // eslint-disable-next-line no-console
+      console.error('Error checking local data:', error);
       return false;
     }
   }
@@ -31,7 +34,7 @@ export class MigrationService {
       const localData = await getAllData();
       const totalWords = localData.units.reduce(
         (sum, unit) => sum + unit.words.length,
-        0,
+        0
       );
       return {
         units: localData.units.length,
@@ -39,7 +42,8 @@ export class MigrationService {
         totalWords: totalWords,
       };
     } catch (error) {
-      console.error("Error getting local data summary:", error);
+      // eslint-disable-next-line no-console
+      console.error('Error getting local data summary:', error);
       return { units: 0, words: 0, totalWords: 0 };
     }
   }
@@ -51,7 +55,8 @@ export class MigrationService {
       const snapshot = await getDocs(unitsRef);
       return !snapshot.empty;
     } catch (error) {
-      console.error("Error checking Firebase data:", error);
+      // eslint-disable-next-line no-console
+      console.error('Error checking Firebase data:', error);
       return false;
     }
   }
@@ -63,13 +68,13 @@ export class MigrationService {
       const localData = await getAllData();
       const totalWords = localData.units.reduce(
         (sum, unit) => sum + unit.words.length,
-        0,
+        0
       );
 
       if (localData.units.length === 0 && totalWords === 0) {
         return {
           success: false,
-          message: "No local data to migrate",
+          message: 'No local data to migrate',
           migratedUnits: 0,
           migratedWords: 0,
         };
@@ -100,7 +105,7 @@ export class MigrationService {
 
         for (const word of unitWords) {
           const wordRef = doc(
-            collection(db, `users/${userId}/units/${unitRef.id}/words`),
+            collection(db, `users/${userId}/units/${unitRef.id}/words`)
           );
 
           // Prepare word data
@@ -127,11 +132,12 @@ export class MigrationService {
         migratedWords,
       };
     } catch (error) {
-      console.error("Migration failed:", error);
+      // eslint-disable-next-line no-console
+      console.error('Migration failed:', error);
 
       return {
         success: false,
-        message: `Migration failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+        message: `Migration failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
         migratedUnits: 0,
         migratedWords: 0,
       };
@@ -141,7 +147,8 @@ export class MigrationService {
   // Export Firebase data to localStorage (backup)
   static async exportToLocalStorage(userId: string): Promise<MigrationResult> {
     try {
-      console.log("Starting Firebase data export for user:", userId);
+      // eslint-disable-next-line no-console
+      console.log('Starting Firebase data export for user:', userId);
 
       const unitsRef = collection(db, `users/${userId}/units`);
       const unitsSnapshot = await getDocs(unitsRef);
@@ -167,7 +174,7 @@ export class MigrationService {
         // Export words for this unit
         const wordsRef = collection(
           db,
-          `users/${userId}/units/${unitDoc.id}/words`,
+          `users/${userId}/units/${unitDoc.id}/words`
         );
         const wordsSnapshot = await getDocs(wordsRef);
 
@@ -185,12 +192,13 @@ export class MigrationService {
 
       // Save to localStorage
       localStorage.setItem(
-        "vocabulary-app-backup",
-        JSON.stringify(exportedData),
+        'vocabulary-app-backup',
+        JSON.stringify(exportedData)
       );
 
+      // eslint-disable-next-line no-console
       console.log(
-        `Export completed: ${exportedUnits} units, ${exportedWords} words`,
+        `Export completed: ${exportedUnits} units, ${exportedWords} words`
       );
 
       return {
@@ -200,10 +208,11 @@ export class MigrationService {
         migratedWords: exportedWords,
       };
     } catch (error) {
-      console.error("Export failed:", error);
+      // eslint-disable-next-line no-console
+      console.error('Export failed:', error);
       return {
         success: false,
-        message: `Export failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+        message: `Export failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
         migratedUnits: 0,
         migratedWords: 0,
       };

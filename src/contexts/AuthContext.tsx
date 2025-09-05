@@ -1,16 +1,17 @@
-import React, { createContext, useContext, useReducer, ReactNode } from "react";
-import { User } from "firebase/auth";
-import { auth } from "../config/firebase";
 import {
+  getRedirectResult,
+  GoogleAuthProvider,
   onAuthStateChanged,
   signInWithPopup,
   signInWithRedirect,
-  getRedirectResult,
-  GoogleAuthProvider,
   signOut,
-} from "firebase/auth";
-import { initializeDataService } from "../services/dataServiceManager";
-import { globalCacheManager } from "../utils/cacheManager";
+  User,
+} from 'firebase/auth';
+import React, { createContext, ReactNode, useContext, useReducer } from 'react';
+
+import { auth } from '../config/firebase';
+import { initializeDataService } from '../services/dataServiceManager';
+import { globalCacheManager } from '../utils/cacheManager';
 
 // Auth state interface
 export interface AuthState {
@@ -21,10 +22,10 @@ export interface AuthState {
 
 // Auth action types
 export type AuthAction =
-  | { type: "SET_USER"; payload: User | null }
-  | { type: "SET_LOADING"; payload: boolean }
-  | { type: "SHOW_LOGIN_MODAL" }
-  | { type: "HIDE_LOGIN_MODAL" };
+  | { type: 'SET_USER'; payload: User | null }
+  | { type: 'SET_LOADING'; payload: boolean }
+  | { type: 'SHOW_LOGIN_MODAL' }
+  | { type: 'HIDE_LOGIN_MODAL' };
 
 // Auth context interface
 export interface AuthContextType {
@@ -45,23 +46,23 @@ const initialState: AuthState = {
 // Auth reducer
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
-    case "SET_USER":
+    case 'SET_USER':
       return {
         ...state,
         user: action.payload,
         loading: false,
       };
-    case "SET_LOADING":
+    case 'SET_LOADING':
       return {
         ...state,
         loading: action.payload,
       };
-    case "SHOW_LOGIN_MODAL":
+    case 'SHOW_LOGIN_MODAL':
       return {
         ...state,
         showLoginModal: true,
       };
-    case "HIDE_LOGIN_MODAL":
+    case 'HIDE_LOGIN_MODAL':
       return {
         ...state,
         showLoginModal: false,
@@ -87,12 +88,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user: User | null) => {
       const previousUser = state.user;
-      dispatch({ type: "SET_USER", payload: user });
+      dispatch({ type: 'SET_USER', payload: user });
 
       // Clear cache when user authentication state changes
       if (previousUser !== user) {
         globalCacheManager.clear();
-        console.log("Cache cleared due to auth state change");
+        // eslint-disable-next-line no-console
+        console.log('Cache cleared due to auth state change');
       }
 
       // Initialize data service based on user authentication
@@ -104,10 +106,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       try {
         const result = await getRedirectResult(auth);
         if (result) {
-          dispatch({ type: "HIDE_LOGIN_MODAL" });
+          dispatch({ type: 'HIDE_LOGIN_MODAL' });
         }
       } catch (error) {
-        console.error("Redirect authentication error:", error);
+        // eslint-disable-next-line no-console
+        console.error('Redirect authentication error:', error);
       }
     };
 
@@ -118,11 +121,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Login method
   const login = async () => {
     try {
-      dispatch({ type: "SET_LOADING", payload: true });
+      dispatch({ type: 'SET_LOADING', payload: true });
 
       // Check if Firebase is properly configured
       if (!auth) {
-        throw new Error("Firebase auth is not initialized");
+        throw new Error('Firebase auth is not initialized');
       }
 
       const provider = new GoogleAuthProvider();
@@ -130,15 +133,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Try popup first, fallback to redirect if blocked
       try {
         await signInWithPopup(auth, provider);
-        dispatch({ type: "HIDE_LOGIN_MODAL" });
+        dispatch({ type: 'HIDE_LOGIN_MODAL' });
       } catch (popupError: any) {
-        console.warn("Popup blocked or failed, using redirect:", popupError);
+        // eslint-disable-next-line no-console
+        console.warn('Popup blocked or failed, using redirect:', popupError);
 
         // If popup is blocked, use redirect
         if (
-          popupError.code === "auth/popup-blocked" ||
-          popupError.code === "auth/popup-closed-by-user" ||
-          popupError.message?.includes("popup")
+          popupError.code === 'auth/popup-blocked' ||
+          popupError.code === 'auth/popup-closed-by-user' ||
+          popupError.message?.includes('popup')
         ) {
           await signInWithRedirect(auth, provider);
           // Note: redirect will reload the page, so no need to hide modal here
@@ -148,34 +152,36 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
       }
     } catch (error: any) {
-      console.error("Login failed:", error);
+      // eslint-disable-next-line no-console
+      console.error('Login failed:', error);
       throw error;
     } finally {
       // Only reset loading if we're not redirecting
-      dispatch({ type: "SET_LOADING", payload: false });
+      dispatch({ type: 'SET_LOADING', payload: false });
     }
   };
 
   // Logout method
   const logout = async () => {
     try {
-      dispatch({ type: "SET_LOADING", payload: true });
+      dispatch({ type: 'SET_LOADING', payload: true });
       await signOut(auth);
     } catch (error) {
-      console.error("Logout error:", error);
+      // eslint-disable-next-line no-console
+      console.error('Logout error:', error);
       throw error;
     } finally {
-      dispatch({ type: "SET_LOADING", payload: false });
+      dispatch({ type: 'SET_LOADING', payload: false });
     }
   };
 
   // Modal control methods
   const showLoginModal = () => {
-    dispatch({ type: "SHOW_LOGIN_MODAL" });
+    dispatch({ type: 'SHOW_LOGIN_MODAL' });
   };
 
   const hideLoginModal = () => {
-    dispatch({ type: "HIDE_LOGIN_MODAL" });
+    dispatch({ type: 'HIDE_LOGIN_MODAL' });
   };
 
   const value: AuthContextType = {
@@ -193,7 +199,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 export const useAuthContext = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error("useAuthContext must be used within an AuthProvider");
+    throw new Error('useAuthContext must be used within an AuthProvider');
   }
   return context;
 };

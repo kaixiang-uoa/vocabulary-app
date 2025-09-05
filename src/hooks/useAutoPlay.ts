@@ -1,10 +1,11 @@
-import { useState, useCallback } from "react";
-import { UseAutoPlayOptions, UseAutoPlayReturn } from "../types";
+import { useCallback, useState } from 'react';
 
-const STORAGE_KEY = "spelling_auto_play_settings";
+import { UseAutoPlayOptions, UseAutoPlayReturn } from '../types';
+
+const STORAGE_KEY = 'spelling_auto_play_settings';
 
 export const useAutoPlay = (
-  options: UseAutoPlayOptions = {},
+  options: UseAutoPlayOptions = {}
 ): UseAutoPlayReturn => {
   const {
     defaultEnabled = false,
@@ -25,14 +26,15 @@ export const useAutoPlay = (
         };
       }
     } catch (error) {
-      console.error("Failed to load auto play settings:", error);
+      // eslint-disable-next-line no-console
+      console.error('Failed to load auto play settings:', error);
     }
     return { enabled: defaultEnabled, delay: defaultDelay };
   };
 
   const [autoPlay, setAutoPlayState] = useState(() => loadSettings().enabled);
   const [pronunciationDelay, setPronunciationDelayState] = useState(
-    () => loadSettings().delay,
+    () => loadSettings().delay
   );
 
   // Save settings to localStorage
@@ -40,7 +42,8 @@ export const useAutoPlay = (
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ enabled, delay }));
     } catch (error) {
-      console.error("Failed to save auto play settings:", error);
+      // eslint-disable-next-line no-console
+      console.error('Failed to save auto play settings:', error);
     }
   }, []);
 
@@ -49,7 +52,7 @@ export const useAutoPlay = (
       setAutoPlayState(enabled);
       saveSettings(enabled, pronunciationDelay);
     },
-    [saveSettings, pronunciationDelay],
+    [saveSettings, pronunciationDelay]
   );
 
   const setPronunciationDelay = useCallback(
@@ -59,11 +62,11 @@ export const useAutoPlay = (
       setPronunciationDelayState(roundedDelay);
       saveSettings(autoPlay, roundedDelay);
     },
-    [minDelay, maxDelay, saveSettings, autoPlay],
+    [minDelay, maxDelay, saveSettings, autoPlay]
   );
 
   const toggleAutoPlay = useCallback(() => {
-    setAutoPlayState((prev) => {
+    setAutoPlayState(prev => {
       const newValue = !prev;
       saveSettings(newValue, pronunciationDelay);
       return newValue;

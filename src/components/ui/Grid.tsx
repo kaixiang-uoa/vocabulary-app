@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
 export interface RowProps {
   children: React.ReactNode;
   gutter?: number | [number, number];
-  justify?: "start" | "end" | "center" | "space-around" | "space-between";
-  align?: "top" | "middle" | "bottom";
+  justify?: 'start' | 'end' | 'center' | 'space-around' | 'space-between';
+  align?: 'top' | 'middle' | 'bottom';
   className?: string;
   style?: React.CSSProperties;
 }
@@ -21,9 +21,9 @@ export interface ColProps {
 const Row: React.FC<RowProps> = ({
   children,
   gutter = 0,
-  justify = "start",
-  align = "top",
-  className = "",
+  justify = 'start',
+  align = 'top',
+  className = '',
   style,
 }) => {
   const gutterValue = Array.isArray(gutter) ? gutter[0] : gutter;
@@ -33,24 +33,24 @@ const Row: React.FC<RowProps> = ({
       : {};
 
   const justifyClasses = {
-    start: "justify-start",
-    end: "justify-end",
-    center: "justify-center",
-    "space-around": "justify-around",
-    "space-between": "justify-between",
+    start: 'justify-start',
+    end: 'justify-end',
+    center: 'justify-center',
+    'space-around': 'justify-around',
+    'space-between': 'justify-between',
   };
 
   const alignClasses = {
-    top: "items-start",
-    middle: "items-center",
-    bottom: "items-end",
+    top: 'items-start',
+    middle: 'items-center',
+    bottom: 'items-end',
   };
 
   const classes = `flex flex-wrap ${justifyClasses[justify]} ${alignClasses[align]} ${className}`;
 
   return (
     <div className={classes} style={{ ...gutterStyle, ...style }}>
-      {React.Children.map(children, (child) => {
+      {React.Children.map(children, child => {
         if (React.isValidElement(child)) {
           const props = { ...(child.props as object), gutter: gutterValue };
           return React.cloneElement(child, props);
@@ -65,7 +65,7 @@ const Col: React.FC<ColProps> = ({
   children,
   span = 24,
   offset = 0,
-  className = "",
+  className = '',
   style,
   gutter = 0,
 }) => {

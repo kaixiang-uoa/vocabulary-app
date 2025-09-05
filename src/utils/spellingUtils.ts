@@ -1,5 +1,5 @@
 // Spelling review utility functions
-import { SpellingValidationResult } from "../types";
+import { SpellingValidationResult } from '../types';
 
 /**
  * Validate spelling input against target word
@@ -7,7 +7,7 @@ import { SpellingValidationResult } from "../types";
  */
 export const validateSpellingInput = (
   input: string,
-  targetWord: string,
+  targetWord: string
 ): SpellingValidationResult => {
   const normalizedInput = input.toLowerCase();
   const normalizedTarget = targetWord.toLowerCase();
@@ -68,7 +68,7 @@ export const isValidLetter = (char: string): boolean => {
  * Format input history for display
  */
 export const formatInputHistory = (
-  history: Array<{ input: string; correct: boolean }>,
+  history: Array<{ input: string; correct: boolean }>
 ) => {
   return history.map((item, index) => ({
     ...item,
@@ -81,10 +81,10 @@ export const formatInputHistory = (
  * Calculate error rate based on input history
  */
 export const calculateErrorRate = (
-  history: Array<{ input: string; correct: boolean }>,
+  history: Array<{ input: string; correct: boolean }>
 ): number => {
   if (history.length === 0) return 0;
 
-  const errorCount = history.filter((item) => !item.correct).length;
+  const errorCount = history.filter(item => !item.correct).length;
   return (errorCount / history.length) * 100;
 };

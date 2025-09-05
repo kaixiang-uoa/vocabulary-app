@@ -1,5 +1,6 @@
-import { useState, useMemo } from "react";
-import { Word } from "../types";
+import { useState, useMemo } from 'react';
+
+import { Word } from '../types';
 
 interface UseReviewNavigationOptions {
   words: Word[];
@@ -55,11 +56,11 @@ export const useReviewNavigation = ({ words }: UseReviewNavigationOptions) => {
 
   // Progress tracking
   const markCompleted = (wordId: string) => {
-    setCompletedWords((prev) => new Set(prev).add(wordId));
+    setCompletedWords(prev => new Set(prev).add(wordId));
   };
 
   const markFailed = (wordId: string) => {
-    setFailedWords((prev) => new Set(prev).add(wordId));
+    setFailedWords(prev => new Set(prev).add(wordId));
   };
 
   return {

@@ -1,6 +1,7 @@
 // Word validation utilities
-import { Word, Unit, ImportWordData } from "../types";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from 'uuid';
+
+import { Word, Unit, ImportWordData } from '../types';
 
 /**
  * Validate word data structure
@@ -16,12 +17,12 @@ export const validateWordData = (data: {
   word: string;
   meaning: string;
 }): boolean => {
-  if (!data || typeof data !== "object") return false;
+  if (!data || typeof data !== 'object') return false;
 
   const { word, meaning } = data;
 
   // Check if word and meaning are valid strings
-  if (typeof word !== "string" || typeof meaning !== "string") return false;
+  if (typeof word !== 'string' || typeof meaning !== 'string') return false;
 
   // Check length limits
   if (word.trim().length === 0 || word.length > 100) return false;
@@ -34,7 +35,7 @@ export const validateWordData = (data: {
  * Validate unit name
  */
 export const validateUnitName = (name: string): boolean => {
-  if (typeof name !== "string") return false;
+  if (typeof name !== 'string') return false;
 
   const trimmed = name.trim();
 
@@ -52,7 +53,7 @@ export const validateUnitName = (name: string): boolean => {
  * Format time in seconds to human readable format
  */
 export const formatTime = (seconds: number): string => {
-  if (!Number.isFinite(seconds) || seconds < 0) return "0s";
+  if (!Number.isFinite(seconds) || seconds < 0) return '0s';
 
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
@@ -63,7 +64,7 @@ export const formatTime = (seconds: number): string => {
   if (minutes > 0) parts.push(`${minutes}m`);
   if (secs > 0 || parts.length === 0) parts.push(`${secs}s`);
 
-  return parts.join(" ");
+  return parts.join(' ');
 };
 
 /**
@@ -91,7 +92,7 @@ export const validateImportWordData = (data: ImportWordData): boolean => {
  * Validate CSV line format
  */
 export const validateCSVLine = (line: string): boolean => {
-  const parts = line.split(",");
+  const parts = line.split(',');
   return parts.length >= 2 && !!parts[0].trim() && !!parts[1].trim();
 };
 
@@ -99,7 +100,7 @@ export const validateCSVLine = (line: string): boolean => {
  * Clean and validate word text
  */
 export const cleanWordText = (text: string): string => {
-  return text.trim().replace(/"/g, "");
+  return text.trim().replace(/"/g, '');
 };
 
 /**

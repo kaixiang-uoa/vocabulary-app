@@ -14,7 +14,7 @@ import {
   ArrowUpTrayIcon,
   QuestionMarkCircleIcon,
   ArrowDownTrayIcon,
-} from "@heroicons/react/24/outline";
+} from '@heroicons/react/24/outline';
 
 // Icon mapping object
 export const iconMapping = {

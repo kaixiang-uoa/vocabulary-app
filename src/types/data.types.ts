@@ -11,7 +11,7 @@ export interface DataAccessLayer {
   updateWord(
     unitId: string,
     wordId: string,
-    updatedWord: Partial<Word>,
+    updatedWord: Partial<Word>
   ): Promise<boolean>;
   deleteWord(unitId: string, wordId: string): Promise<boolean>;
 
@@ -20,7 +20,7 @@ export interface DataAccessLayer {
   setWordMasteredStatus(
     unitId: string,
     wordId: string,
-    mastered: boolean,
+    mastered: boolean
   ): Promise<boolean>;
 
   // 批量操作
@@ -29,7 +29,7 @@ export interface DataAccessLayer {
     ids,
     unitId,
   }: {
-    type: "word" | "unit";
+    type: 'word' | 'unit';
     ids: string[];
     unitId?: string;
   }): Promise<boolean>;
@@ -39,7 +39,7 @@ export interface DataAccessLayer {
   importWordsFromCSV(unitId: string, csvContent: string): Promise<boolean>;
   addWordsInBatch(
     unitId: string,
-    wordsArray: ImportWordData[],
+    wordsArray: ImportWordData[]
   ): Promise<boolean>;
 
   // 统计功能
@@ -55,7 +55,7 @@ export interface Unit {
   words: Word[];
   createTime: number;
   updatedAt: number;
-  syncStatus: "synced" | "pending" | "conflict";
+  syncStatus: 'synced' | 'pending' | 'conflict';
 }
 
 export interface Word {
@@ -69,7 +69,7 @@ export interface Word {
   lastReviewTime: number | null;
 }
 
-export type WordStatus = "new" | "learning" | "mastered";
+export type WordStatus = 'new' | 'learning' | 'mastered';
 
 // 存储数据结构
 export interface StorageData {
@@ -80,15 +80,15 @@ export interface StorageData {
 export interface SyncCommand {
   id: string;
   type:
-    | "CREATE_UNIT"
-    | "UPDATE_UNIT"
-    | "DELETE_UNIT"
-    | "UPDATE_WORD_STATUS"
-    | "ADD_WORD"
-    | "DELETE_WORD";
+    | 'CREATE_UNIT'
+    | 'UPDATE_UNIT'
+    | 'DELETE_UNIT'
+    | 'UPDATE_WORD_STATUS'
+    | 'ADD_WORD'
+    | 'DELETE_WORD';
   payload: any;
   timestamp: number;
-  priority: "high" | "normal" | "low";
+  priority: 'high' | 'normal' | 'low';
 }
 
 // 导入数据格式

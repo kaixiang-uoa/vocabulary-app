@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { MigrationResult } from "../services/migrationService";
-import { useMigration } from "../hooks/useMigration";
-import { useAuthContext } from "../contexts/AuthContext";
-import { useTranslation } from "react-i18next";
 import {
   BookOpenIcon,
   CloudArrowUpIcon,
   ExclamationTriangleIcon,
-} from "@heroicons/react/24/outline";
+} from '@heroicons/react/24/outline';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { useAuthContext } from '../contexts/AuthContext';
+import { useMigration } from '../hooks/useMigration';
+import { MigrationResult } from '../services/migrationService';
 
 export const MigrationPrompt: React.FC = () => {
   const { state } = useAuthContext();
@@ -64,7 +65,7 @@ export const MigrationPrompt: React.FC = () => {
     } catch (error) {
       setMigrationResult({
         success: false,
-        message: "Migration failed unexpectedly",
+        message: 'Migration failed unexpectedly',
         migratedUnits: 0,
         migratedWords: 0,
       });
@@ -109,13 +110,13 @@ export const MigrationPrompt: React.FC = () => {
           </div>
 
           <h3 className="text-xl font-bold text-gray-800 mb-2">
-            {t("migration_title", "Migrate Your Data")}
+            {t('migration_title', 'Migrate Your Data')}
           </h3>
 
           <p className="text-gray-600 mb-4">
             {t(
-              "migration_description",
-              "We found local data that can be migrated to the cloud for better synchronization across devices.",
+              'migration_description',
+              'We found local data that can be migrated to the cloud for better synchronization across devices.'
             )}
           </p>
 
@@ -125,13 +126,13 @@ export const MigrationPrompt: React.FC = () => {
               <div className="flex items-center gap-2">
                 <BookOpenIcon className="w-4 h-4 text-blue-500" />
                 <span>
-                  {localDataSummary.units} {t("units", "units")}
+                  {localDataSummary.units} {t('units', 'units')}
                 </span>
               </div>
               <div className="flex items-center gap-2">
                 <BookOpenIcon className="w-4 h-4 text-green-500" />
                 <span>
-                  {localDataSummary.words} {t("words", "words")}
+                  {localDataSummary.words} {t('words', 'words')}
                 </span>
               </div>
             </div>
@@ -142,8 +143,8 @@ export const MigrationPrompt: React.FC = () => {
             <div
               className={`mb-4 p-3 rounded-lg ${
                 migrationResult.success
-                  ? "bg-green-50 text-green-800 border border-green-200"
-                  : "bg-red-50 text-red-800 border border-red-200"
+                  ? 'bg-green-50 text-green-800 border border-green-200'
+                  : 'bg-red-50 text-red-800 border border-red-200'
               }`}
             >
               <div className="flex items-center gap-2">
@@ -174,17 +175,17 @@ export const MigrationPrompt: React.FC = () => {
               disabled={isMigrating}
               className={`flex-1 py-3 px-4 rounded-lg transition-colors ${
                 isMigrating
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-blue-600 text-white hover:bg-blue-700"
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-blue-600 text-white hover:bg-blue-700'
               }`}
             >
               {isMigrating ? (
                 <div className="flex items-center justify-center gap-2">
                   <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                  {t("migrating", "Migrating...")}
+                  {t('migrating', 'Migrating...')}
                 </div>
               ) : (
-                t("migrate_now", "Migrate Now")
+                t('migrate_now', 'Migrate Now')
               )}
             </button>
 
@@ -193,7 +194,7 @@ export const MigrationPrompt: React.FC = () => {
               disabled={isMigrating}
               className="flex-1 py-3 px-4 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              {t("skip", "Skip")}
+              {t('skip', 'Skip')}
             </button>
           </div>
         </div>

@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
-import Button from "./Button";
+import React, { useState, useRef, useEffect } from 'react';
+
+import Button from './Button';
 
 export interface PopconfirmProps {
   title?: React.ReactNode;
@@ -9,23 +10,23 @@ export interface PopconfirmProps {
   okText?: string;
   cancelText?: string;
   children: React.ReactNode;
-  placement?: "top" | "bottom" | "left" | "right";
-  trigger?: "hover" | "click";
+  placement?: 'top' | 'bottom' | 'left' | 'right';
+  trigger?: 'hover' | 'click';
   className?: string;
   style?: React.CSSProperties;
 }
 
 const Popconfirm: React.FC<PopconfirmProps> = ({
-  title = "Are you sure?",
+  title = 'Are you sure?',
   description,
   onConfirm,
   onCancel,
-  okText = "Yes",
-  cancelText = "No",
+  okText = 'Yes',
+  cancelText = 'No',
   children,
-  placement = "bottom",
-  trigger = "hover",
-  className = "",
+  placement = 'bottom',
+  trigger = 'hover',
+  className = '',
   style,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -42,7 +43,7 @@ const Popconfirm: React.FC<PopconfirmProps> = ({
 
     // Find the actual button element within the trigger
     const buttonElement =
-      triggerRef.current.querySelector("button") || triggerRef.current;
+      triggerRef.current.querySelector('button') || triggerRef.current;
     const triggerRect = buttonElement.getBoundingClientRect();
 
     // Get viewport dimensions
@@ -58,19 +59,19 @@ const Popconfirm: React.FC<PopconfirmProps> = ({
 
     // Calculate initial position based on placement
     switch (placement) {
-      case "top":
+      case 'top':
         top = triggerRect.top - estimatedHeight - 8;
         left = triggerRect.left + (triggerRect.width - estimatedWidth) / 2;
         break;
-      case "bottom":
+      case 'bottom':
         top = triggerRect.bottom + 8;
         left = triggerRect.left + (triggerRect.width - estimatedWidth) / 2;
         break;
-      case "left":
+      case 'left':
         top = triggerRect.top + (triggerRect.height - estimatedHeight) / 2;
         left = triggerRect.left - estimatedWidth - 8;
         break;
-      case "right":
+      case 'right':
         top = triggerRect.top + (triggerRect.height - estimatedHeight) / 2;
         left = triggerRect.right + 8;
         break;
@@ -182,14 +183,14 @@ const Popconfirm: React.FC<PopconfirmProps> = ({
       const handleScroll = () => hidePopup();
       const handleResize = () => hidePopup();
 
-      document.addEventListener("mousedown", handleClickOutside);
-      window.addEventListener("scroll", handleScroll);
-      window.addEventListener("resize", handleResize);
+      document.addEventListener('mousedown', handleClickOutside);
+      window.addEventListener('scroll', handleScroll);
+      window.addEventListener('resize', handleResize);
 
       return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-        window.removeEventListener("scroll", handleScroll);
-        window.removeEventListener("resize", handleResize);
+        document.removeEventListener('mousedown', handleClickOutside);
+        window.removeEventListener('scroll', handleScroll);
+        window.removeEventListener('resize', handleResize);
       };
     }
   }, [isVisible]);
@@ -197,9 +198,9 @@ const Popconfirm: React.FC<PopconfirmProps> = ({
   return (
     <div
       ref={triggerRef}
-      onMouseEnter={trigger === "hover" ? showPopup : undefined}
-      onMouseLeave={trigger === "hover" ? hidePopup : undefined}
-      onClick={trigger === "click" ? (e) => showPopup(e) : undefined}
+      onMouseEnter={trigger === 'hover' ? showPopup : undefined}
+      onMouseLeave={trigger === 'hover' ? hidePopup : undefined}
+      onClick={trigger === 'click' ? e => showPopup(e) : undefined}
       className={className}
       style={style}
     >
@@ -211,7 +212,7 @@ const Popconfirm: React.FC<PopconfirmProps> = ({
           style={{
             top: position.top,
             left: position.left,
-            animation: "fadeIn 0.2s ease-out",
+            animation: 'fadeIn 0.2s ease-out',
           }}
         >
           <div className="mb-4">

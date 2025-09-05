@@ -1,17 +1,19 @@
-import React, { useState } from "react";
-import { Card, Checkbox, Tooltip } from "../components/ui";
 import {
   BookOpenIcon,
   CheckCircleIcon,
   XCircleIcon,
   ArrowRightIcon,
   PencilIcon,
-} from "@heroicons/react/24/outline";
-import { Link } from "react-router";
-import { useTranslation } from "react-i18next";
-import EditModal from "./EditModal";
-import { UnitCardProps } from "../types";
-import { getTailwindClass } from "../utils/styleMapping";
+} from '@heroicons/react/24/outline';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
+
+import { Card, Checkbox, Tooltip } from '../components/ui';
+import { UnitCardProps } from '../types';
+import { getTailwindClass } from '../utils/styleMapping';
+
+import EditModal from './EditModal';
 
 const UnitCard: React.FC<UnitCardProps> = ({
   unit,
@@ -23,15 +25,15 @@ const UnitCard: React.FC<UnitCardProps> = ({
   const [showEditModal, setShowEditModal] = useState(false);
 
   const wordCount = unit.words.length;
-  const masteredCount = unit.words.filter((word) => word.mastered).length;
+  const masteredCount = unit.words.filter(word => word.mastered).length;
   const progressPercent =
     wordCount > 0 ? Math.round((masteredCount / wordCount) * 100) : 0;
 
   return (
     <Card
-      className={`${getTailwindClass("unit-card")} ${isSelected ? getTailwindClass("unit-card.selected") : ""}`}
+      className={`${getTailwindClass('unit-card')} ${isSelected ? getTailwindClass('unit-card.selected') : ''}`}
       hoverable
-      styles={{ body: { padding: 0, background: "transparent" } }}
+      styles={{ body: { padding: 0, background: 'transparent' } }}
       variant="outlined"
     >
       {/* Top gradient block */}
@@ -48,12 +50,12 @@ const UnitCard: React.FC<UnitCardProps> = ({
           {/* Edit button and checkbox side by side */}
           <div className="flex items-center gap-2">
             <button
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
                 setShowEditModal(true);
               }}
               className="p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors duration-200"
-              aria-label={t("edit_unit")}
+              aria-label={t('edit_unit')}
             >
               <PencilIcon className="w-4 h-4" />
             </button>
@@ -65,13 +67,13 @@ const UnitCard: React.FC<UnitCardProps> = ({
               cancelText="cancel"
               fields={[
                 {
-                  name: "name",
-                  label: "unit_name",
+                  name: 'name',
+                  label: 'unit_name',
                   value: unit.name,
-                  placeholder: "input_unit_name_placeholder",
+                  placeholder: 'input_unit_name_placeholder',
                 },
               ]}
-              onOk={(values) => {
+              onOk={values => {
                 setShowEditModal(false);
                 onEdit && onEdit(unit.id, { name: values.name });
               }}
@@ -79,7 +81,7 @@ const UnitCard: React.FC<UnitCardProps> = ({
             />
             <Checkbox
               checked={isSelected}
-              onClick={(e) => {
+              onClick={e => {
                 e.stopPropagation();
                 onSelect && onSelect(unit.id);
               }}
@@ -101,14 +103,14 @@ const UnitCard: React.FC<UnitCardProps> = ({
               {unit.name}
             </h3>
             <span className="text-base text-gray-600 font-medium">
-              {t("word_count", { count: wordCount })}
+              {t('word_count', { count: wordCount })}
             </span>
           </div>
           {/* Progress bar */}
           <div className="mb-6">
             <div className="flex items-center justify-between mb-3">
               <span className="text-base font-semibold text-gray-700">
-                {t("learning_progress")}
+                {t('learning_progress')}
               </span>
               <span className="text-lg font-bold text-blue-600">
                 {progressPercent}%
@@ -123,13 +125,13 @@ const UnitCard: React.FC<UnitCardProps> = ({
           </div>
           {/* Statistics */}
           <div className="flex items-center gap-6 mb-6">
-            <Tooltip title={t("mastered_words")}>
+            <Tooltip title={t('mastered_words')}>
               <div className="flex items-center gap-2 text-green-600">
                 <CheckCircleIcon className="w-5 h-5" />
                 <span className="text-base font-semibold">{masteredCount}</span>
               </div>
             </Tooltip>
-            <Tooltip title={t("unmastered_words")}>
+            <Tooltip title={t('unmastered_words')}>
               <div className="flex items-center gap-2 text-red-600">
                 <XCircleIcon className="w-5 h-5" />
                 <span className="text-base font-semibold">
@@ -144,10 +146,10 @@ const UnitCard: React.FC<UnitCardProps> = ({
         <div className="mt-auto">
           <Link
             to={`/unit/${unit.id}`}
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
             className="flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold transition-all duration-200 rounded-lg px-4 py-2 text-base shadow-md hover:shadow-lg hover:transform hover:-translate-y-0.5 hover:text-blue-100"
           >
-            <span className="text-base">{t("view_details")}</span>
+            <span className="text-base">{t('view_details')}</span>
             <ArrowRightIcon className="w-5 h-5 ml-3 flex-shrink-0" />
           </Link>
         </div>

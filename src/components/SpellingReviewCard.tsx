@@ -1,12 +1,13 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Button, Text, Progress } from "../components/ui";
-import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
-import { useTranslation } from "react-i18next";
-import { SpellingReviewCardProps, InputHistoryItem } from "../types";
-import { useNavigate, useParams } from "react-router";
-import { isValidLetter } from "../utils/spellingUtils";
-import { getTailwindClass } from "../utils/styleMapping";
-import { usePronunciation } from "../hooks/usePronunciation";
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/outline';
+import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router';
+
+import { Button, Progress, Text } from '../components/ui';
+import { usePronunciation } from '../hooks/usePronunciation';
+import { InputHistoryItem, SpellingReviewCardProps } from '../types';
+import { isValidLetter } from '../utils/spellingUtils';
+import { getTailwindClass } from '../utils/styleMapping';
 
 const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
   word,
@@ -25,13 +26,13 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { unitId } = useParams<{ unitId: string }>();
-  const [currentInput, setCurrentInput] = useState("");
+  const [currentInput, setCurrentInput] = useState('');
   const [errorCount, setErrorCount] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
   const [showResult, setShowResult] = useState(false);
   const [inputHistory, setInputHistory] = useState<InputHistoryItem[]>([]);
   const inputRef = useRef<any>(null);
-  const lastWordId = useRef<string>("");
+  const lastWordId = useRef<string>('');
   const { play } = usePronunciation();
 
   const maxErrors = 3;
@@ -60,7 +61,7 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
 
   // Reset state when word changes - Qwerty Learner style
   useEffect(() => {
-    setCurrentInput("");
+    setCurrentInput('');
     setErrorCount(0);
     setIsCompleted(false);
     setShowResult(false);
@@ -82,21 +83,17 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
           const audio = new Audio(url);
 
           // Handle audio loading errors gracefully
-          audio.addEventListener("error", (e) => {
-            console.warn(
-              "Auto-play audio failed to load for word:",
-              word.word,
-              e,
-            );
+          audio.addEventListener('error', e => {
+            // Auto-play audio failed to load - graceful fallback
             // Don't throw error, just log it
           });
 
-          audio.play().catch((error) => {
-            console.warn("Auto-play audio failed for word:", word.word, error);
+          audio.play().catch(error => {
+            // Auto-play audio playback failed - graceful fallback
             // Don't throw error, just log it
           });
         } catch (error) {
-          console.warn("Auto-play audio error for word:", word.word, error);
+          // Auto-play audio service error - graceful fallback
           // Don't throw error, just log it
         }
       }, pronunciationDelay * 1000);
@@ -105,7 +102,7 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
 
   // Handle key press
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && showResult) {
+    if (e.key === 'Enter' && showResult) {
       handleNext();
     }
   };
@@ -137,10 +134,10 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
 
   // Generate input display
   const renderInputDisplay = () => {
-    return targetWord.split("").map((letter, index) => {
-      const inputLetter = currentInput[index] || "";
+    return targetWord.split('').map((letter, index) => {
+      const inputLetter = currentInput[index] || '';
       const isCorrect = inputLetter === letter;
-      const hasInput = inputLetter !== "";
+      const hasInput = inputLetter !== '';
 
       return (
         <span
@@ -148,9 +145,9 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
           className={`inline-block w-8 h-8 mx-1 text-center leading-8 border-2 rounded font-mono text-lg font-bold ${
             hasInput
               ? isCorrect
-                ? "border-green-500 bg-green-100 text-green-700"
-                : "border-red-500 bg-red-100 text-red-700"
-              : "border-gray-300 bg-gray-50 text-gray-400"
+                ? 'border-green-500 bg-green-100 text-green-700'
+                : 'border-red-500 bg-red-100 text-red-700'
+              : 'border-gray-300 bg-gray-50 text-gray-400'
           }`}
         >
           {inputLetter}
@@ -164,7 +161,7 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
   // Handle input error - Qwerty Learner style
   const handleInputError = (input: string) => {
     // Immediately clear input and force focus
-    setCurrentInput("");
+    setCurrentInput('');
 
     // Force input focus after state update
     setTimeout(() => {
@@ -210,7 +207,7 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
       <div className="mb-6">
         <div className="text-center mb-4">
           <span className="text-lg font-medium text-gray-600">
-            {t("meaning")}
+            {t('meaning')}
           </span>
         </div>
         <div className="text-center">
@@ -219,7 +216,7 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
             type="button"
             onClick={playManualPronunciation}
             className="text-gray-500 hover:text-gray-700 ml-3 inline-flex items-center"
-            title={t("play_pronunciation")}
+            title={t('play_pronunciation')}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
               <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
@@ -229,12 +226,12 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
       </div>
 
       {/* Progress indicator */}
-      <div className={`${getTailwindClass("mb-24")}`}>
+      <div className={`${getTailwindClass('mb-24')}`}>
         <Progress
           percent={Math.round((errorCount / maxErrors) * 100)}
-          status={errorCount >= maxErrors ? "exception" : "active"}
+          status={errorCount >= maxErrors ? 'exception' : 'active'}
           format={() => `${errorCount}/${maxErrors}`}
-          strokeColor={errorCount >= maxErrors ? "#ff4d4f" : "#1890ff"}
+          strokeColor={errorCount >= maxErrors ? '#ff4d4f' : '#1890ff'}
           className="text-base font-medium"
         />
       </div>
@@ -247,7 +244,7 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
               ref={inputRef}
               type="text"
               value={currentInput}
-              onChange={(e) => {
+              onChange={e => {
                 const value = e.target.value.toLowerCase();
 
                 // Handle backspace
@@ -281,8 +278,8 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
                 // Other cases (like multiple letters input), ignore
               }}
               onKeyPress={handleKeyPress}
-              onPaste={(e) => e.preventDefault()}
-              placeholder={t("enter_word")}
+              onPaste={e => e.preventDefault()}
+              placeholder={t('enter_word')}
               className="w-full text-center font-mono text-xl h-14 px-4 py-3 border border-gray-300 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               maxLength={targetWord.length}
               autoFocus
@@ -292,7 +289,7 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
         ) : (
           <div>
             <div className="mb-4 text-center">
-              {targetWord.split("").map((letter, index) => (
+              {targetWord.split('').map((letter, index) => (
                 <span
                   key={index}
                   className="inline-block w-8 h-8 mx-1 text-center leading-8 border-2 border-green-500 bg-green-100 text-green-700 rounded font-mono text-lg font-bold"
@@ -304,12 +301,12 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
             <div className="mt-4 text-center">
               {isCompleted ? (
                 <Text className="text-green-600 text-base flex items-center justify-center gap-2">
-                  <CheckCircleIcon className="w-5 h-5" />{" "}
-                  {t("spelling_correct")}
+                  <CheckCircleIcon className="w-5 h-5" />{' '}
+                  {t('spelling_correct')}
                 </Text>
               ) : (
                 <Text className="text-red-600 text-base flex items-center justify-center gap-2">
-                  <XCircleIcon className="w-5 h-5" /> {t("correct_answer")}
+                  <XCircleIcon className="w-5 h-5" /> {t('correct_answer')}
                   {targetWord}
                 </Text>
               )}
@@ -323,9 +320,9 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
         <Button
           onClick={handlePrev}
           disabled={isFirst}
-          className={`${getTailwindClass("btn-primary")} ${getTailwindClass("btn-standard")}`}
+          className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')}`}
         >
-          {t("previous")}
+          {t('previous')}
         </Button>
 
         {!showResult && (
@@ -333,16 +330,16 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
             onClick={handleShowAnswer}
             className="px-4 py-2 text-base font-medium rounded-lg transition-colors duration-200 bg-yellow-500 text-white border border-yellow-500 hover:bg-yellow-600"
           >
-            {t("view_answer")}
+            {t('view_answer')}
           </Button>
         )}
 
         <Button
           onClick={handleNext}
           disabled={isLast && !showResult}
-          className={`${getTailwindClass("btn-primary")} ${getTailwindClass("btn-standard")}`}
+          className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')}`}
         >
-          {isLast ? t("complete") : t("next_word")}
+          {isLast ? t('complete') : t('next_word')}
         </Button>
       </div>
 
@@ -350,9 +347,9 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
       {inputHistory.length > 0 && (
         <div className="mt-8 text-center">
           <Text
-            className={`${getTailwindClass("text-secondary")} ${getTailwindClass("text-small")}`}
+            className={`${getTailwindClass('text-secondary')} ${getTailwindClass('text-small')}`}
           >
-            {t("attempt_history")}
+            {t('attempt_history')}
           </Text>
           <div className="mt-2 text-center">
             {inputHistory.map((attempt, index) => (
@@ -360,8 +357,8 @@ const SpellingReviewCard: React.FC<SpellingReviewCardProps> = ({
                 key={index}
                 className={`inline-block mx-1 px-3 py-1 rounded text-sm font-mono ${
                   attempt.correct
-                    ? "bg-green-100 text-green-700 border border-green-300"
-                    : "bg-red-100 text-red-700 border border-red-300"
+                    ? 'bg-green-100 text-green-700 border border-green-300'
+                    : 'bg-red-100 text-red-700 border border-red-300'
                 }`}
               >
                 {attempt.input}

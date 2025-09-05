@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export interface EmptyProps {
   description?: React.ReactNode;
@@ -12,11 +12,11 @@ export interface EmptyProps {
 }
 
 const Empty: React.FC<EmptyProps> = ({
-  description = "No Data",
+  description = 'No Data',
   image,
   children,
   styles,
-  className = "",
+  className = '',
   style,
 }) => {
   const defaultImage = (

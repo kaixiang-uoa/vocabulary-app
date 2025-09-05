@@ -1,13 +1,13 @@
 import {
-  ImportWordData,
-  ImportUnitData,
   ImportCompleteData,
   ImportData,
-} from "../types";
+  ImportUnitData,
+  ImportWordData,
+} from '../types';
 
 // Parse CSV content to word array (for single unit)
 export const parseCSV = (csvContent: string): ImportWordData[] => {
-  const lines = csvContent.trim().split("\n");
+  const lines = csvContent.trim().split('\n');
   const words: ImportWordData[] = [];
 
   // Skip header line (word,meaning)
@@ -16,11 +16,11 @@ export const parseCSV = (csvContent: string): ImportWordData[] => {
     if (!line) continue;
 
     // Handle CSV format, support comma and tab separation
-    const parts = line.includes("\t") ? line.split("\t") : line.split(",");
+    const parts = line.includes('\t') ? line.split('\t') : line.split(',');
 
     if (parts.length >= 2) {
-      const word = parts[0].trim().replace(/"/g, "");
-      const meaning = parts[1].trim().replace(/"/g, "");
+      const word = parts[0].trim().replace(/"/g, '');
+      const meaning = parts[1].trim().replace(/"/g, '');
 
       if (word && meaning) {
         words.push({ word, meaning });
@@ -33,7 +33,7 @@ export const parseCSV = (csvContent: string): ImportWordData[] => {
 
 // Parse CSV content to unit data array (for multiple units)
 export const parseUnitCSV = (csvContent: string): ImportUnitData[] => {
-  const lines = csvContent.trim().split("\n");
+  const lines = csvContent.trim().split('\n');
   const unitData: ImportUnitData[] = [];
 
   // Skip header line (unit,word,meaning)
@@ -42,12 +42,12 @@ export const parseUnitCSV = (csvContent: string): ImportUnitData[] => {
     if (!line) continue;
 
     // Handle CSV format, support comma and tab separation
-    const parts = line.includes("\t") ? line.split("\t") : line.split(",");
+    const parts = line.includes('\t') ? line.split('\t') : line.split(',');
 
     if (parts.length >= 3) {
-      const unit = parts[0].trim().replace(/"/g, "");
-      const word = parts[1].trim().replace(/"/g, "");
-      const meaning = parts[2].trim().replace(/"/g, "");
+      const unit = parts[0].trim().replace(/"/g, '');
+      const word = parts[1].trim().replace(/"/g, '');
+      const meaning = parts[2].trim().replace(/"/g, '');
 
       if (unit && word && meaning) {
         unitData.push({ unit, word, meaning });
@@ -65,23 +65,24 @@ export const parseJSON = (jsonContent: string): ImportWordData[] => {
 
     if (Array.isArray(data)) {
       return data
-        .map((item) => ({
-          word: item.word || item.Word || "",
-          meaning: item.meaning || item.Meaning || item.translation || "",
+        .map(item => ({
+          word: item.word || item.Word || '',
+          meaning: item.meaning || item.Meaning || item.translation || '',
         }))
-        .filter((item) => item.word && item.meaning);
+        .filter(item => item.word && item.meaning);
     }
 
     return [];
   } catch (error) {
-    console.error("Failed to parse JSON:", error);
+    // eslint-disable-next-line no-console
+    console.error('Failed to parse JSON:', error);
     return [];
   }
 };
 
 // Parse JSON content to complete data structure (for multiple units)
 export const parseCompleteJSON = (
-  jsonContent: string,
+  jsonContent: string
 ): ImportCompleteData | null => {
   try {
     const data = JSON.parse(jsonContent);
@@ -92,7 +93,8 @@ export const parseCompleteJSON = (
 
     return null;
   } catch (error) {
-    console.error("Failed to parse complete JSON:", error);
+    // eslint-disable-next-line no-console
+    console.error('Failed to parse complete JSON:', error);
     return null;
   }
 };
@@ -100,17 +102,17 @@ export const parseCompleteJSON = (
 // Auto-detect and parse content based on format
 export const parseImportContent = (
   content: string,
-  fileType: string,
+  fileType: string
 ): ImportData => {
   switch (fileType.toLowerCase()) {
-    case "csv":
+    case 'csv':
       // Check if CSV has unit column (3 columns: unit,word,meaning)
-      const lines = content.trim().split("\n");
+      const lines = content.trim().split('\n');
       const firstLine = lines[0]?.trim();
       if (firstLine) {
-        const parts = firstLine.includes("\t")
-          ? firstLine.split("\t")
-          : firstLine.split(",");
+        const parts = firstLine.includes('\t')
+          ? firstLine.split('\t')
+          : firstLine.split(',');
         if (parts.length >= 3) {
           // Has unit column, parse as unit CSV
           return parseUnitCSV(content);
@@ -119,7 +121,7 @@ export const parseImportContent = (
       // No unit column, parse as word CSV
       return parseCSV(content);
 
-    case "json":
+    case 'json':
       // Try to parse as complete structure first
       const completeData = parseCompleteJSON(content);
       if (completeData) {
@@ -130,23 +132,23 @@ export const parseImportContent = (
 
     default:
       // Auto-detect format
-      if (content.trim().startsWith("{")) {
+      if (content.trim().startsWith('{')) {
         // Try complete JSON first
         const completeData = parseCompleteJSON(content);
         if (completeData) {
           return completeData;
         }
         return parseJSON(content);
-      } else if (content.trim().startsWith("[")) {
+      } else if (content.trim().startsWith('[')) {
         return parseJSON(content);
       } else {
         // CSV format - check for unit column
-        const lines = content.trim().split("\n");
+        const lines = content.trim().split('\n');
         const firstLine = lines[0]?.trim();
         if (firstLine) {
-          const parts = firstLine.includes("\t")
-            ? firstLine.split("\t")
-            : firstLine.split(",");
+          const parts = firstLine.includes('\t')
+            ? firstLine.split('\t')
+            : firstLine.split(',');
           if (parts.length >= 3) {
             return parseUnitCSV(content);
           }

@@ -1,27 +1,28 @@
-import React, { useState, useRef } from "react";
-import { Modal, Button, Input } from "../components/ui";
-import { useTranslation } from "react-i18next";
-import { parseImportContent } from "../utils/importParser";
-import { ImportModalProps } from "../types";
-import { getTailwindClass } from "../utils/styleMapping";
+import React, { useState, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { Modal, Button, Input } from '../components/ui';
+import { ImportModalProps } from '../types';
+import { parseImportContent } from '../utils/importParser';
+import { getTailwindClass } from '../utils/styleMapping';
 
 const ImportModal: React.FC<ImportModalProps> = ({
   visible,
   onOk,
   onCancel,
   title,
-  accept = "",
+  accept = '',
   buttonText,
   icon,
-  placeholder = "",
+  placeholder = '',
   validate,
 }) => {
-  const [content, setContent] = useState("");
-  const [error, setError] = useState("");
+  const [content, setContent] = useState('');
+  const [error, setError] = useState('');
   const { t } = useTranslation();
 
   // Record filename
-  const fileNameRef = useRef<string>("");
+  const fileNameRef = useRef<string>('');
 
   // Handle file upload
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,10 +31,10 @@ const ImportModal: React.FC<ImportModalProps> = ({
 
     fileNameRef.current = file.name;
     const reader = new FileReader();
-    reader.onload = (evt) => {
+    reader.onload = evt => {
       const result = evt.target?.result as string;
       setContent(result);
-      setError("");
+      setError('');
     };
     reader.readAsText(file);
   };
@@ -41,7 +42,7 @@ const ImportModal: React.FC<ImportModalProps> = ({
   // Handle import confirm
   const handleOk = () => {
     if (!content.trim()) {
-      setError(t("import_empty_error"));
+      setError(t('import_empty_error'));
       return;
     }
 
@@ -56,33 +57,33 @@ const ImportModal: React.FC<ImportModalProps> = ({
     try {
       // Get file extension from filename
       const fileExtension =
-        fileNameRef.current.split(".").pop()?.toLowerCase() || "";
+        fileNameRef.current.split('.').pop()?.toLowerCase() || '';
       const parsed = parseImportContent(content, fileExtension);
       onOk(parsed);
-      setContent("");
-      setError("");
+      setContent('');
+      setError('');
       const input = document.getElementById(
-        "import-file-input",
+        'import-file-input'
       ) as HTMLInputElement | null;
-      if (input) input.value = "";
+      if (input) input.value = '';
     } catch (e: any) {
       setError(e.message);
     }
   };
 
   const handleCancel = () => {
-    setContent("");
-    setError("");
+    setContent('');
+    setError('');
     onCancel();
     const input = document.getElementById(
-      "import-file-input",
+      'import-file-input'
     ) as HTMLInputElement | null;
-    if (input) input.value = "";
+    if (input) input.value = '';
   };
 
   return (
     <Modal
-      title={<span className={getTailwindClass("page-title")}>{title}</span>}
+      title={<span className={getTailwindClass('page-title')}>{title}</span>}
       visible={visible}
       onOk={handleOk}
       onCancel={handleCancel}
@@ -91,9 +92,9 @@ const ImportModal: React.FC<ImportModalProps> = ({
       centered
     >
       <div
-        className={`${getTailwindClass("text-secondary")} ${getTailwindClass("text-small")} mb-4`}
+        className={`${getTailwindClass('text-secondary')} ${getTailwindClass('text-small')} mb-4`}
       >
-        {t("import_brief_tip")}
+        {t('import_brief_tip')}
       </div>
       <div className="mb-6 min-w-[220px]">
         <input
@@ -104,37 +105,37 @@ const ImportModal: React.FC<ImportModalProps> = ({
           className="sr-only"
         />
         <Button
-          onClick={() => document.getElementById("import-file-input")?.click()}
+          onClick={() => document.getElementById('import-file-input')?.click()}
           icon={icon}
-          className={`${getTailwindClass("btn-primary")} mb-2 w-full`}
+          className={`${getTailwindClass('btn-primary')} mb-2 w-full`}
         >
-          {buttonText || t("upload_file")}
+          {buttonText || t('upload_file')}
         </Button>
         <div
-          className={`${getTailwindClass("text-secondary")} ${getTailwindClass("text-small")} mb-2`}
+          className={`${getTailwindClass('text-secondary')} ${getTailwindClass('text-small')} mb-2`}
         >
-          {t("import_paste_tip")}
+          {t('import_paste_tip')}
         </div>
       </div>
       <Input.TextArea
-        placeholder={placeholder || t("import_placeholder_default")}
+        placeholder={placeholder || t('import_placeholder_default')}
         value={content}
-        onChange={(e) => {
+        onChange={e => {
           setContent(e.target.value);
-          setError("");
+          setError('');
         }}
         rows={8}
-        className={`${getTailwindClass("text-small")} rounded mb-2`}
+        className={`${getTailwindClass('text-small')} rounded mb-2`}
         style={{
-          minHeight: "300px",
-          fontFamily: "monospace",
-          fontSize: "13px",
-          lineHeight: "1.5",
+          minHeight: '300px',
+          fontFamily: 'monospace',
+          fontSize: '13px',
+          lineHeight: '1.5',
         }}
       />
       {error && (
         <div
-          className={`${getTailwindClass("text-error")} ${getTailwindClass("text-small")} font-medium mb-0`}
+          className={`${getTailwindClass('text-error')} ${getTailwindClass('text-small')} font-medium mb-0`}
         >
           {error}
         </div>
@@ -142,17 +143,17 @@ const ImportModal: React.FC<ImportModalProps> = ({
       <div className="flex justify-end gap-3 mt-4">
         <Button
           onClick={handleCancel}
-          className={getTailwindClass("btn-standard")}
+          className={getTailwindClass('btn-standard')}
           style={{ minWidth: 80 }}
         >
-          {t("cancel")}
+          {t('cancel')}
         </Button>
         <Button
           onClick={handleOk}
-          className={`${getTailwindClass("btn-primary")} ${getTailwindClass("btn-standard")}`}
+          className={`${getTailwindClass('btn-primary')} ${getTailwindClass('btn-standard')}`}
           style={{ minWidth: 80 }}
         >
-          {t("ok")}
+          {t('ok')}
         </Button>
       </div>
     </Modal>

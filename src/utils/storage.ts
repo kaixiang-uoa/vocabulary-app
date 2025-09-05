@@ -6,7 +6,8 @@ export const saveData = (key: string, data: any): boolean => {
     localStorage.setItem(key, JSON.stringify(data));
     return true;
   } catch (error) {
-    console.error("Failed to save data:", error);
+    // eslint-disable-next-line no-console
+    console.error('Failed to save data:', error);
     return false;
   }
 };
@@ -17,7 +18,8 @@ export const getData = (key: string): any => {
     const data = localStorage.getItem(key);
     return data ? JSON.parse(data) : null;
   } catch (error) {
-    console.error("Failed to get data:", error);
+    // eslint-disable-next-line no-console
+    console.error('Failed to get data:', error);
     return null;
   }
 };
@@ -28,7 +30,8 @@ export const removeData = (key: string): boolean => {
     localStorage.removeItem(key);
     return true;
   } catch (error) {
-    console.error("Failed to remove data:", error);
+    // eslint-disable-next-line no-console
+    console.error('Failed to remove data:', error);
     return false;
   }
 };
@@ -39,7 +42,8 @@ export const clearAllData = (): boolean => {
     localStorage.clear();
     return true;
   } catch (error) {
-    console.error("Failed to clear data:", error);
+    // eslint-disable-next-line no-console
+    console.error('Failed to clear data:', error);
     return false;
   }
 };

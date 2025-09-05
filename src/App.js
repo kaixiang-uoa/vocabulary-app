@@ -1,22 +1,17 @@
-import React from "react";
-import { HashRouter as Router, Routes, Route, Navigate } from "react-router";
+import { useTranslation } from 'react-i18next';
+import { Navigate, Route, HashRouter as Router, Routes } from 'react-router';
 
-// Import i18n configuration
-import "./i18n";
-import { useTranslation } from "react-i18next";
-
-// Import AuthProvider and context
-import { AuthProvider, useAuthContext } from "./contexts/AuthContext";
-import { WordProvider } from "./contexts/WordContext";
-import { LoginModal } from "./components/LoginModal";
-import { MigrationPrompt } from "./components/MigrationPrompt";
-import { FirebaseStatus } from "./components/FirebaseStatus";
-
+import { FirebaseStatus } from './components/FirebaseStatus';
+import { LoginModal } from './components/LoginModal';
+import { MigrationPrompt } from './components/MigrationPrompt';
+import { AuthProvider, useAuthContext } from './contexts/AuthContext';
+import { WordProvider } from './contexts/WordContext';
+import './i18n';
 // import page components
-import HomePage from "./pages/HomePage";
-import UnitDetailPage from "./pages/UnitDetailPage";
-import ReviewPage from "./pages/ReviewPage";
-import SpellingReviewPage from "./pages/SpellingReviewPage";
+import HomePage from './pages/HomePage';
+import ReviewPage from './pages/ReviewPage';
+import SpellingReviewPage from './pages/SpellingReviewPage';
+import UnitDetailPage from './pages/UnitDetailPage';
 
 // Main app component that uses auth context
 function AppContent() {
@@ -41,7 +36,7 @@ function AppContent() {
         <div className="container mx-auto px-4 py-8">
           {/* Header with conditional auth UI */}
           <div className="flex justify-between items-center mb-6">
-            <div className="text-xl font-bold text-gray-800">{t("title")}</div>
+            <div className="text-xl font-bold text-gray-800">{t('title')}</div>
             {state.user ? (
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-4">

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export interface CardProps {
   title?: React.ReactNode;
@@ -6,7 +6,7 @@ export interface CardProps {
   children: React.ReactNode;
   hoverable?: boolean;
   bordered?: boolean;
-  size?: "small" | "default";
+  size?: 'small' | 'default';
   variant?: string;
   className?: string;
   style?: React.CSSProperties;
@@ -22,19 +22,19 @@ const Card: React.FC<CardProps> = ({
   children,
   hoverable = false,
   bordered = true,
-  size = "default",
+  size = 'default',
   variant,
-  className = "",
+  className = '',
   style,
   styles,
   onClick,
 }) => {
-  const baseClasses = "bg-white rounded-lg transition-all duration-200";
-  const borderClasses = bordered ? "border border-gray-200" : "";
+  const baseClasses = 'bg-white rounded-lg transition-all duration-200';
+  const borderClasses = bordered ? 'border border-gray-200' : '';
   const hoverClasses = hoverable
-    ? "hover:shadow-lg hover:-translate-y-1 cursor-pointer"
-    : "";
-  const sizeClasses = size === "small" ? "p-4" : "p-6";
+    ? 'hover:shadow-lg hover:-translate-y-1 cursor-pointer'
+    : '';
+  const sizeClasses = size === 'small' ? 'p-4' : 'p-6';
 
   const classes = `${baseClasses} ${borderClasses} ${hoverClasses} ${className}`;
 

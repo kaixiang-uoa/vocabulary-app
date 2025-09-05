@@ -1,27 +1,35 @@
 // Custom hook for word operations state management with caching
-import { useState, useCallback } from "react";
-import { StorageData, Word, Unit, ImportData, ImportUnitData, ImportWordData } from "../types";
+import { useCallback, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+
+import { isUsingFirebase } from '../services/dataServiceManager';
 import {
-  getAllData,
-  saveAllData,
   addWord,
-  updateWord,
-  updateUnit,
-  toggleWordMastered,
-  setWordMasteredStatus,
   createUnit,
   deleteItems,
-} from "../services/wordService";
-import { isUsingFirebase } from "../services/dataServiceManager";
-import { v4 as uuidv4 } from "uuid";
+  getAllData,
+  saveAllData,
+  setWordMasteredStatus,
+  toggleWordMastered,
+  updateUnit,
+  updateWord,
+} from '../services/wordService';
 import {
-  validateWord,
-  validateUnitName,
-  isWordDuplicate,
-  getUnitStats,
+  ImportData,
+  ImportUnitData,
+  ImportWordData,
+  StorageData,
+  Unit,
+  Word,
+} from '../types';
+import { CACHE_KEYS, globalCacheManager } from '../utils/cacheManager';
+import {
   getOverallStats,
-} from "../utils/wordHelpers";
-import { globalCacheManager, CACHE_KEYS } from "../utils/cacheManager";
+  getUnitStats,
+  isWordDuplicate,
+  validateUnitName,
+  validateWord,
+} from '../utils/wordHelpers';
 
 interface UseWordOperationsReturn {
   // Data state
@@ -37,28 +45,28 @@ interface UseWordOperationsReturn {
   addWordToUnit: (
     unitId: string,
     word: string,
-    meaning: string,
+    meaning: string
   ) => Promise<boolean>;
   updateWordInUnit: (
     unitId: string,
     wordId: string,
-    updatedWord: Partial<Word>,
+    updatedWord: Partial<Word>
   ) => Promise<boolean>;
   toggleWordMasteredStatus: (
     unitId: string,
-    wordId: string,
+    wordId: string
   ) => Promise<boolean>;
   setWordMasteredStatusDirect: (
     unitId: string,
     wordId: string,
-    mastered: boolean,
+    mastered: boolean
   ) => Promise<boolean>;
 
   // Unit operations
   createNewUnit: (unitName: string) => Promise<string | null>;
   updateUnitData: (
     unitId: string,
-    updatedUnit: Partial<Unit>,
+    updatedUnit: Partial<Unit>
   ) => Promise<boolean>;
 
   // Delete operations
@@ -66,14 +74,16 @@ interface UseWordOperationsReturn {
   deleteUnits: (unitIds: string[]) => Promise<boolean>;
 
   // Batch operations
-  batchImportData: (importData: ImportData) => Promise<{ success: boolean; count: number }>;
+  batchImportData: (
+    importData: ImportData
+  ) => Promise<{ success: boolean; count: number }>;
 
   // Utility functions
   getUnitStatistics: (unitId: string) => any;
   getOverallStatistics: () => any;
   validateWordInput: (
     word: string,
-    meaning: string,
+    meaning: string
   ) => { isValid: boolean; error?: string };
   validateUnitNameInput: (name: string) => { isValid: boolean; error?: string };
   checkWordDuplicate: (unitId: string, newWord: string) => boolean;
@@ -84,8 +94,8 @@ export const useWordOperations = (): UseWordOperationsReturn => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [dataServiceType, setDataServiceType] = useState<
-    "firebase" | "localStorage"
-  >(isUsingFirebase() ? "firebase" : "localStorage");
+    'firebase' | 'localStorage'
+  >(isUsingFirebase() ? 'firebase' : 'localStorage');
 
   // Cache invalidation helper
   const invalidateCache = useCallback(() => {
@@ -101,13 +111,14 @@ export const useWordOperations = (): UseWordOperationsReturn => {
     try {
       // Check if data service type has changed
       const currentServiceType = isUsingFirebase()
-        ? "firebase"
-        : "localStorage";
+        ? 'firebase'
+        : 'localStorage';
       if (currentServiceType !== dataServiceType) {
         setDataServiceType(currentServiceType);
         // Clear cache when switching data services
         globalCacheManager.clear();
-        console.log("Data service changed, cache cleared");
+        // eslint-disable-next-line no-console
+        console.log('Data service changed, cache cleared');
       }
 
       // Check cache first
@@ -126,7 +137,7 @@ export const useWordOperations = (): UseWordOperationsReturn => {
 
       setData(result);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to load data");
+      setError(err instanceof Error ? err.message : 'Failed to load data');
       // Reset data on error (e.g., when not authenticated)
       setData({ units: [] });
     } finally {
@@ -148,13 +159,13 @@ export const useWordOperations = (): UseWordOperationsReturn => {
         }
         return success;
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to save data");
+        setError(err instanceof Error ? err.message : 'Failed to save data');
         return false;
       } finally {
         setLoading(false);
       }
     },
-    [invalidateCache],
+    [invalidateCache]
   );
 
   // Add word to unit
@@ -162,39 +173,60 @@ export const useWordOperations = (): UseWordOperationsReturn => {
     async (unitId: string, word: string, meaning: string): Promise<boolean> => {
       if (!data) return false;
 
-      setLoading(true);
+      // Store original data for rollback
+      const originalData = data;
+
+      // Optimistic update - update UI immediately
+      const updatedData = {
+        ...data,
+        units: data.units.map(unit =>
+          unit.id === unitId
+            ? {
+                ...unit,
+                words: [
+                  ...unit.words,
+                  {
+                    id: Date.now().toString(), // Temporary ID
+                    unitId,
+                    word,
+                    meaning,
+                    mastered: false,
+                    createTime: Date.now(),
+                    reviewTimes: 0,
+                    lastReviewTime: null,
+                  },
+                ],
+              }
+            : unit
+        ),
+      };
+
+      setData(updatedData);
       setError(null);
+
       try {
         const success = await addWord(unitId, word, meaning);
         if (success) {
-          // Invalidate cache instead of reloading
-          invalidateCache();
-          // Update local state optimistically
-          const updatedData = { ...data };
-          const unit = updatedData.units.find((u) => u.id === unitId);
-          if (unit) {
-            unit.words.push({
-              id: Date.now().toString(), // Temporary ID
-              unitId,
-              word,
-              meaning,
-              mastered: false,
-              createTime: Date.now(),
-              reviewTimes: 0,
-              lastReviewTime: null,
-            });
-            setData(updatedData);
-          }
+          // Update cache with new data
+          globalCacheManager.set(CACHE_KEYS.UNITS, updatedData);
+        } else {
+          // Rollback on failure
+          setData(originalData);
+          // Clear cache on failure to ensure fresh data on next load
+          globalCacheManager.delete(CACHE_KEYS.UNITS);
+          setError('Failed to add word');
         }
         return success;
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to add word");
+        // Rollback on error
+        setData(originalData);
+        // Clear cache on error to ensure fresh data on next load
+        globalCacheManager.delete(CACHE_KEYS.UNITS);
+        setError(err instanceof Error ? err.message : 'Failed to add word');
         return false;
-      } finally {
-        setLoading(false);
       }
     },
-    [data, invalidateCache],
+    [data]
   );
 
   // Update word in unit
@@ -202,7 +234,7 @@ export const useWordOperations = (): UseWordOperationsReturn => {
     async (
       unitId: string,
       wordId: string,
-      updatedWord: Partial<Word>,
+      updatedWord: Partial<Word>
     ): Promise<boolean> => {
       if (!data) return false;
 
@@ -215,9 +247,9 @@ export const useWordOperations = (): UseWordOperationsReturn => {
           invalidateCache();
           // Update local state optimistically
           const updatedData = { ...data };
-          const unit = updatedData.units.find((u) => u.id === unitId);
+          const unit = updatedData.units.find(u => u.id === unitId);
           if (unit) {
-            const word = unit.words.find((w) => w.id === wordId);
+            const word = unit.words.find(w => w.id === wordId);
             if (word) {
               Object.assign(word, updatedWord);
               setData(updatedData);
@@ -226,13 +258,13 @@ export const useWordOperations = (): UseWordOperationsReturn => {
         }
         return success;
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to update word");
+        setError(err instanceof Error ? err.message : 'Failed to update word');
         return false;
       } finally {
         setLoading(false);
       }
     },
-    [data, invalidateCache],
+    [data, invalidateCache]
   );
 
   // Toggle word mastered status
@@ -249,9 +281,9 @@ export const useWordOperations = (): UseWordOperationsReturn => {
           invalidateCache();
           // Update local state optimistically
           const updatedData = { ...data };
-          const unit = updatedData.units.find((u) => u.id === unitId);
+          const unit = updatedData.units.find(u => u.id === unitId);
           if (unit) {
-            const word = unit.words.find((w) => w.id === wordId);
+            const word = unit.words.find(w => w.id === wordId);
             if (word) {
               word.mastered = !word.mastered;
               setData(updatedData);
@@ -261,14 +293,14 @@ export const useWordOperations = (): UseWordOperationsReturn => {
         return success;
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : "Failed to toggle word status",
+          err instanceof Error ? err.message : 'Failed to toggle word status'
         );
         return false;
       } finally {
         setLoading(false);
       }
     },
-    [data, invalidateCache],
+    [data, invalidateCache]
   );
 
   // Set word mastered status directly
@@ -276,7 +308,7 @@ export const useWordOperations = (): UseWordOperationsReturn => {
     async (
       unitId: string,
       wordId: string,
-      mastered: boolean,
+      mastered: boolean
     ): Promise<boolean> => {
       if (!data) return false;
 
@@ -289,9 +321,9 @@ export const useWordOperations = (): UseWordOperationsReturn => {
           invalidateCache();
           // Update local state optimistically
           const updatedData = { ...data };
-          const unit = updatedData.units.find((u) => u.id === unitId);
+          const unit = updatedData.units.find(u => u.id === unitId);
           if (unit) {
-            const word = unit.words.find((w) => w.id === wordId);
+            const word = unit.words.find(w => w.id === wordId);
             if (word) {
               word.mastered = mastered;
               setData(updatedData);
@@ -301,14 +333,14 @@ export const useWordOperations = (): UseWordOperationsReturn => {
         return success;
       } catch (err) {
         setError(
-          err instanceof Error ? err.message : "Failed to set word status",
+          err instanceof Error ? err.message : 'Failed to set word status'
         );
         return false;
       } finally {
         setLoading(false);
       }
     },
-    [data, invalidateCache],
+    [data, invalidateCache]
   );
 
   // Create new unit
@@ -335,13 +367,13 @@ export const useWordOperations = (): UseWordOperationsReturn => {
         }
         return unitId;
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to create unit");
+        setError(err instanceof Error ? err.message : 'Failed to create unit');
         return null;
       } finally {
         setLoading(false);
       }
     },
-    [data, invalidateCache],
+    [data, invalidateCache]
   );
 
   // Update unit data
@@ -358,7 +390,7 @@ export const useWordOperations = (): UseWordOperationsReturn => {
           invalidateCache();
           // Update local state optimistically
           const updatedData = { ...data };
-          const unit = updatedData.units.find((u) => u.id === unitId);
+          const unit = updatedData.units.find(u => u.id === unitId);
           if (unit) {
             Object.assign(unit, updatedUnit);
             setData(updatedData);
@@ -366,13 +398,13 @@ export const useWordOperations = (): UseWordOperationsReturn => {
         }
         return success;
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to update unit");
+        setError(err instanceof Error ? err.message : 'Failed to update unit');
         return false;
       } finally {
         setLoading(false);
       }
     },
-    [data, invalidateCache],
+    [data, invalidateCache]
   );
 
   // Delete words
@@ -384,7 +416,7 @@ export const useWordOperations = (): UseWordOperationsReturn => {
       setError(null);
       try {
         const success = await deleteItems({
-          type: "word",
+          type: 'word',
           ids: wordIds,
           unitId,
         });
@@ -393,23 +425,21 @@ export const useWordOperations = (): UseWordOperationsReturn => {
           invalidateCache();
           // Update local state optimistically
           const updatedData = { ...data };
-          const unit = updatedData.units.find((u) => u.id === unitId);
+          const unit = updatedData.units.find(u => u.id === unitId);
           if (unit) {
-            unit.words = unit.words.filter(
-              (word) => !wordIds.includes(word.id),
-            );
+            unit.words = unit.words.filter(word => !wordIds.includes(word.id));
             setData(updatedData);
           }
         }
         return success;
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to delete words");
+        setError(err instanceof Error ? err.message : 'Failed to delete words');
         return false;
       } finally {
         setLoading(false);
       }
     },
-    [data, invalidateCache],
+    [data, invalidateCache]
   );
 
   // Delete units
@@ -420,31 +450,33 @@ export const useWordOperations = (): UseWordOperationsReturn => {
       setLoading(true);
       setError(null);
       try {
-        const success = await deleteItems({ type: "unit", ids: unitIds });
+        const success = await deleteItems({ type: 'unit', ids: unitIds });
         if (success) {
           // Invalidate cache instead of reloading
           invalidateCache();
           // Update local state optimistically
           const updatedData = { ...data };
           updatedData.units = updatedData.units.filter(
-            (unit) => !unitIds.includes(unit.id),
+            unit => !unitIds.includes(unit.id)
           );
           setData(updatedData);
         }
         return success;
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to delete units");
+        setError(err instanceof Error ? err.message : 'Failed to delete units');
         return false;
       } finally {
         setLoading(false);
       }
     },
-    [data, invalidateCache],
+    [data, invalidateCache]
   );
 
   // Batch import data (optimized for performance)
   const batchImportData = useCallback(
-    async (importData: ImportData): Promise<{ success: boolean; count: number }> => {
+    async (
+      importData: ImportData
+    ): Promise<{ success: boolean; count: number }> => {
       if (!data) return { success: false, count: 0 };
 
       setError(null);
@@ -455,7 +487,7 @@ export const useWordOperations = (): UseWordOperationsReturn => {
 
         if (Array.isArray(importData)) {
           // Handle ImportUnitData[] or ImportWordData[]
-          if (importData.length > 0 && "unit" in importData[0]) {
+          if (importData.length > 0 && 'unit' in importData[0]) {
             // ImportUnitData[] - multiple units with words
             const unitMap = new Map<string, string>();
 
@@ -486,7 +518,7 @@ export const useWordOperations = (): UseWordOperationsReturn => {
                   reviewTimes: 0,
                   lastReviewTime: null,
                 };
-                const unit = updatedData.units.find((u) => u.id === unitId);
+                const unit = updatedData.units.find(u => u.id === unitId);
                 if (unit) {
                   // Ensure words array reference changes as well
                   unit.words = [...unit.words, newWord];
@@ -499,7 +531,7 @@ export const useWordOperations = (): UseWordOperationsReturn => {
             const newUnitId = uuidv4();
             const newUnit: Unit = {
               id: newUnitId,
-              name: "Imported Unit",
+              name: 'Imported Unit',
               createTime: Date.now(),
               words: [],
             };
@@ -567,21 +599,21 @@ export const useWordOperations = (): UseWordOperationsReturn => {
         globalCacheManager.delete(CACHE_KEYS.UNITS);
         return { success: false, count: 0 };
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to import data");
+        setError(err instanceof Error ? err.message : 'Failed to import data');
         return { success: false, count: 0 };
       }
     },
-    [data],
+    [data]
   );
 
   // Get unit statistics
   const getUnitStatistics = useCallback(
     (unitId: string) => {
       if (!data) return null;
-      const unit = data.units.find((u) => u.id === unitId);
+      const unit = data.units.find(u => u.id === unitId);
       return unit ? getUnitStats(unit) : null;
     },
-    [data],
+    [data]
   );
 
   // Get overall statistics
@@ -604,11 +636,11 @@ export const useWordOperations = (): UseWordOperationsReturn => {
   const checkWordDuplicate = useCallback(
     (unitId: string, newWord: string): boolean => {
       if (!data) return false;
-      const unit = data.units.find((u) => u.id === unitId);
+      const unit = data.units.find(u => u.id === unitId);
       if (!unit) return false;
       return isWordDuplicate(unit.words, newWord);
     },
-    [data],
+    [data]
   );
 
   return {

@@ -1,10 +1,10 @@
 // Hook-related type definitions
-import { Unit, Word } from "./index";
+import { Unit, Word } from './index';
 
 export interface UseReviewDataOptions {
   unitId: string | undefined;
-  reviewMode: "all" | "unmastered" | "mastered";
-  reviewOrder: "sequential" | "random";
+  reviewMode: 'all' | 'unmastered' | 'mastered';
+  reviewOrder: 'sequential' | 'random';
   refreshTrigger?: number;
 }
 

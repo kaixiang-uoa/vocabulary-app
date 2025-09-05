@@ -1,12 +1,12 @@
 // Pure utility functions for word operations
-import { Word, Unit, StorageData } from "../types";
+import { Word, Unit, StorageData } from '../types';
 
 // Filter words by mastered status
 export const filterWordsByMastered = (
   words: Word[],
-  mastered: boolean,
+  mastered: boolean
 ): Word[] => {
-  return words.filter((word) => word.mastered === mastered);
+  return words.filter(word => word.mastered === mastered);
 };
 
 // Get words for review (not mastered)
@@ -22,7 +22,7 @@ export const getMasteredWords = (words: Word[]): Word[] => {
 // Calculate mastery percentage
 export const calculateMasteryPercentage = (words: Word[]): number => {
   if (words.length === 0) return 0;
-  const masteredCount = words.filter((word) => word.mastered).length;
+  const masteredCount = words.filter(word => word.mastered).length;
   return Math.round((masteredCount / words.length) * 100);
 };
 
@@ -49,12 +49,12 @@ export const sortWordsByCreateTime = (words: Word[]): Word[] => {
 // Get words that need review (not reviewed recently)
 export const getWordsNeedingReview = (
   words: Word[],
-  daysThreshold: number = 7,
+  daysThreshold: number = 7
 ): Word[] => {
   const now = Date.now();
   const thresholdMs = daysThreshold * 24 * 60 * 60 * 1000;
 
-  return words.filter((word) => {
+  return words.filter(word => {
     if (!word.lastReviewTime) return true;
     return now - word.lastReviewTime > thresholdMs;
   });
@@ -63,27 +63,27 @@ export const getWordsNeedingReview = (
 // Validate word data
 export const validateWord = (
   word: string,
-  meaning: string,
+  meaning: string
 ): { isValid: boolean; error?: string } => {
   const trimmedWord = word.trim();
   const trimmedMeaning = meaning.trim();
 
   if (!trimmedWord) {
-    return { isValid: false, error: "Word cannot be empty" };
+    return { isValid: false, error: 'Word cannot be empty' };
   }
 
   if (!trimmedMeaning) {
-    return { isValid: false, error: "Meaning cannot be empty" };
+    return { isValid: false, error: 'Meaning cannot be empty' };
   }
 
   if (trimmedWord.length > 100) {
-    return { isValid: false, error: "Word is too long (max 100 characters)" };
+    return { isValid: false, error: 'Word is too long (max 100 characters)' };
   }
 
   if (trimmedMeaning.length > 500) {
     return {
       isValid: false,
-      error: "Meaning is too long (max 500 characters)",
+      error: 'Meaning is too long (max 500 characters)',
     };
   }
 
@@ -92,18 +92,18 @@ export const validateWord = (
 
 // Validate unit name
 export const validateUnitName = (
-  name: string,
+  name: string
 ): { isValid: boolean; error?: string } => {
   const trimmedName = name.trim();
 
   if (!trimmedName) {
-    return { isValid: false, error: "Unit name cannot be empty" };
+    return { isValid: false, error: 'Unit name cannot be empty' };
   }
 
   if (trimmedName.length > 50) {
     return {
       isValid: false,
-      error: "Unit name is too long (max 50 characters)",
+      error: 'Unit name is too long (max 50 characters)',
     };
   }
 
@@ -114,7 +114,7 @@ export const validateUnitName = (
 export const isWordDuplicate = (words: Word[], newWord: string): boolean => {
   const normalizedNewWord = newWord.trim().toLowerCase();
   return words.some(
-    (word) => word.word.trim().toLowerCase() === normalizedNewWord,
+    word => word.word.trim().toLowerCase() === normalizedNewWord
   );
 };
 
@@ -136,7 +136,7 @@ export const getUnitStats = (unit: Unit) => {
 
 // Get overall statistics from all units
 export const getOverallStats = (data: StorageData) => {
-  const allWords = data.units.flatMap((unit) => unit.words);
+  const allWords = data.units.flatMap(unit => unit.words);
   const totalWords = allWords.length;
   const masteredWords = getMasteredWords(allWords).length;
   const masteryPercentage = calculateMasteryPercentage(allWords);
@@ -167,7 +167,7 @@ export const formatDuration = (milliseconds: number): string => {
 
 // Get time since last review
 export const getTimeSinceLastReview = (word: Word): string => {
-  if (!word.lastReviewTime) return "Never reviewed";
+  if (!word.lastReviewTime) return 'Never reviewed';
 
   const now = Date.now();
   const timeDiff = now - word.lastReviewTime;

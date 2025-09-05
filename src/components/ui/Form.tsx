@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 export interface FormProps {
   children: ReactNode;
@@ -34,7 +34,7 @@ const FormContext = createContext<FormContextType | null>(null);
 const useFormContext = () => {
   const context = useContext(FormContext);
   if (!context) {
-    throw new Error("useFormContext must be used within a Form");
+    throw new Error('useFormContext must be used within a Form');
   }
   return context;
 };
@@ -45,7 +45,7 @@ const useForm = <T = any,>() => {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const setFieldsValue = (newValues: Partial<T>) => {
-    setValues((prev) => ({ ...prev, ...newValues }));
+    setValues(prev => ({ ...prev, ...newValues }));
   };
 
   const getFieldValue = (name: string) => {
@@ -79,31 +79,31 @@ const Form: React.FC<FormProps> = ({
   children,
   onFinish,
   initialValues = {},
-  className = "",
+  className = '',
   style,
 }) => {
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const setValue = (name: string, value: any) => {
-    setValues((prev) => ({ ...prev, [name]: value }));
+    setValues(prev => ({ ...prev, [name]: value }));
     // Clear error when value changes
     if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: "" }));
+      setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
 
   const setError = (name: string, error: string) => {
-    setErrors((prev) => ({ ...prev, [name]: error }));
+    setErrors(prev => ({ ...prev, [name]: error }));
   };
 
   const validateField = (name: string, value: any): boolean => {
     // Simple validation - can be extended
-    if (value === undefined || value === null || value === "") {
-      setError(name, "This field is required");
+    if (value === undefined || value === null || value === '') {
+      setError(name, 'This field is required');
       return false;
     }
-    setError(name, "");
+    setError(name, '');
     return true;
   };
 
@@ -149,11 +149,11 @@ const FormItem: React.FC<FormItemProps> = ({
   name,
   rules = [],
   children,
-  className = "",
+  className = '',
   style,
 }) => {
   const { errors, validateField } = useFormContext();
-  const error = name ? errors[name] : "";
+  const error = name ? errors[name] : '';
 
   const handleChange = (value: any) => {
     if (name) {
@@ -171,7 +171,7 @@ const FormItem: React.FC<FormItemProps> = ({
       <div>
         {React.cloneElement(children as React.ReactElement<any>, {
           onChange: handleChange,
-          "data-name": name,
+          'data-name': name,
         })}
       </div>
       {error && <div className="text-red-500 text-sm mt-1">{error}</div>}

@@ -1,13 +1,13 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef } from 'react';
 
 export interface InputProps
   extends Partial<
     Omit<
       React.InputHTMLAttributes<HTMLInputElement>,
-      "size" | "prefix" | "suffix"
+      'size' | 'prefix' | 'suffix'
     >
   > {
-  customSize?: "small" | "medium" | "large";
+  customSize?: 'small' | 'medium' | 'large';
   inputPrefix?: React.ReactNode;
   inputSuffix?: React.ReactNode;
   allowClear?: boolean;
@@ -25,18 +25,18 @@ export interface TextAreaProps
 const InputComponent = forwardRef<HTMLInputElement, InputProps>(
   (
     {
-      customSize = "medium",
+      customSize = 'medium',
       inputPrefix,
       inputSuffix,
       allowClear = false,
-      className = "",
+      className = '',
       style,
       ...rest
     },
-    ref,
+    ref
   ) => {
     const [inputValue, setInputValue] = React.useState(
-      rest.value || rest.defaultValue || "",
+      rest.value || rest.defaultValue || ''
     );
     const [showClear, setShowClear] = React.useState(false);
 
@@ -47,11 +47,11 @@ const InputComponent = forwardRef<HTMLInputElement, InputProps>(
     }, [rest.value]);
 
     const baseClasses =
-      "w-full border border-gray-300 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed";
+      'w-full border border-gray-300 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed';
     const sizeClasses = {
-      small: "px-3 py-1.5 text-sm",
-      medium: "px-4 py-2 text-base",
-      large: "px-4 py-3 text-lg",
+      small: 'px-3 py-1.5 text-sm',
+      medium: 'px-4 py-2 text-base',
+      large: 'px-4 py-3 text-lg',
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,10 +62,10 @@ const InputComponent = forwardRef<HTMLInputElement, InputProps>(
     };
 
     const handleClear = () => {
-      setInputValue("");
+      setInputValue('');
       setShowClear(false);
       const event = {
-        target: { value: "" },
+        target: { value: '' },
       } as React.ChangeEvent<HTMLInputElement>;
       rest.onChange?.(event);
     };
@@ -82,7 +82,7 @@ const InputComponent = forwardRef<HTMLInputElement, InputProps>(
           {...rest}
           value={inputValue}
           onChange={handleChange}
-          className={`${baseClasses} ${sizeClasses[customSize]} ${inputPrefix ? "pl-10" : ""} ${inputSuffix || (allowClear && showClear) ? "pr-10" : ""}`}
+          className={`${baseClasses} ${sizeClasses[customSize]} ${inputPrefix ? 'pl-10' : ''} ${inputSuffix || (allowClear && showClear) ? 'pr-10' : ''}`}
         />
         {(inputSuffix || (allowClear && showClear)) && (
           <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
@@ -112,15 +112,15 @@ const InputComponent = forwardRef<HTMLInputElement, InputProps>(
         )}
       </div>
     );
-  },
+  }
 );
 
-InputComponent.displayName = "Input";
+InputComponent.displayName = 'Input';
 
 const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  ({ allowClear = false, className = "", style, ...rest }, ref) => {
+  ({ allowClear = false, className = '', style, ...rest }, ref) => {
     const [inputValue, setInputValue] = React.useState(
-      rest.value || rest.defaultValue || "",
+      rest.value || rest.defaultValue || ''
     );
     const [showClear, setShowClear] = React.useState(false);
 
@@ -131,7 +131,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     }, [rest.value]);
 
     const baseClasses =
-      "w-full border border-gray-300 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed resize-none";
+      'w-full border border-gray-300 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed resize-none';
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       const newValue = e.target.value;
@@ -141,10 +141,10 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     };
 
     const handleClear = () => {
-      setInputValue("");
+      setInputValue('');
       setShowClear(false);
       const event = {
-        target: { value: "" },
+        target: { value: '' },
       } as React.ChangeEvent<HTMLTextAreaElement>;
       rest.onChange?.(event);
     };
@@ -156,7 +156,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
           {...rest}
           value={inputValue}
           onChange={handleChange}
-          className={`${baseClasses} px-4 py-2 text-base ${allowClear && showClear ? "pr-10" : ""}`}
+          className={`${baseClasses} px-4 py-2 text-base ${allowClear && showClear ? 'pr-10' : ''}`}
         />
         {allowClear && showClear && (
           <div className="absolute right-3 top-3">
@@ -183,10 +183,10 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
         )}
       </div>
     );
-  },
+  }
 );
 
-TextArea.displayName = "TextArea";
+TextArea.displayName = 'TextArea';
 
 const Input = InputComponent as typeof InputComponent & {
   TextArea: typeof TextArea;

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect } from 'react';
 
 export interface LoadingState {
   isLoading: boolean;
@@ -46,7 +46,7 @@ export interface UseLoadingStateReturn extends LoadingState {
 
 export const useLoadingState = (
   initialData: any = null,
-  options: UseLoadingStateOptions = {},
+  options: UseLoadingStateOptions = {}
 ): UseLoadingStateReturn => {
   const {
     skeletonDelay = 300,
@@ -67,7 +67,7 @@ export const useLoadingState = (
   // Skeleton state
   const [showSkeleton, setShowSkeleton] = useState(initialShowSkeleton);
   const [skeletonTimer, setSkeletonTimer] = useState<NodeJS.Timeout | null>(
-    null,
+    null
   );
 
   // Clear skeleton timer on unmount
@@ -140,13 +140,13 @@ export const useLoadingState = (
       setHasData(!!data);
       finishLoading();
     },
-    [finishLoading],
+    [finishLoading]
   );
 
   // Retry functionality
   const retry = useCallback(() => {
     if (retryCount < maxRetries) {
-      setRetryCount((prev) => prev + 1);
+      setRetryCount(prev => prev + 1);
       setError(null);
       startLoading();
 

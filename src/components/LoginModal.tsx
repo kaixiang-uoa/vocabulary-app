@@ -1,6 +1,7 @@
-import React from "react";
-import { useAuthContext } from "../contexts/AuthContext";
-import { useTranslation } from "react-i18next";
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { useAuthContext } from '../contexts/AuthContext';
 
 interface LoginModalProps {
   onClose?: () => void;
@@ -15,7 +16,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
       await login();
       // Modal will be automatically hidden after successful login
     } catch (error) {
-      console.error("Login failed:", error);
+      // Login failed - error will be handled by AuthContext
     }
   };
 
@@ -57,18 +58,18 @@ export const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
         </button>
 
         <h2 className="text-2xl font-bold mb-6 text-center">
-          {t("login_title", "登录")}
+          {t('login_title', '登录')}
         </h2>
         <p className="text-gray-600 mb-6 text-center">
-          {t("login_description", "登录后可以在不同设备间同步你的学习数据")}
+          {t('login_description', '登录后可以在不同设备间同步你的学习数据')}
         </p>
         <button
           onClick={handleGoogleSignIn}
           disabled={state.loading}
           className={`w-full py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2 ${
             state.loading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-blue-600 text-white hover:bg-blue-700"
+              ? 'bg-gray-400 cursor-not-allowed'
+              : 'bg-blue-600 text-white hover:bg-blue-700'
           }`}
         >
           {state.loading ? (
@@ -94,8 +95,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
             </svg>
           )}
           {state.loading
-            ? t("logging_in", "登录中...")
-            : t("login_with_google", "使用 Google 登录")}
+            ? t('logging_in', '登录中...')
+            : t('login_with_google', '使用 Google 登录')}
         </button>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export interface RadioProps {
   checked?: boolean;
@@ -33,7 +33,7 @@ const Radio: React.FC<RadioProps> = ({
   value,
   onChange,
   children,
-  className = "",
+  className = '',
 }) => {
   const [isChecked, setIsChecked] = React.useState(checked ?? defaultChecked);
 
@@ -51,8 +51,8 @@ const Radio: React.FC<RadioProps> = ({
     onChange?.(newValue);
   };
 
-  const baseClasses = "inline-flex items-center cursor-pointer";
-  const disabledClasses = disabled ? "opacity-50 cursor-not-allowed" : "";
+  const baseClasses = 'inline-flex items-center cursor-pointer';
+  const disabledClasses = disabled ? 'opacity-50 cursor-not-allowed' : '';
   const classes = `${baseClasses} ${disabledClasses} ${className}`;
 
   return (
@@ -68,8 +68,8 @@ const Radio: React.FC<RadioProps> = ({
         />
         <div
           className={`w-4 h-4 border-2 rounded-full transition-all duration-200 ${
-            isChecked ? "border-primary-600" : "border-gray-300"
-          } ${disabled ? "opacity-50" : ""}`}
+            isChecked ? 'border-primary-600' : 'border-gray-300'
+          } ${disabled ? 'opacity-50' : ''}`}
         >
           {isChecked && (
             <div className="w-2 h-2 bg-primary-600 rounded-full absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
@@ -87,7 +87,7 @@ const RadioButton: React.FC<RadioButtonProps> = ({
   value,
   disabled = false,
   children,
-  className = "",
+  className = '',
   onClick,
 }) => {
   return (
@@ -96,7 +96,7 @@ const RadioButton: React.FC<RadioButtonProps> = ({
       disabled={disabled}
       onClick={onClick}
       className={`px-3 py-1 text-sm font-medium rounded border transition-all duration-200 ${
-        disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+        disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
       } ${className}`}
     >
       {children}
@@ -109,10 +109,10 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   defaultValue,
   onChange,
   children,
-  className = "",
+  className = '',
 }) => {
   const [selectedValue, setSelectedValue] = React.useState(
-    value ?? defaultValue,
+    value ?? defaultValue
   );
 
   React.useEffect(() => {
@@ -128,15 +128,15 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
 
   return (
     <div className={`radio-group flex gap-1 ${className}`}>
-      {React.Children.map(children, (child) => {
+      {React.Children.map(children, child => {
         if (React.isValidElement(child) && child.type === RadioButton) {
           const childProps = child.props as RadioButtonProps;
           const isSelected = childProps.value === selectedValue;
           const newProps = {
-            className: `${childProps.className || ""} ${
+            className: `${childProps.className || ''} ${
               isSelected
-                ? "bg-primary-600 text-white border-primary-600"
-                : "bg-white text-gray-700 border-gray-300 hover:border-primary-500"
+                ? 'bg-primary-600 text-white border-primary-600'
+                : 'bg-white text-gray-700 border-gray-300 hover:border-primary-500'
             }`,
             onClick: () => handleRadioChange(childProps.value),
           };

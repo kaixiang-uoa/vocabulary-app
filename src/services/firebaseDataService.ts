@@ -8,9 +8,10 @@ import {
   where,
   writeBatch,
   serverTimestamp,
-} from "firebase/firestore";
-import { db } from "../config/firebase";
-import { StorageData, Unit, Word } from "../types";
+} from 'firebase/firestore';
+
+import { db } from '../config/firebase';
+import { StorageData, Unit, Word } from '../types';
 
 export class FirebaseDataService {
   private userId: string;
@@ -38,21 +39,21 @@ export class FirebaseDataService {
       for (const unitDoc of unitsSnapshot.docs) {
         const unitData = unitDoc.data();
         const wordsSnapshot = await getDocs(
-          this.getWordsCollection(unitDoc.id),
+          this.getWordsCollection(unitDoc.id)
         );
         const words: Word[] = [];
 
-        wordsSnapshot.forEach((wordDoc) => {
+        wordsSnapshot.forEach(wordDoc => {
           const wordData = wordDoc.data();
 
           // Safely handle createTime conversion
           let createTime = Date.now();
           if (wordData.createTime) {
-            if (typeof wordData.createTime.toMillis === "function") {
+            if (typeof wordData.createTime.toMillis === 'function') {
               createTime = wordData.createTime.toMillis();
             } else if (wordData.createTime.seconds) {
               createTime = wordData.createTime.seconds * 1000;
-            } else if (typeof wordData.createTime === "number") {
+            } else if (typeof wordData.createTime === 'number') {
               createTime = wordData.createTime;
             }
           }
@@ -60,11 +61,11 @@ export class FirebaseDataService {
           // Safely handle lastReviewTime conversion
           let lastReviewTime = null;
           if (wordData.lastReviewTime) {
-            if (typeof wordData.lastReviewTime.toMillis === "function") {
+            if (typeof wordData.lastReviewTime.toMillis === 'function') {
               lastReviewTime = wordData.lastReviewTime.toMillis();
             } else if (wordData.lastReviewTime.seconds) {
               lastReviewTime = wordData.lastReviewTime.seconds * 1000;
-            } else if (typeof wordData.lastReviewTime === "number") {
+            } else if (typeof wordData.lastReviewTime === 'number') {
               lastReviewTime = wordData.lastReviewTime;
             }
           }
@@ -84,11 +85,11 @@ export class FirebaseDataService {
         // Safely handle unit createTime conversion
         let unitCreateTime = Date.now();
         if (unitData.createTime) {
-          if (typeof unitData.createTime.toMillis === "function") {
+          if (typeof unitData.createTime.toMillis === 'function') {
             unitCreateTime = unitData.createTime.toMillis();
           } else if (unitData.createTime.seconds) {
             unitCreateTime = unitData.createTime.seconds * 1000;
-          } else if (typeof unitData.createTime === "number") {
+          } else if (typeof unitData.createTime === 'number') {
             unitCreateTime = unitData.createTime;
           }
         }
@@ -103,8 +104,9 @@ export class FirebaseDataService {
 
       return { units };
     } catch (error) {
-      console.error("Error getting all data:", error);
-      throw new Error("Failed to load data from Firebase");
+      // eslint-disable-next-line no-console
+      console.error('Error getting all data:', error);
+      throw new Error('Failed to load data from Firebase');
     }
   }
 
@@ -115,7 +117,7 @@ export class FirebaseDataService {
 
       // Clear existing data
       const existingUnits = await getDocs(this.getUnitsCollection());
-      existingUnits.docs.forEach((unitDoc) => {
+      existingUnits.docs.forEach(unitDoc => {
         batch.delete(unitDoc.ref);
       });
 
@@ -144,8 +146,9 @@ export class FirebaseDataService {
       await batch.commit();
       return true;
     } catch (error) {
-      console.error("Error saving all data:", error);
-      throw new Error("Failed to save data to Firebase");
+      // eslint-disable-next-line no-console
+      console.error('Error saving all data:', error);
+      throw new Error('Failed to save data to Firebase');
     }
   }
 
@@ -160,8 +163,9 @@ export class FirebaseDataService {
       const docRef = await addDoc(this.getUnitsCollection(), unitData);
       return docRef.id;
     } catch (error) {
-      console.error("Error creating unit:", error);
-      throw new Error("Failed to create unit");
+      // eslint-disable-next-line no-console
+      console.error('Error creating unit:', error);
+      throw new Error('Failed to create unit');
     }
   }
 
@@ -169,7 +173,7 @@ export class FirebaseDataService {
   async addWord(
     unitId: string,
     word: string,
-    meaning: string,
+    meaning: string
   ): Promise<boolean> {
     try {
       const trimmedWord = word.trim();
@@ -191,8 +195,9 @@ export class FirebaseDataService {
       await addDoc(this.getWordsCollection(unitId), wordData);
       return true;
     } catch (error) {
-      console.error("Error adding word:", error);
-      throw new Error("Failed to add word");
+      // eslint-disable-next-line no-console
+      console.error('Error adding word:', error);
+      throw new Error('Failed to add word');
     }
   }
 
@@ -200,7 +205,7 @@ export class FirebaseDataService {
   async updateWord(
     unitId: string,
     wordId: string,
-    updatedWord: Partial<Word>,
+    updatedWord: Partial<Word>
   ): Promise<boolean> {
     try {
       const wordRef = doc(this.getWordsCollection(unitId), wordId);
@@ -223,15 +228,16 @@ export class FirebaseDataService {
       await updateDoc(wordRef, updateData);
       return true;
     } catch (error) {
-      console.error("Error updating word:", error);
-      throw new Error("Failed to update word");
+      // eslint-disable-next-line no-console
+      console.error('Error updating word:', error);
+      throw new Error('Failed to update word');
     }
   }
 
   // Update a unit
   async updateUnit(
     unitId: string,
-    updatedUnit: Partial<Unit>,
+    updatedUnit: Partial<Unit>
   ): Promise<boolean> {
     try {
       const unitRef = doc(this.getUnitsCollection(), unitId);
@@ -242,8 +248,9 @@ export class FirebaseDataService {
       await updateDoc(unitRef, updateData);
       return true;
     } catch (error) {
-      console.error("Error updating unit:", error);
-      throw new Error("Failed to update unit");
+      // eslint-disable-next-line no-console
+      console.error('Error updating unit:', error);
+      throw new Error('Failed to update unit');
     }
   }
 
@@ -254,7 +261,7 @@ export class FirebaseDataService {
 
       // Get current word data
       const wordDoc = await getDocs(
-        query(this.getWordsCollection(unitId), where("__name__", "==", wordId)),
+        query(this.getWordsCollection(unitId), where('__name__', '==', wordId))
       );
       if (wordDoc.empty) return false;
 
@@ -269,8 +276,9 @@ export class FirebaseDataService {
 
       return true;
     } catch (error) {
-      console.error("Error toggling word mastered status:", error);
-      throw new Error("Failed to update word status");
+      // eslint-disable-next-line no-console
+      console.error('Error toggling word mastered status:', error);
+      throw new Error('Failed to update word status');
     }
   }
 
@@ -278,14 +286,14 @@ export class FirebaseDataService {
   async setWordMasteredStatus(
     unitId: string,
     wordId: string,
-    mastered: boolean,
+    mastered: boolean
   ): Promise<boolean> {
     try {
       const wordRef = doc(this.getWordsCollection(unitId), wordId);
 
       // Get current word data
       const wordDoc = await getDocs(
-        query(this.getWordsCollection(unitId), where("__name__", "==", wordId)),
+        query(this.getWordsCollection(unitId), where('__name__', '==', wordId))
       );
       if (wordDoc.empty) return false;
 
@@ -299,8 +307,9 @@ export class FirebaseDataService {
 
       return true;
     } catch (error) {
-      console.error("Error setting word mastered status:", error);
-      throw new Error("Failed to update word status");
+      // eslint-disable-next-line no-console
+      console.error('Error setting word mastered status:', error);
+      throw new Error('Failed to update word status');
     }
   }
 
@@ -310,25 +319,25 @@ export class FirebaseDataService {
     ids,
     unitId,
   }: {
-    type: "word" | "unit";
+    type: 'word' | 'unit';
     ids: string[];
     unitId?: string;
   }): Promise<boolean> {
     try {
       const batch = writeBatch(db);
 
-      if (type === "word" && unitId) {
+      if (type === 'word' && unitId) {
         // Delete words
         for (const wordId of ids) {
           const wordRef = doc(this.getWordsCollection(unitId), wordId);
           batch.delete(wordRef);
         }
-      } else if (type === "unit") {
+      } else if (type === 'unit') {
         // Delete units and their words
         for (const unitId of ids) {
           // Delete all words in the unit
           const wordsSnapshot = await getDocs(this.getWordsCollection(unitId));
-          wordsSnapshot.docs.forEach((wordDoc) => {
+          wordsSnapshot.docs.forEach(wordDoc => {
             batch.delete(wordDoc.ref);
           });
 
@@ -341,8 +350,9 @@ export class FirebaseDataService {
       await batch.commit();
       return true;
     } catch (error) {
-      console.error("Error deleting items:", error);
-      throw new Error("Failed to delete items");
+      // eslint-disable-next-line no-console
+      console.error('Error deleting items:', error);
+      throw new Error('Failed to delete items');
     }
   }
 
@@ -350,11 +360,12 @@ export class FirebaseDataService {
   async getMasteredWords(): Promise<Word[]> {
     try {
       const allData = await this.getAllData();
-      return allData.units.flatMap((unit) =>
-        unit.words.filter((word) => word.mastered),
+      return allData.units.flatMap(unit =>
+        unit.words.filter(word => word.mastered)
       );
     } catch (error) {
-      console.error("Error getting mastered words:", error);
+      // eslint-disable-next-line no-console
+      console.error('Error getting mastered words:', error);
       return [];
     }
   }
@@ -363,11 +374,12 @@ export class FirebaseDataService {
   async getUnmasteredWords(): Promise<Word[]> {
     try {
       const allData = await this.getAllData();
-      return allData.units.flatMap((unit) =>
-        unit.words.filter((word) => !word.mastered),
+      return allData.units.flatMap(unit =>
+        unit.words.filter(word => !word.mastered)
       );
     } catch (error) {
-      console.error("Error getting unmastered words:", error);
+      // eslint-disable-next-line no-console
+      console.error('Error getting unmastered words:', error);
       return [];
     }
   }

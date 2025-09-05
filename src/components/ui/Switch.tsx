@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
 export interface SwitchProps {
   checked?: boolean;
   defaultChecked?: boolean;
   disabled?: boolean;
   loading?: boolean;
-  size?: "small" | "default";
+  size?: 'small' | 'default';
   onChange?: (checked: boolean) => void;
   className?: string;
 }
@@ -15,9 +15,9 @@ const Switch: React.FC<SwitchProps> = ({
   defaultChecked = false,
   disabled = false,
   loading = false,
-  size = "default",
+  size = 'default',
   onChange,
-  className = "",
+  className = '',
 }) => {
   const [isChecked, setIsChecked] = React.useState(checked ?? defaultChecked);
 
@@ -36,21 +36,21 @@ const Switch: React.FC<SwitchProps> = ({
   };
 
   const sizeClasses = {
-    small: "w-8 h-4",
-    default: "w-11 h-6",
+    small: 'w-8 h-4',
+    default: 'w-11 h-6',
   };
 
   const thumbSizeClasses = {
-    small: "w-3 h-3",
-    default: "w-5 h-5",
+    small: 'w-3 h-3',
+    default: 'w-5 h-5',
   };
 
   const baseClasses =
-    "relative inline-flex items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500";
-  const checkedClasses = isChecked ? "bg-primary-600" : "bg-gray-200";
+    'relative inline-flex items-center rounded-full transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500';
+  const checkedClasses = isChecked ? 'bg-primary-600' : 'bg-gray-200';
   const disabledClasses = disabled
-    ? "opacity-50 cursor-not-allowed"
-    : "cursor-pointer";
+    ? 'opacity-50 cursor-not-allowed'
+    : 'cursor-pointer';
 
   const classes = `${baseClasses} ${sizeClasses[size]} ${checkedClasses} ${disabledClasses} ${className}`;
 
@@ -65,7 +65,7 @@ const Switch: React.FC<SwitchProps> = ({
     >
       <span
         className={`inline-block ${thumbSizeClasses[size]} bg-white rounded-full shadow transform transition-transform duration-200 ${
-          isChecked ? "translate-x-6" : "translate-x-1"
+          isChecked ? 'translate-x-6' : 'translate-x-1'
         }`}
       >
         {loading && (

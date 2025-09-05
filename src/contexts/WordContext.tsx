@@ -1,6 +1,8 @@
-import React, { createContext, useContext, useEffect } from "react";
-import { useWordOperations } from "../hooks/useWordOperations";
-import { useAuthContext } from "./AuthContext";
+import React, { createContext, useContext, useEffect } from 'react';
+
+import { useWordOperations } from '../hooks/useWordOperations';
+
+import { useAuthContext } from './AuthContext';
 
 // Use the exact return type of useWordOperations to avoid duplicating types
 type WordContextValue = ReturnType<typeof useWordOperations>;
@@ -31,15 +33,15 @@ export const WordProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const onFocus = () => ops.loadData().catch(() => {});
     const onVisible = () => {
-      if (document.visibilityState === "visible") {
+      if (document.visibilityState === 'visible') {
         ops.loadData().catch(() => {});
       }
     };
-    window.addEventListener("focus", onFocus);
-    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener('focus', onFocus);
+    document.addEventListener('visibilitychange', onVisible);
     return () => {
-      window.removeEventListener("focus", onFocus);
-      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener('focus', onFocus);
+      document.removeEventListener('visibilitychange', onVisible);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -50,9 +52,7 @@ export const WordProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useWordContext = (): WordContextValue => {
   const ctx = useContext(WordContext);
   if (!ctx) {
-    throw new Error("useWordContext must be used within a WordProvider");
+    throw new Error('useWordContext must be used within a WordProvider');
   }
   return ctx;
 };
-
-

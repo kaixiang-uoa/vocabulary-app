@@ -1,19 +1,20 @@
-import { useState, useEffect } from "react";
-import { auth } from "../config/firebase";
 import {
+  GoogleAuthProvider,
   onAuthStateChanged,
   signInWithPopup,
-  GoogleAuthProvider,
   signOut,
   User,
-} from "firebase/auth";
+} from 'firebase/auth';
+import { useEffect, useState } from 'react';
+
+import { auth } from '../config/firebase';
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
       setUser(user);
       setLoading(false);
     });
@@ -27,7 +28,8 @@ export const useAuth = () => {
       const result = await signInWithPopup(auth, provider);
       return result.user;
     } catch (error) {
-      console.error("Sign in error:", error);
+      // eslint-disable-next-line no-console
+      console.error('Sign in error:', error);
       throw error;
     }
   };
@@ -36,7 +38,8 @@ export const useAuth = () => {
     try {
       await signOut(auth);
     } catch (error) {
-      console.error("Sign out error:", error);
+      // eslint-disable-next-line no-console
+      console.error('Sign out error:', error);
       throw error;
     }
   };

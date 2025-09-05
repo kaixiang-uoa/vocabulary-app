@@ -1,5 +1,5 @@
 // Word filtering utilities
-import { Word, StorageData } from "../types";
+import { Word, StorageData } from '../types';
 
 /**
  * Get all unmastered words
@@ -7,8 +7,8 @@ import { Word, StorageData } from "../types";
 export const getUnmasteredWords = (data: StorageData): Promise<Word[]> => {
   const unmasteredWords: Word[] = [];
 
-  data.units.forEach((unit) => {
-    unit.words.forEach((word) => {
+  data.units.forEach(unit => {
+    unit.words.forEach(word => {
       if (!word.mastered) {
         unmasteredWords.push(word);
       }
@@ -24,8 +24,8 @@ export const getUnmasteredWords = (data: StorageData): Promise<Word[]> => {
 export const getMasteredWords = (data: StorageData): Promise<Word[]> => {
   const masteredWords: Word[] = [];
 
-  data.units.forEach((unit) => {
-    unit.words.forEach((word) => {
+  data.units.forEach(unit => {
+    unit.words.forEach(word => {
       if (word.mastered) {
         masteredWords.push(word);
       }
@@ -40,9 +40,9 @@ export const getMasteredWords = (data: StorageData): Promise<Word[]> => {
  */
 export const getUnitWords = async (
   data: StorageData,
-  unitId: string,
+  unitId: string
 ): Promise<Word[]> => {
-  const unit = data.units.find((u) => u.id === unitId);
+  const unit = data.units.find(u => u.id === unitId);
   return unit ? unit.words : [];
 };
 
@@ -51,12 +51,12 @@ export const getUnitWords = async (
  */
 export const getWordsByReviewStatus = async (
   data: StorageData,
-  mastered: boolean,
+  mastered: boolean
 ): Promise<Word[]> => {
   const filteredWords: Word[] = [];
 
-  data.units.forEach((unit) => {
-    unit.words.forEach((word) => {
+  data.units.forEach(unit => {
+    unit.words.forEach(word => {
       if (word.mastered === mastered) {
         filteredWords.push(word);
       }
@@ -70,15 +70,15 @@ export const getWordsByReviewStatus = async (
  * Get words that need review (unmastered or recently reviewed)
  */
 export const getWordsNeedingReview = async (
-  data: StorageData,
+  data: StorageData
 ): Promise<Word[]> => {
   const now = Date.now();
   const oneDay = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
   const wordsNeedingReview: Word[] = [];
 
-  data.units.forEach((unit) => {
-    unit.words.forEach((word) => {
+  data.units.forEach(unit => {
+    unit.words.forEach(word => {
       // Include unmastered words or words reviewed more than 24 hours ago
       if (
         !word.mastered ||

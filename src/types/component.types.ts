@@ -23,7 +23,7 @@ export interface UnitCardProps {
 }
 
 export interface UnitListProps {
-  units: UnitCardProps["unit"][];
+  units: UnitCardProps['unit'][];
   selectedUnits: string[];
   searchTerm: string;
   onSearchChange: (term: string) => void;
@@ -39,8 +39,8 @@ export interface UnitListProps {
 export interface ActionButtonProps {
   icon: React.ReactNode;
   children: React.ReactNode;
-  variant?: "primary" | "secondary" | "danger" | "outline";
-  size?: "sm" | "md" | "lg";
+  variant?: 'primary' | 'secondary' | 'danger' | 'outline';
+  size?: 'sm' | 'md' | 'lg';
   onClick?: () => void;
   disabled?: boolean;
   className?: string;
