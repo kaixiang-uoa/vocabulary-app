@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ReviewWordCardProps } from '../types';
+import { formatMeaning } from '../utils/meaningFormatter';
 import { getTailwindClass } from '../utils/styleMapping';
 
 // Play pronunciation using Youdao API
@@ -78,42 +79,58 @@ const ReviewWordCard: React.FC<ReviewWordCardProps> = ({
               </button>
             </div>
           ) : (
-            <span className="text-3xl font-bold text-gray-900">
-              {word.meaning}
-            </span>
+            <div className="text-xl font-normal text-gray-900 text-center">
+              {formatMeaning(word.meaning).map((line, index) => (
+                <div key={index} className={index > 0 ? 'mt-2' : ''}>
+                  {line}
+                </div>
+              ))}
+            </div>
           )}
         </div>
 
         {/* Back: Display meaning or English based on mode */}
         <div
-          className={`absolute inset-0 rounded-xl border-2 p-8 flex flex-col items-center justify-center ${word.mastered ? 'bg-green-50 border-green-500' : 'bg-white border-gray-200'}`}
+          className={`absolute inset-0 rounded-xl border-2 p-6 flex flex-col ${word.mastered ? 'bg-green-50 border-green-500' : 'bg-white border-gray-200'}`}
           style={{
             backfaceVisibility: 'hidden',
             transform: 'rotateY(180deg)',
           }}
         >
-          {isEn2Zh ? (
-            <span className="text-3xl font-bold text-gray-900 mb-6 text-center leading-relaxed px-5">
-              {word.meaning}
-            </span>
-          ) : (
-            <span className="text-3xl font-bold text-gray-900 mb-6 text-center leading-relaxed px-5">
-              {word.word}
-            </span>
-          )}
-          <button
-            onClick={e => {
-              e.stopPropagation();
-              onMasteredToggle && onMasteredToggle(word.id);
-            }}
-            className={`px-4 py-2 text-base font-medium rounded-lg transition-colors duration-200 ${
-              word.mastered
-                ? 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200'
-                : 'bg-blue-500 text-white border border-blue-500 hover:bg-blue-600'
-            }`}
-          >
-            {word.mastered ? t('mark_unmastered') : t('mark_mastered')}
-          </button>
+          {/* Scrollable content area */}
+          <div className="flex-1 overflow-y-auto mb-4 px-2">
+            <div className="flex items-center justify-center min-h-full py-4">
+              {isEn2Zh ? (
+                <div className="text-xl font-normal text-gray-900 text-center leading-relaxed px-3 py-2">
+                  {formatMeaning(word.meaning).map((line, index) => (
+                    <div key={index} className={index > 0 ? 'mt-3' : ''}>
+                      {line}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <span className="text-xl font-normal text-gray-900 text-center leading-relaxed px-3 py-2">
+                  {word.word}
+                </span>
+              )}
+            </div>
+          </div>
+          {/* Fixed button at bottom */}
+          <div className="flex justify-center">
+            <button
+              onClick={e => {
+                e.stopPropagation();
+                onMasteredToggle && onMasteredToggle(word.id);
+              }}
+              className={`px-4 py-2 text-base font-medium rounded-lg transition-colors duration-200 ${
+                word.mastered
+                  ? 'bg-gray-100 text-gray-700 border border-gray-300 hover:bg-gray-200'
+                  : 'bg-blue-500 text-white border border-blue-500 hover:bg-blue-600'
+              }`}
+            >
+              {word.mastered ? t('mark_unmastered') : t('mark_mastered')}
+            </button>
+          </div>
         </div>
       </div>
     </div>
